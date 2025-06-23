@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    @include('layouts._partials.headers')
+</head>
+
+<body>
+    @include('layouts._partials.sidebar')
+    @include('layouts._partials.navbars')
+
+    <main>
+        @yield('content')
+    </main>
+
+    @include('layouts._partials.scripts')
+    @include('layouts._partials.footers')
+</body>
+
+</html>
