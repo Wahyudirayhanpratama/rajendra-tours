@@ -4,17 +4,15 @@
 
 @section('content')
 
-    <!-- * my sliders -->
-    <div class="section mb-5" style="margin-top: 20px;">
-        <div class="row justify-content-center">
-            <div class="col-6">
-                <img class="img-fluid" src="{{ asset('storage/logo_rajendra.png') }}" style="width: 300px;">
-            </div>
+    <!-- logo -->
+    <div class="container text-center">
+        <div class="mb-5">
+            <img class="img-fluid" src="{{ asset('storage/logo_rajendra.png') }}" style="width: 200px;">
         </div>
     </div>
 
     <div class="section">
-        <div class="card mt-1">
+        <div class="card">
 
             <div class="card-body">
                 <form action="{{ route('jadwal.cari') }}" method="GET">
@@ -162,6 +160,32 @@
 @endpush
 
 @push('scriptspwa')
+    <!-- Tombol Install -->
+    <button id="btn-install" class="btn btn-warning" style="display: none;">Install Aplikasi</button>
+
+    <script>
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('btn-install').style.display = 'inline-block';
+        });
+
+        document.getElementById('btn-install').addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(choiceResult => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('btn-install').style.display = 'none';
+                });
+            }
+        });
+    </script>
+
     <script>
         function selectPassenger(button, value) {
             document.querySelectorAll('.passenger-options button').forEach(btn => btn.classList.remove('active'));

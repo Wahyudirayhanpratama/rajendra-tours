@@ -66,17 +66,25 @@
                 </div>
             </div>
             <!-- Modal (Popup Detail) -->
-            <div class="modal modal-bottom" id="detailModal-{{ $loop->index }}" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+            <div class="modal modal-bottom" id="detailModal-{{ $loop->index }}" tabindex="-1"
+                aria-labelledby="detailModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm modal-fullscreen-sm-down">
                     <div class="modal-content rounded-top-4">
+                        <!-- Header dengan Logo dan Tombol Silang -->
+                        <div class="d-flex justify-content-between align-items-center px-3 pt-3">
+                            <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo" style="max-width: 150px;" />
+                            <a href="#" data-bs-dismiss="modal">
+                                <i class="uil uil-multiply fs-18 text-dark"></i>
+                            </a>
+                        </div>
+
                         <div class="modal-body">
                             <!-- Isi Modal -->
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo" style="max-width: 150px;" />
-                                <div class="text-end">
-                                    <p class="mb-1">Kode Booking</p>
-                                    <p class="fw-bold">{{ $pemesanan->kode_booking }}</p>
-                                </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <p class="fw-medium mb-0">Nomor Tiket</p>
+                                {{-- <div class="text-end ms-auto"> --}}
+                                <p class="fw-bold">{{ $pemesanan->tiket->no_tiket }}</p>
+                                {{-- </div> --}}
                             </div>
 
                             <!-- Status -->
@@ -85,6 +93,12 @@
                                 <span
                                     class="badge {{ $pemesanan->status === 'Tiket dibatalkan' ? 'bg-danger text-white' : 'bg-success text-white' }}"
                                     style="background-color: #b4ffa8; font-size: 0.85rem;">{{ ucfirst(str_replace('_', ' ', $pemesanan->status)) }}</span>
+                            </div>
+
+                            <!-- Kode Booking -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <p class="mb-0">Kode Booking</p>
+                                <p class="fw-medium mb-0">{{ $pemesanan->kode_booking }}</p>
                             </div>
 
                             <!-- Nomor Transaksi -->

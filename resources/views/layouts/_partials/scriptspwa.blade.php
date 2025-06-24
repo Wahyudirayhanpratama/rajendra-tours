@@ -16,4 +16,17 @@
 <!-- CDN SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+{{-- PWA --}}
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('{{ asset('service-worker.js') }}')
+            .then(function(reg) {
+                console.log("✅ Service worker registered!", reg);
+            })
+            .catch(function(err) {
+                console.log("❌ Service worker registration failed: ", err);
+            });
+    }
+</script>
+
 @stack('scriptspwa')

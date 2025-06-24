@@ -21,9 +21,8 @@
     </div>
     <!-- * App Header -->
 
-    <div id="appCapsule" style="margin-top:-380px;">
+    <div id="appCapsule" class="full-height" style="margin-top:-400px;">
         @yield('content')
-
     </div>
 
 

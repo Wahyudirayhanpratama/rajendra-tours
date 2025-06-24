@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="small-box bg-primary">
+                            <div class="small-box bg-blue">
                                 <div class="inner">
                                     <h3>{{ $jumlahMobil }}</h3>
                                     <p>Jumlah Unit</p>
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="small-box bg-primary">
+                            <div class="small-box bg-blue">
                                 <div class="inner">
                                     <h3>{{ $pembatalanBulanIni }}</h3>
                                     <p>Total Pembatalan Tiket di Bulan {{ formatIndonesia(date('F Y')) }}</p>
