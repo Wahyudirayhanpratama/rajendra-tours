@@ -20,12 +20,19 @@ class AuthController extends Controller
 
         if ($user && Hash::check($request->password, $user->password)) {
 
+            // Logout guard lain terlebih dahulu
+            Auth::guard('admin')->logout();
+            Auth::guard('pemilik')->logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
             if ($user->role === 'admin') {
-                Auth::guard('admin')->login($user); // login pakai guard admin
+                Auth::guard('admin')->login($user);
                 $request->session()->regenerate();
                 return redirect()->route('dashboard.admin');
             } elseif ($user->role === 'pemilik') {
-                Auth::guard('pemilik')->login($user); // login pakai guard pemilik
+                Auth::guard('pemilik')->login($user);
                 $request->session()->regenerate();
                 return redirect()->route('dashboard.pemilik');
             } else {

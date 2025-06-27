@@ -7,8 +7,8 @@
 </head>
 
 <body>
-    @include('layouts._partials.sidebar')
     @include('layouts._partials.navbars')
+    @include('layouts._partials.sidebar')
 
     <main>
         @yield('content')

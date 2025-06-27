@@ -3,6 +3,12 @@
 @section('title', 'Dashboard')
 
 @section('content')
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" src="{{ asset('storage/logo_jendra.png') }}" alt="Logo Rajendra" height="200"
+            width="200">
+    </div>
+
     <!-- Site wrapper -->
     <div class="wrapper">
         <!-- Content Wrapper. Contains page content -->

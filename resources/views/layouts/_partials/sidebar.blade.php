@@ -11,10 +11,13 @@
         <nav class="mt-5">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 @php
-                    $admin = Auth::guard('admin')->user();
-                    $pemilik = Auth::guard('pemilik')->user();
+                    $guard = Auth::guard('admin')->check()
+                        ? 'admin'
+                        : (Auth::guard('pemilik')->check()
+                            ? 'pemilik'
+                            : null);
                 @endphp
-                @if ($admin)
+                @if ($guard === 'admin')
                     <!-- Menu Admin -->
                     <li class="nav-item">
                         <a href="{{ route('dashboard.admin') }}"
@@ -58,7 +61,7 @@
                             <p class="text-white">Data Akun</p>
                         </a>
                     </li>
-                @elseif ($pemilik)
+                @elseif ($guard === 'pemilik')
                     <!-- Menu Pemilik -->
                     <li class="nav-item">
                         <a href="{{ route('dashboard.pemilik') }}"
@@ -78,8 +81,7 @@
 
                 <!-- Logout (Tampil untuk semua role) -->
                 <li class="nav-item fixed-bottom mb-3 mx-3">
-                    <a href="#" class="nav-link"
-                        id="logout-link" data-confirm="logout">
+                    <a href="#" class="nav-link" id="logout-link" data-confirm="logout">
                         <i class="side-icon fa-solid fa-right-from-bracket text-white"></i>
                         <p class="text-white">Logout</p>
                     </a>

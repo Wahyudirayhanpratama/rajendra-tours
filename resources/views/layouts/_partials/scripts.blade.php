@@ -5,7 +5,7 @@
 <!-- AdminLTE App -->
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
+{{-- <script src="../../dist/js/demo.js"></script> --}}
 <!-- ChartJS -->
 <script src="../../plugins/chart.js/Chart.min.js"></script>
 <!-- jQuery -->

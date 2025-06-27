@@ -79,14 +79,17 @@ return [
         'pelanggans' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class, // jika pelanggan pakai model User
+            'table' => 'users',
         ],
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class, // jika admin pakai model User
+            'table' => 'users',
         ],
         'pemiliks' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class, // jika pemilik pakai model User
+            'table' => 'users',
         ],
 
         // 'users' => [
