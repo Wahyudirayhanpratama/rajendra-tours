@@ -27,7 +27,6 @@
         <div class="card p-3" style="background-color: transparent; border: none; box-shadow: none;">
             <h5 class="fw-bold mb-3">Data Pemesan</h5>
 
-            <!-- Nama Pemesan -->
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <strong>Terjadi kesalahan:</strong>
@@ -51,6 +50,7 @@
                 <input type="hidden" name="jadwal_id" value="{{ $jadwal_id }}">
                 <input type="hidden" name="total_harga" value="{{ $total_harga }}">
 
+                <!-- Nama Pemesan -->
                 <div class="form-group mb-3">
                     <div class="input-group">
                         <span class="input-group-text bg-white">
@@ -91,7 +91,7 @@
                 <div class="form-group mb-3">
                     <div class="input-group">
                         <span class="input-group-text bg-white">
-                            <i class="fas fa-chair text-dark icon-regist"></i>
+                            <img class="icon-regist" src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="22">
                         </span>
                         <input type="text" id="inputTempatDuduk" class="form-control" placeholder="Pilih Kursi" readonly>
                         <span class="input-group-text bg-white">
@@ -203,15 +203,18 @@
                         <div class="col-4 border-end text-center py-3">
                             <div class="mb-3 fw-bold text-po">INFORMASI KURSI</div>
                             <div class="mb-2 mt-4">
-                                <img src="https://img.icons8.com/emoji/48/bust-in-silhouette.png" width="24">
+                                <img src="https://img.icons8.com/emoji/48/bust-in-silhouette.png" width="32"
+                                    alt="Supir">
                                 <div class="fs-12 mt-1">Kursi Supir</div>
                             </div>
                             <div class="mb-2 mt-4">
-                                <i class="fas fa-chair text-po fs-3"></i>
+                                <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"
+                                    alt="Kursi Tersedia">
                                 <div class="fs-12 mt-1">Kursi yang Tersedia</div>
                             </div>
                             <div class="mb-2 mt-4">
-                                <i class="fas fa-chair text-secondary fs-3" style="opacity: 0.3;"></i>
+                                <img src="https://img.icons8.com/ios-filled/50/888888/car-seat.png" width="32"
+                                    style="opacity: 0.3;" alt="Tidak Tersedia">
                                 <div class="fs-12 mt-1">Kursi Tidak Tersedia</div>
                             </div>
                         </div>
@@ -222,33 +225,33 @@
                             <div class="row text-center" id="seatmapWrapper">
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="1">
-                                        <i class="fas fa-chair fs-2"></i><br>1
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>1
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn driver" disabled>
                                         <img src="https://img.icons8.com/emoji/48/bust-in-silhouette.png"
-                                            width="24"><br>S
+                                            width="30"><br>S
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="2">
-                                        <i class="fas fa-chair fs-2"></i><br>2
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>2
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="3">
-                                        <i class="fas fa-chair fs-2"></i><br>3
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>3
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="4">
-                                        <i class="fas fa-chair fs-2"></i><br>4
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>4
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="5">
-                                        <i class="fas fa-chair fs-2"></i><br>5
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>5
                                     </button>
                                 </div>
                             </div>

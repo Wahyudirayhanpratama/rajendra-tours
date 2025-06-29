@@ -39,7 +39,7 @@
     <!-- App Header -->
     <div class="appHeader bg-po">
         <div class="left">
-            <a href="#" class="headerButton goBack">
+            <a href="{{ route('cari-jadwal') }}" class="headerButton goBack">
                 <i class="uil uil-angle-left-b fs-25 text-white"></i>
             </a>
         </div>
@@ -53,21 +53,25 @@
     <div class="text-center"><input type="text" class="input-sm" id="changedate"></div>
     <div class="section" style="margin-top:-80px;">
         <div class="card">
+            @php
+                use Illuminate\Support\Carbon;
+                $prevDate = Carbon::parse($tanggal)->subDay()->format('Y-m-d');
+                $nextDate = Carbon::parse($tanggal)->addDay()->format('Y-m-d');
+            @endphp
             <div class="card-header">
                 <div class="row">
                     <div class="col-2 text-center">
-                        <a href="#">
+                        <a href="{{ route('jadwal.cari', ['tanggal' => $prevDate]) }}">
                             <i class="uil uil-angle-left-b text-main fs-17"></i>
                         </a>
                     </div>
                     <div class="col-8 text-center">
                         <div class="fw-600 fs-16 text-main" id="changedateLabel">
-                            <i
-                                class="uil uil-calendar-alt fs-20 fw-300"></i>{{ formatIndonesianDate($tanggal) }}
+                            <i class="uil uil-calendar-alt fs-20 fw-300"></i>{{ formatIndonesianDate($tanggal) }}
                         </div>
                     </div>
                     <div class="col-2 text-center">
-                        <a href="#">
+                        <a href="{{ route('jadwal.cari', ['tanggal' => $nextDate]) }}">
                             <i class="uil uil-angle-right-b text-main fs-17"></i>
                         </a>
                     </div>
@@ -87,7 +91,8 @@
                     </div>
                     <div class="col-3 text-center fs-12 text-dark">
                         <div class="text-dark">
-                            <i class="fas fa-chair fs-15 text-dark"></i> Seat
+                            <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="18"
+                                style="vertical-align: middle;"> Seat
                         </div>
                     </div>
                     <div class="col-3 text-center fs-12 text-dark">
@@ -105,8 +110,16 @@
 
         <div class="section mt-1 mb-5">
             @forelse($jadwals as $jadwal)
+                @php
+                    $jadwalDateTime = Carbon::parse($jadwal->tanggal . ' ' . $jadwal->jam_berangkat);
+                    $isExpired = $jadwalDateTime->lt(now());
+                @endphp
                 <a href="{{ route('penumpang.create') }}?jadwal={{ $jadwal->jadwal_id }}">
-                    <div class="card mb-1  ">
+                    <div class="card mb-1 {{ $isExpired ? 'bg-light opacity-50' : '' }}">
+                        @if (!$isExpired)
+                            <a href="{{ route('penumpang.create') }}?jadwal={{ $jadwal->jadwal_id }}"
+                                class="stretched-link"></a>
+                        @endif
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-6">
@@ -144,6 +157,9 @@
                                     <div class="fs-12 text-end">
                                         <div class="mb-0 lh-17"><span class=" text-dark"><span class="fw-600 fs-15">Rp.
                                                     {{ number_format($jadwal->harga, 0, ',', '.') }}</span></div>
+                                        @if ($isExpired)
+                                            <div class="fs-12 text-danger lh-15">Lewat batas waktu pemesanan</div>
+                                        @endif
                                         <div class="fs-12 text-end text-danger lh-15"></div>
                                     </div>
                                 </div>
@@ -203,5 +219,4 @@
 @endpush
 
 @push('scriptspwa')
-    
 @endpush

@@ -13,10 +13,12 @@ class Mobil extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['mobil_id','nama_mobil', 'nomor_polisi', 'kapasitas'];
+    protected $fillable = ['mobil_id', 'nama_mobil', 'nomor_polisi', 'kapasitas'];
 
-    public function jadwals()
+    public function jadwalsAktif()
     {
-        return $this->hasMany(Jadwal::class, 'mobil_id');
+        return $this->hasMany(Jadwal::class, 'mobil_id', 'mobil_id')
+            ->whereDate('tanggal', '>=', now())
+            ->orderBy('tanggal', 'asc');
     }
 }

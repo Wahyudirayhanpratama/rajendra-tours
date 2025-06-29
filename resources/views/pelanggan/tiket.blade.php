@@ -13,7 +13,7 @@
     <!-- App Header -->
     <div class="appHeader bg-po">
         <div class="left">
-            <a href="#" class="headerButton goBack">
+            <a href="{{ route('cari-jadwal') }}" class="headerButton goBack">
                 <i class="uil uil-angle-left-b fs-25 text-white"></i>
             </a>
         </div>

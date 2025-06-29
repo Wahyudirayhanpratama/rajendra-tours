@@ -37,7 +37,7 @@ Route::post('/login-pelanggan-ajax', [AuthController::class, 'loginAjax'])->name
 Route::post('/logout-pelanggan', [AuthController::class, 'logoutPelanggan'])->name('logout.pelanggan');
 
 Route::resource('jadwals', JadwalController::class);
-Route::get('/jadwal/cari', [JadwalController::class, 'cari'])->name('jadwal.cari');
+Route::get('/jadwal/cari/{tanggal?}', [JadwalController::class, 'cari'])->name('jadwal.cari');
 Route::get('/', [JadwalController::class, 'showCari'])->name('cari-jadwal');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

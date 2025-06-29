@@ -16,6 +16,15 @@
         </section>
 
         <div class="container">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form action="{{ route('store-data-mobil') }}" method="POST">
                 @csrf
                 <div class="mb-3">
@@ -23,7 +32,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="nomor_polisi" placeholder="Masukkan Nomor Polisi" required>
+                    <input type="text" class="form-control" name="nomor_polisi" placeholder="Masukkan Nomor Polisi"
+                        required>
                 </div>
 
                 <div class="mb-3">

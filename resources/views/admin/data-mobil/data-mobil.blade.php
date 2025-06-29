@@ -31,12 +31,10 @@
                                     </div>
                                     <p class="mb-1 mt-1">{{ $mobil->nomor_polisi }}</p>
                                     <!-- Detail lainnya -->
-                                    @php
-                                        $jadwal = $mobil->jadwals->first(); // misalnya hanya tampilkan 1 jadwal pertama
-                                    @endphp
-                                    @if ($jadwal)
+                                    @if ($mobil->jadwal_terbaru)
                                         <p class="mb-1 mt-2">Jam Berangkat
-                                            {{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }} WIB</p>
+                                            {{ \Carbon\Carbon::parse($mobil->jadwal_terbaru->jam_berangkat)->format('H:i') }}
+                                            WIB</p>
                                     @else
                                         <p class="mb-1 mt-2 text-warning">Belum ada jadwal</p>
                                     @endif

@@ -6,31 +6,40 @@ use Illuminate\Http\Request;
 use App\Models\Mobil;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MobilController extends Controller
 {
     public function dataMobil()
     {
-        $mobils = Mobil::all(); // ambil semua data mobil
+        $mobils = Mobil::with(['jadwalsAktif'])->get(); // eager load jadwal aktif saja
+
         foreach ($mobils as $mobil) {
-            // Ambil semua kursi yang sudah dipakai untuk mobil ini
-            $kursi_db = DB::table('penumpangs')
-                ->join('pemesanans', 'penumpangs.pemesanan_id', '=', 'pemesanans.pemesanan_id')
-                ->join('jadwals', 'pemesanans.jadwal_id', '=', 'jadwals.jadwal_id')
-                ->where('jadwals.mobil_id', $mobil->mobil_id)
-                ->pluck('penumpangs.nomor_kursi')
-                ->toArray();
+            // Ambil semua kursi yang sudah dipakai dari jadwal aktif
+            $jadwalTerbaru = $mobil->jadwalsAktif->first();
 
-            // Ubah jadi array kursi individu
-            $kursi_terpakai = [];
-            foreach ($kursi_db as $kursi) {
-                $kursi_array = explode(',', $kursi);
-                $kursi_terpakai = array_merge($kursi_terpakai, array_map('trim', $kursi_array));
+            if ($jadwalTerbaru) {
+                $kursi_db = DB::table('penumpangs')
+                    ->join('pemesanans', 'penumpangs.pemesanan_id', '=', 'pemesanans.pemesanan_id')
+                    ->where('pemesanans.jadwal_id', $jadwalTerbaru->jadwal_id)
+                    ->pluck('penumpangs.nomor_kursi')
+                    ->toArray();
+
+                $kursi_terpakai = [];
+                foreach ($kursi_db as $kursi) {
+                    $kursi_array = explode(',', $kursi);
+                    $kursi_terpakai = array_merge($kursi_terpakai, array_map('trim', $kursi_array));
+                }
+
+                $mobil->kursi_terpakai = count($kursi_terpakai);
+                $mobil->kursi_tersisa = $mobil->kapasitas - count($kursi_terpakai);
+                $mobil->jadwal_terbaru = $jadwalTerbaru;
+            } else {
+                // Tidak ada jadwal aktif
+                $mobil->kursi_terpakai = 0;
+                $mobil->kursi_tersisa = $mobil->kapasitas;
+                $mobil->jadwal_terbaru = null;
             }
-
-            // Tambahkan properti custom ke setiap mobil
-            $mobil->kursi_terpakai = count($kursi_terpakai);
-            $mobil->kursi_tersisa = $mobil->kapasitas - count($kursi_terpakai);
         }
         return view('admin.data-mobil.data-mobil', compact('mobils'));
     }
@@ -48,14 +57,24 @@ class MobilController extends Controller
             'kapasitas' => 'required|numeric',
         ]);
 
-        Mobil::create([
-            'mobil_id' => Str::uuid(),
-            'nama_mobil' => $request->nama_mobil,
-            'nomor_polisi' => $request->nomor_polisi,
-            'kapasitas' => $request->kapasitas,
-        ]);
+        DB::beginTransaction();
 
-        return redirect()->route('data-mobil')->with('success', 'Mobil berhasil ditambahkan.');
+        try {
+            Mobil::create([
+                'mobil_id' => Str::uuid(),
+                'nama_mobil' => $request->nama_mobil,
+                'nomor_polisi' => $request->nomor_polisi,
+                'kapasitas' => $request->kapasitas,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('data-mobil')->with('success', 'Mobil berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            DB::rollback(); // Jika ada yang gagal, rollback semua
+            Log::error('Gagal menyimpan mobil', ['error' => $e->getMessage()]);
+            return back()->withInput()->withErrors(['general_error' => 'Gagal menyimpan data mobil: ' . $e->getMessage()]);
+        }
     }
 
     public function editMobil($id)

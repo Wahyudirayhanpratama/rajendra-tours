@@ -7,6 +7,7 @@ use App\Models\Mobil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class JadwalController extends Controller
 {
@@ -15,31 +16,40 @@ class JadwalController extends Controller
         return view('pelanggan.cari-jadwal');
     }
     // Tampilkan semua jadwal
-    public function cari(Request $request)
+    public function cari(Request $request, $tanggal = null)
     {
-        $request->validate([
-            'cityfrom' => 'required|string',
-            'cityto' => 'required|string',
-            'date' => 'required|date',
-            'jumlah_penumpang' => 'required|integer|min:1|max:5',
-        ]);
+        $cityfrom = $request->input('cityfrom') ?? session('cityfrom');
+        $cityto = $request->input('cityto') ?? session('cityto');
+        $jumlah_penumpang = $request->input('jumlah_penumpang') ?? session('jumlah_penumpang');
+        $tanggal = $tanggal ?? $request->input('date') ?? session('tanggal');
 
-        $cityfrom = $request->input('cityfrom');
-        $cityto = $request->input('cityto');
-        $tanggal = $request->input('date');
-        $jumlah_penumpang = $request->input('jumlah_penumpang');
+        // Jika pencarian baru (via form), lakukan validasi dan simpan ke session
+        if ($request->has('cityfrom') && $request->has('cityto')) {
+            $request->validate([
+                'cityfrom' => 'required|string',
+                'cityto' => 'required|string',
+                'date' => 'required|date',
+                'jumlah_penumpang' => 'required|integer|min:1|max:5',
+            ]);
+
+            session([
+                'cityfrom' => $cityfrom,
+                'cityto' => $cityto,
+                'tanggal' => $tanggal,
+                'jumlah_penumpang' => $jumlah_penumpang,
+            ]);
+        }
+
+        // Jika masih ada data yang kosong, redirect ke halaman pencarian
+        if (!$cityfrom || !$cityto || !$tanggal || !$jumlah_penumpang) {
+            return redirect()->route('form.pencarian')->with('error', 'Silakan isi form pencarian terlebih dahulu.');
+        }
 
         $singkatanKota = [
             'pekanbaru' => 'PKU',
             'padang' => 'PDG',
             'duri' => 'Duri',
         ];
-        session([
-            'cityfrom' => $cityfrom,
-            'cityto' => $cityto,
-            'tanggal' => $tanggal,
-            'jumlah_penumpang' => $jumlah_penumpang,
-        ]);
 
         $cityfromSingkat = $singkatanKota[strtolower($cityfrom)] ?? strtoupper($cityfrom);
         $citytoSingkat = $singkatanKota[strtolower($cityto)] ?? strtoupper($cityto);
@@ -70,7 +80,21 @@ class JadwalController extends Controller
             $jadwal->kursi_tersisa = ($jadwal->mobil->kapasitas ?? 0) - count($kursi_terpakai);
         }
 
-        return view('pelanggan.jadwal', compact('jadwals', 'cityfrom', 'cityto', 'tanggal', 'jumlah_penumpang', 'cityfromSingkat', 'citytoSingkat'));
+        $tanggalCarbon = Carbon::parse($tanggal);
+        $prevDate = $tanggalCarbon->copy()->subDay()->format('Y-m-d');
+        $nextDate = $tanggalCarbon->copy()->addDay()->format('Y-m-d');
+
+        return view('pelanggan.jadwal', compact(
+            'jadwals',
+            'cityfrom',
+            'cityto',
+            'tanggal',
+            'jumlah_penumpang',
+            'cityfromSingkat',
+            'citytoSingkat',
+            'prevDate',
+            'nextDate'
+        ));
     }
     public function jadwalKeberangkatan()
     {
