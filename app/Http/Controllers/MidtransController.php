@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pemesanan;
+use App\Models\Pembayaran;
 use App\Services\MidtransService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Midtrans\Config;
 use Midtrans\Notification;
@@ -43,22 +45,57 @@ class MidtransController extends Controller
         );
 
         if ($request->signature_key !== $computedSignature) {
+            Log::warning('Invalid Midtrans Signature.', $request->all());
             return response()->json(['message' => 'Invalid signature'], 403);
         }
 
         $pemesanan = Pemesanan::where('kode_booking', $request->order_id)->first();
         if (!$pemesanan) {
+            Log::error('Pemesanan tidak ditemukan untuk order_id: ' . $request->order_id);
             return response()->json(['message' => 'Pemesanan tidak ditemukan'], 404);
         }
 
+        Pembayaran::updateOrCreate(
+            ['order_id' => $request->order_id],
+            [
+                'pembayaran_id' => Str::uuid(),
+                'pemesanan_id' => $pemesanan->pemesanan_id,
+                'transaction_id' => $request->transaction_id,
+                'payment_type' => $request->payment_type,
+                'transaction_status' => $request->transaction_status,
+                'fraud_status' => $request->fraud_status ?? null,
+                'gross_amount' => (int)$request->gross_amount,
+                'va_numbers' => json_encode($request->va_numbers ?? []),
+                'status' => $request->transaction_status === 'settlement' ? 'paid' : 'pending',
+                'waktu_bayar' => $request->transaction_time ? Carbon::parse($request->transaction_time) : now(),
+            ]
+        );
+
+        // Update status pemesanan
         if ($request->transaction_status === 'settlement') {
             $pemesanan->update([
                 'status' => 'Lunas',
-                'metode_pembayaran' => $request->payment_type,
-                'nomor_transaksi' => $request->transaction_id,
-                'waktu_pembayaran' => Carbon::parse($request->transaction_time),
+            ]);
+        } elseif (in_array($request->transaction_status, ['expire', 'cancel', 'deny'])) {
+            $pemesanan->update([
+                'status' => 'Gagal',
+            ]);
+        } elseif ($request->transaction_status === 'pending') {
+            $pemesanan->update([
+                'status' => 'Menunggu Pembayaran',
             ]);
         }
+
+        Log::info('Notifikasi Midtrans berhasil diproses.', $request->all());
+
+        // if ($request->transaction_status === 'settlement') {
+        //     $pemesanan->update([
+        //         'status' => 'Lunas',
+        //         'metode_pembayaran' => $request->payment_type,
+        //         'nomor_transaksi' => $request->transaction_id,
+        //         'waktu_pembayaran' => Carbon::parse($request->transaction_time),
+        //     ]);
+        // }
 
         return response(['message' => 'Notification handled']);
     }

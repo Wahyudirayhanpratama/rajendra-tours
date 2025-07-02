@@ -75,7 +75,6 @@
                 <form action="{{ route('tiket.batalkan', $pemesanan->pemesanan_id) }}" method="POST"
                     onsubmit="return confirm('Yakin ingin membatalkan tiket ini?')" class="w-100">
                     @csrf
-                    <button class="btn btn-po fw-bold mb-2 w-100">Reschedule Pesanan</button>
                     <button type="submit" class="btn btn-po fw-bold w-100">Batalkan Pesanan</button>
                 </form>
             @endif

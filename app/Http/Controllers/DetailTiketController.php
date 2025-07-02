@@ -21,11 +21,10 @@ class DetailTiketController extends Controller
         if ($pemesanan->status === 'Tiket dibatalkan') {
             return back()->with('error', 'Tiket sudah dibatalkan sebelumnya.');
         }
-        
+
         $pemesanan->update([
             'status' => 'Tiket dibatalkan',
         ]);
-
 
         return redirect()->route('detail.show', $id)->with('success', 'Tiket berhasil dibatalkan.');
     }
