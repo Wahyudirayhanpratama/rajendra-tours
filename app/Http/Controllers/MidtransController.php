@@ -71,31 +71,14 @@ class MidtransController extends Controller
             ]
         );
 
-        // Update status pemesanan
         if ($request->transaction_status === 'settlement') {
             $pemesanan->update([
                 'status' => 'Lunas',
-            ]);
-        } elseif (in_array($request->transaction_status, ['expire', 'cancel', 'deny'])) {
-            $pemesanan->update([
-                'status' => 'Gagal',
-            ]);
-        } elseif ($request->transaction_status === 'pending') {
-            $pemesanan->update([
-                'status' => 'Menunggu Pembayaran',
+                'metode_pembayaran' => $request->payment_type,
+                'nomor_transaksi' => $request->transaction_id,
+                'waktu_pembayaran' => Carbon::parse($request->transaction_time),
             ]);
         }
-
-        Log::info('Notifikasi Midtrans berhasil diproses.', $request->all());
-
-        // if ($request->transaction_status === 'settlement') {
-        //     $pemesanan->update([
-        //         'status' => 'Lunas',
-        //         'metode_pembayaran' => $request->payment_type,
-        //         'nomor_transaksi' => $request->transaction_id,
-        //         'waktu_pembayaran' => Carbon::parse($request->transaction_time),
-        //     ]);
-        // }
 
         return response(['message' => 'Notification handled']);
     }
