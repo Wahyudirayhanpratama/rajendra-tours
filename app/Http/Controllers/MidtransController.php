@@ -85,7 +85,14 @@ class MidtransController extends Controller
                 ]);
             }
 
-            return response(['message' => 'Notification handled']);
+            if (strtolower($request->signature_key) !== strtolower($computedSignature)) {
+                Log::warning('Invalid Midtrans Signature.', [
+                    'from_request' => $request->signature_key,
+                    'expected' => $computedSignature,
+                    'raw_string' => $request->order_id . $request->status_code . $request->gross_amount . $serverKey,
+                ]);
+                return response()->json(['message' => 'Invalid signature'], 403);
+            }
         } catch (\Exception $e) {
             Log::error('MIDTRANS ERROR: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
