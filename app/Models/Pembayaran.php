@@ -13,5 +13,17 @@ class Pembayaran extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['pemesanan_id', 'metode_pembayaran', 'status', 'transaksi_id', 'waktu_bayar'];
+    protected $fillable = [
+        'pembayaran_id',
+        'pemesanan_id',
+        'order_id', // ✅ TAMBAHKAN INI
+        'transaction_id',
+        'payment_type',
+        'transaction_status',
+        'fraud_status',
+        'gross_amount',
+        'va_numbers',
+        'status',
+        'waktu_bayar'
+    ];
 }
