@@ -129,7 +129,7 @@
         .passenger-selector {
             display: flex;
             align-items: center;
-            border: 1px solid #001B79;
+            border: 1px solid black;
             padding: 10px;
             border-radius: 8px;
             gap: 10px;
