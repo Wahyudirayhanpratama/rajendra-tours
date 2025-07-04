@@ -114,59 +114,70 @@
                     $jadwalDateTime = Carbon::parse($jadwal->tanggal . ' ' . $jadwal->jam_berangkat);
                     $isExpired = $jadwalDateTime->lt(now());
                 @endphp
-                <a href="{{ route('penumpang.create') }}?jadwal={{ $jadwal->jadwal_id }}">
-                    <div class="card mb-1 {{ $isExpired ? 'bg-light opacity-50' : '' }}">
-                        @if (!$isExpired)
-                            <a href="{{ route('penumpang.create') }}?jadwal={{ $jadwal->jadwal_id }}"
-                                class="stretched-link"></a>
-                        @endif
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="fs-13  text-dark">
-                                        <div class=" text-dark mt-0 fw-600 fs-14">{{ $jadwal->mobil->nama_mobil }}</div>
-                                    </div>
+
+                @if (!$isExpired)
+                    <!-- Card aktif dengan link -->
+                    <a href="{{ route('penumpang.create') }}?jadwal={{ $jadwal->jadwal_id }}" class="text-decoration-none">
+                @endif
+
+                <div class="card mb-1 {{ $isExpired ? 'bg-light opacity-50' : '' }}"
+                    style="{{ $isExpired ? 'pointer-events: none;' : '' }}">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="fs-13 text-dark">
+                                    <div class="text-dark mt-0 fw-600 fs-14">{{ $jadwal->mobil->nama_mobil }}</div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="fs-13  text-dark">
-                                        <div class=" text-dark mt-0 fs-14 fw-600 text-end">
-                                            {{ $jadwal->mobil->nomor_polisi }}
-                                        </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="fs-13 text-dark">
+                                    <div class="text-dark mt-0 fs-14 fw-600 text-end">
+                                        {{ $jadwal->mobil->nomor_polisi }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="dot bg-blue dot_start"></div>
-                            <div class="dot bg-blue dot_end"></div>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="fs-18 text-center  text-dark lh-15">{{ $jadwal->kota_tujuan }}</div>
-                                    <div class="fs-18 text-center  text-dark" style="font-weight: bold">
-                                        {{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }} WIB</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row">
-                                <div class="col-7">
-                                    <div class="fs-13 text-start lh-15  text-dark fw-600 ">
-                                        Sisa {{ $jadwal->kursi_tersisa ?? 0 }} Seat</div>
-                                </div>
-                                <div class="col-5">
-                                    <div class="fs-12 text-end">
-                                        <div class="mb-0 lh-17"><span class=" text-dark"><span class="fw-600 fs-15">Rp.
-                                                    {{ number_format($jadwal->harga, 0, ',', '.') }}</span></div>
-                                        @if ($isExpired)
-                                            <div class="fs-12 text-danger lh-15">Lewat batas waktu pemesanan</div>
-                                        @endif
-                                        <div class="fs-12 text-end text-danger lh-15"></div>
-                                    </div>
+                        <div class="dot bg-blue dot_start"></div>
+                        <div class="dot bg-blue dot_end"></div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="fs-18 text-center text-dark lh-15">{{ $jadwal->kota_tujuan }}</div>
+                                <div class="fs-18 text-center text-dark fw-bold">
+                                    {{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }} WIB
                                 </div>
                             </div>
                         </div>
                     </div>
-                </a>
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="fs-13 text-start lh-15 text-dark fw-600">
+                                    Sisa {{ $jadwal->kursi_tersisa ?? 0 }} Seat
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="fs-12 text-end">
+                                    <div class="mb-0 lh-17 text-dark">
+                                        <span class="fw-600 fs-15">
+                                            Rp. {{ number_format($jadwal->harga, 0, ',', '.') }}
+                                        </span>
+                                    </div>
+                                    @if ($isExpired)
+                                        <div class="fs-12 text-danger lh-15">Lewat batas waktu pemesanan</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (!$isExpired)
+                    </a>
+                @endif
             @empty
                 <div class="alert alert-danger mt-3">
                     Tidak ada jadwal tersedia untuk kota dan tanggal tersebut.

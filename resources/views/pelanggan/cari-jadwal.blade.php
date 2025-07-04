@@ -129,31 +129,40 @@
         .passenger-selector {
             display: flex;
             align-items: center;
-            border: 1px solid #000;
+            border: 1px solid #001B79;
             padding: 10px;
             border-radius: 8px;
+            gap: 10px;
+            flex-wrap: wrap;
+            /* fallback */
         }
 
         .passenger-icon {
-            font-size: 30px;
-            margin-right: 15px;
-            color: black;
+            font-size: 24px;
+            color: #001B79;
+            flex-shrink: 0;
+        }
+
+        .passenger-options {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            gap: 5px;
         }
 
         .passenger-options button {
-            background-color: #e0e0e0;
-            color: #333;
-            border: none;
-            margin-right: 5px;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
+            flex: 1;
+            /* agar semua tombol lebar sama dan responsif */
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid #001B79;
+            background-color: white;
+            color: #001B79;
+            font-weight: 600;
         }
 
         .passenger-options button.active {
             background-color: #001B79;
-            /* warna biru tua */
             color: #fff;
         }
     </style>
