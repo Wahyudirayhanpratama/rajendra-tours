@@ -38,21 +38,27 @@ class MidtransController extends Controller
         $payload = json_decode($request->getContent(), true);
         Log::info('Midtrans Callback:', $payload);
 
-        $orderId = $payload['order_id'] ?? null;
-        $statusCode = $payload['status_code'] ?? null;
+        // Safety check
+        if (!$payload || !isset($payload['order_id'])) {
+            Log::error('Payload tidak valid atau kosong.');
+            return response()->json(['message' => 'Invalid payload'], 400);
+        }
+
+        $orderId = $payload['order_id'];
+        $statusCode = $payload['status_code'] ?? '';
         $grossAmount = number_format((float)($payload['gross_amount'] ?? 0), 2, '.', '');
-        $signatureKey = $payload['signature_key'] ?? null;
+        $signatureKey = $payload['signature_key'] ?? '';
 
         $serverKey = config('midtrans.server_key');
-        $computedSignature = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
+        $expectedSignature = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
 
         Log::info('SIGNATURE DEBUG', [
-            'expected' => $computedSignature,
+            'expected' => $expectedSignature,
             'from_request' => $signatureKey,
             'raw_string' => $orderId . $statusCode . $grossAmount . $serverKey,
         ]);
 
-        if ($signatureKey !== $computedSignature) {
+        if ($signatureKey !== $expectedSignature) {
             Log::warning('Invalid Midtrans Signature.', $payload);
             return response()->json(['message' => 'Invalid signature'], 403);
         }
@@ -72,7 +78,7 @@ class MidtransController extends Controller
                 'payment_type' => $payload['payment_type'] ?? null,
                 'transaction_status' => $payload['transaction_status'] ?? null,
                 'fraud_status' => $payload['fraud_status'] ?? null,
-                'gross_amount' => (int) $payload['gross_amount'],
+                'gross_amount' => (int) $payload['gross_amount'] ?? 0,
                 'va_numbers' => json_encode($payload['va_numbers'] ?? []),
                 'status' => ($payload['transaction_status'] ?? null) === 'settlement' ? 'paid' : 'pending',
                 'waktu_bayar' => isset($payload['transaction_time']) ? Carbon::parse($payload['transaction_time']) : now(),
@@ -84,7 +90,7 @@ class MidtransController extends Controller
                 'status' => 'Lunas',
                 'metode_pembayaran' => $payload['payment_type'] ?? null,
                 'nomor_transaksi' => $payload['transaction_id'] ?? null,
-                'waktu_pembayaran' => Carbon::parse($payload['transaction_time']),
+                'waktu_pembayaran' => Carbon::parse($payload['transaction_time'] ?? now()),
             ]);
         }
 
