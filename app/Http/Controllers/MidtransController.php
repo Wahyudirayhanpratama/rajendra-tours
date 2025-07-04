@@ -61,21 +61,32 @@ class MidtransController extends Controller
                 return response()->json(['message' => 'Pemesanan tidak ditemukan'], 404);
             }
 
-            Pembayaran::updateOrCreate(
-                ['order_id' => $request->order_id],
-                [
-                    'pembayaran_id' => Str::uuid(),
-                    'pemesanan_id' => $pemesanan->pemesanan_id,
-                    'transaction_id' => $request->transaction_id,
-                    'payment_type' => $request->payment_type,
-                    'transaction_status' => $request->transaction_status,
-                    'fraud_status' => $request->fraud_status ?? null,
-                    'gross_amount' => (int)$request->gross_amount,
-                    'va_numbers' => json_encode($request->va_numbers ?? []),
-                    'status' => $request->transaction_status === 'settlement' ? 'paid' : 'pending',
-                    'waktu_bayar' => $request->transaction_time ? \Carbon\Carbon::parse($request->transaction_time) : now(),
-                ]
-            );
+            Log::info('PAYLOAD DEBUG', [
+                'order_id' => $request->order_id,
+                'pemesanan_id' => $pemesanan->pemesanan_id,
+                'transaction_id' => $request->transaction_id,
+                'gross_amount' => $request->gross_amount
+            ]);
+
+            try {
+                Pembayaran::updateOrCreate(
+                    ['order_id' => $request->order_id],
+                    [
+                        'pembayaran_id' => Str::uuid(),
+                        'pemesanan_id' => $pemesanan->pemesanan_id,
+                        'transaction_id' => $request->transaction_id,
+                        'payment_type' => $request->payment_type,
+                        'transaction_status' => $request->transaction_status,
+                        'fraud_status' => $request->fraud_status ?? null,
+                        'gross_amount' => (int)$request->gross_amount,
+                        'va_numbers' => json_encode($request->va_numbers ?? []),
+                        'status' => $request->transaction_status === 'settlement' ? 'paid' : 'pending',
+                        'waktu_bayar' => $request->transaction_time ? Carbon::parse($request->transaction_time) : now(),
+                    ]
+                );
+            } catch (\Exception $e) {
+                Log::error('GAGAL INSERT PEMBAYARAN: ' . $e->getMessage());
+            }
 
             if ($request->transaction_status === 'settlement') {
                 $pemesanan->update([
