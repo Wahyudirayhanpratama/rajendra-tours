@@ -4,7 +4,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- PWA -->
-<link rel="manifest" href="{{ asset('manifest.json') }}">
+<link rel="manifest" href="{{ asset('manifest.json?v=2') }}">
 <meta name="theme-color" content="#000080">
 <link rel="apple-touch-icon" href="{{ asset('icons/icon-192x192.png') }}">
 
