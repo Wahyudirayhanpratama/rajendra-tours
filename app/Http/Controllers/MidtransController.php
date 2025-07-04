@@ -36,69 +36,59 @@ class MidtransController extends Controller
     public function handleNotification(Request $request)
     {
         try {
-            $data = json_decode($request->getContent(), true);
-            Log::info('Midtrans Callback: ', $data);
+            $request->merge(json_decode($request->getContent(), true) ?? []);
+            Log::info('Midtrans Callback:', $request->all());
 
-            // Hitung signature
             $serverKey = config('midtrans.server_key');
-            $expectedSignature = hash(
-                'sha512',
-                $data['order_id'] .
-                    $data['status_code'] .
-                    $data['gross_amount'] .
-                    $serverKey
-            );
+            $raw = $request->order_id . $request->status_code . $request->gross_amount . $serverKey;
+            $computedSignature = hash('sha512', $raw);
 
             Log::info('SIGNATURE DEBUG', [
-                'expected' => $expectedSignature,
-                'from_request' => $data['signature_key'] ?? null,
+                'expected' => $computedSignature,
+                'from_request' => $request->signature_key,
+                'raw_string' => $raw,
             ]);
 
-            // Cek signature
-            if (($data['signature_key'] ?? '') !== $expectedSignature) {
-                Log::warning('Invalid Midtrans Signature.', $data);
+            if ($request->signature_key !== $computedSignature) {
+                Log::warning('Invalid Midtrans Signature.', $request->all());
                 return response()->json(['message' => 'Invalid signature'], 403);
             }
 
-            // Temukan pemesanan
-            $pemesanan = Pemesanan::where('kode_booking', $data['order_id'])->first();
+            $pemesanan = Pemesanan::where('kode_booking', $request->order_id)->first();
             if (!$pemesanan) {
-                Log::error('Pemesanan tidak ditemukan.', $data);
+                Log::error('Pemesanan tidak ditemukan untuk order_id: ' . $request->order_id);
                 return response()->json(['message' => 'Pemesanan tidak ditemukan'], 404);
             }
 
-            // Simpan atau update pembayaran
             Pembayaran::updateOrCreate(
-                ['order_id' => $data['order_id']],
+                ['order_id' => $request->order_id],
                 [
                     'pembayaran_id' => Str::uuid(),
                     'pemesanan_id' => $pemesanan->pemesanan_id,
-                    'transaction_id' => $data['transaction_id'],
-                    'payment_type' => $data['payment_type'],
-                    'transaction_status' => $data['transaction_status'],
-                    'fraud_status' => $data['fraud_status'] ?? null,
-                    'gross_amount' => (int) $data['gross_amount'],
-                    'va_numbers' => json_encode($data['va_numbers'] ?? []),
-                    'status' => $data['transaction_status'] === 'settlement' ? 'paid' : 'pending',
-                    'waktu_bayar' => Carbon::parse($data['transaction_time']),
+                    'transaction_id' => $request->transaction_id,
+                    'payment_type' => $request->payment_type,
+                    'transaction_status' => $request->transaction_status,
+                    'fraud_status' => $request->fraud_status ?? null,
+                    'gross_amount' => (int)$request->gross_amount,
+                    'va_numbers' => json_encode($request->va_numbers ?? []),
+                    'status' => $request->transaction_status === 'settlement' ? 'paid' : 'pending',
+                    'waktu_bayar' => $request->transaction_time ? Carbon::parse($request->transaction_time) : now(),
                 ]
             );
 
-            // Update status pemesanan jika lunas
-            if ($data['transaction_status'] === 'settlement') {
+            if ($request->transaction_status === 'settlement') {
                 $pemesanan->update([
                     'status' => 'Lunas',
-                    'metode_pembayaran' => $data['payment_type'],
-                    'nomor_transaksi' => $data['transaction_id'],
-                    'waktu_pembayaran' => Carbon::parse($data['transaction_time']),
+                    'metode_pembayaran' => $request->payment_type,
+                    'nomor_transaksi' => $request->transaction_id,
+                    'waktu_pembayaran' => Carbon::parse($request->transaction_time),
                 ]);
             }
 
-            return response()->json(['message' => 'Notification handled']);
+            return response(['message' => 'Notification handled']);
         } catch (\Exception $e) {
-            Log::error('Midtrans Callback Error: ' . $e->getMessage(), [
+            Log::error('MIDTRANS ERROR: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
-                'payload' => $request->getContent(),
             ]);
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
