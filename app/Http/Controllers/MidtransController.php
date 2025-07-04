@@ -41,14 +41,23 @@ class MidtransController extends Controller
         Log::info('Midtrans Callback:', $request->all());
 
 
+        $orderId = $request->order_id;
+        $statusCode = $request->status_code;
+        $grossAmount = number_format((float)$request->gross_amount, 2, '.', ''); // "140000.00"
         $serverKey = config('midtrans.server_key');
-        $grossAmount = number_format((float) $request->gross_amount, 0, '', '');
-        $computedSignature = hash('sha512',
-            $request->order_id .
-                $request->status_code .
+        $computedSignature = hash(
+            'sha512',
+            $orderId .
+                $statusCode .
                 $grossAmount .
                 $serverKey
         );
+
+        Log::info('SIGNATURE DEBUG', [
+            'expected' => $computedSignature,
+            'from_request' => $request->signature_key,
+            'raw_string' => $orderId . $statusCode . $grossAmount . $serverKey,
+        ]);
 
         if ($request->signature_key !== $computedSignature) {
             Log::warning('Invalid Midtrans Signature.', $request->all());
