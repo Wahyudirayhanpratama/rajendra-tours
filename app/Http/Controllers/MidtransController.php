@@ -36,71 +36,59 @@ class MidtransController extends Controller
     public function handleNotification(Request $request)
     {
         try {
-            $payload = json_decode($request->getContent(), true);
-            Log::info('Midtrans Callback:', $payload);
+            $request->merge(json_decode($request->getContent(), true) ?? []);
 
-            if (!$payload || !isset($payload['order_id'])) {
-                Log::error('Payload tidak valid atau kosong.');
-                return response()->json(['message' => 'Invalid payload'], 400);
-            }
-
-            $orderId = $payload['order_id'];
-            $statusCode = $payload['status_code'] ?? '';
-            $grossAmount = number_format((float)($payload['gross_amount'] ?? 0), 2, '.', '');
-            $signatureKey = $payload['signature_key'] ?? '';
+            Log::info('Midtrans Callback:', $request->all());
 
             $serverKey = config('midtrans.server_key');
-            $expectedSignature = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
 
-            Log::info('SIGNATURE DEBUG', [
-                'expected' => $expectedSignature,
-                'from_request' => $signatureKey,
-                'raw_string' => $orderId . $statusCode . $grossAmount . $serverKey,
-            ]);
+            $computedSignature = hash(
+                'sha512',
+                $request->order_id .
+                    $request->status_code .
+                    $request->gross_amount .
+                    $serverKey
+            );
 
-            if ($signatureKey !== $expectedSignature) {
-                Log::warning('Invalid Midtrans Signature.', $payload);
+            if ($request->signature_key !== $computedSignature) {
+                Log::warning('Invalid Midtrans Signature.', $request->all());
                 return response()->json(['message' => 'Invalid signature'], 403);
             }
 
-            $pemesanan = \App\Models\Pemesanan::where('kode_booking', $orderId)->first();
+            $pemesanan = Pemesanan::where('kode_booking', $request->order_id)->first();
             if (!$pemesanan) {
-                Log::error('Pemesanan tidak ditemukan untuk order_id: ' . $orderId);
+                Log::error('Pemesanan tidak ditemukan untuk order_id: ' . $request->order_id);
                 return response()->json(['message' => 'Pemesanan tidak ditemukan'], 404);
             }
 
             Pembayaran::updateOrCreate(
-                ['order_id' => $orderId],
+                ['order_id' => $request->order_id],
                 [
                     'pembayaran_id' => Str::uuid(),
                     'pemesanan_id' => $pemesanan->pemesanan_id,
-                    'transaction_id' => $payload['transaction_id'] ?? null,
-                    'payment_type' => $payload['payment_type'] ?? null,
-                    'transaction_status' => $payload['transaction_status'] ?? null,
-                    'fraud_status' => $payload['fraud_status'] ?? null,
-                    'gross_amount' => (int)($payload['gross_amount'] ?? 0),
-                    'va_numbers' => json_encode($payload['va_numbers'] ?? []),
-                    'status' => ($payload['transaction_status'] ?? '') === 'settlement' ? 'paid' : 'pending',
-                    'waktu_bayar' => isset($payload['transaction_time']) ? \Carbon\Carbon::parse($payload['transaction_time']) : now(),
+                    'transaction_id' => $request->transaction_id,
+                    'payment_type' => $request->payment_type,
+                    'transaction_status' => $request->transaction_status,
+                    'fraud_status' => $request->fraud_status ?? null,
+                    'gross_amount' => (int)$request->gross_amount,
+                    'va_numbers' => json_encode($request->va_numbers ?? []),
+                    'status' => $request->transaction_status === 'settlement' ? 'paid' : 'pending',
+                    'waktu_bayar' => $request->transaction_time ? \Carbon\Carbon::parse($request->transaction_time) : now(),
                 ]
             );
 
-            if (($payload['transaction_status'] ?? '') === 'settlement') {
+            if ($request->transaction_status === 'settlement') {
                 $pemesanan->update([
                     'status' => 'Lunas',
-                    'metode_pembayaran' => $payload['payment_type'] ?? null,
-                    'nomor_transaksi' => $payload['transaction_id'] ?? null,
-                    'waktu_pembayaran' => \Carbon\Carbon::parse($payload['transaction_time'] ?? now()),
+                    'metode_pembayaran' => $request->payment_type,
+                    'nomor_transaksi' => $request->transaction_id,
+                    'waktu_pembayaran' => Carbon::parse($request->transaction_time),
                 ]);
             }
 
             return response(['message' => 'Notification handled']);
-        } catch (\Throwable $e) {
-            Log::error('Callback Error: ' . $e->getMessage(), [
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
-                'trace' => $e->getTraceAsString(),
-            ]);
+        } catch (\Exception $e) {
+            Log::error('Callback Error: ' . $e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
