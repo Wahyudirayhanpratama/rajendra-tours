@@ -39,6 +39,8 @@ class MidtransController extends Controller
         if (empty($data)) {
             $data = json_decode(file_get_contents('php://input'), true);
         }
+        Log::info('💡 NOTIFIKASI MASUK:', ['request' => $request->all()]);
+        Log::info('💡 JSON DECODED:', ['data' => $data]);
 
         Log::info('Midtrans Callback:', $data);
 
