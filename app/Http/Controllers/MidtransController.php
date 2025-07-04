@@ -42,10 +42,11 @@ class MidtransController extends Controller
 
 
         $serverKey = config('midtrans.server_key');
+        $grossAmount = number_format((float) $request->gross_amount, 0, '', '');
         $computedSignature = hash('sha512',
             $request->order_id .
                 $request->status_code .
-                $request->gross_amount .
+                $grossAmount .
                 $serverKey
         );
 
@@ -85,6 +86,6 @@ class MidtransController extends Controller
             ]);
         }
 
-        return response(['message' => 'Notification handled']);
+        return response()->json(['message' => 'Notification handled'], 200);
     }
 }
