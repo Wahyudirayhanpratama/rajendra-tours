@@ -139,7 +139,7 @@
 
         .passenger-icon {
             font-size: 24px;
-            color: #001B79;
+            color: black;
             flex-shrink: 0;
         }
 
