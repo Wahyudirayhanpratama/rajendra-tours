@@ -128,3 +128,7 @@ Route::get('/test-signature', function () {
 
     return $signature;
 });
+
+use App\Http\Controllers\MidtransController;
+
+Route::post('/midtrans/callback', [MidtransController::class, 'handleNotification']);

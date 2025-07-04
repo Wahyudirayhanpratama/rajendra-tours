@@ -35,6 +35,10 @@ class MidtransController extends Controller
     }
     public function handleNotification(Request $request)
     {
+        Log::info('📥 MIDTRANS MASUK');
+
+        $data = $request->all();
+        Log::info('📦 DATA DITERIMA:', $data);
         $data = $request->all();
         if (empty($data)) {
             $data = json_decode(file_get_contents('php://input'), true);
