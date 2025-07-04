@@ -91,7 +91,8 @@
                 <div class="form-group mb-3">
                     <div class="input-group">
                         <span class="input-group-text bg-white">
-                            <img class="icon-regist" src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="22">
+                            <img class="icon-regist" src="https://img.icons8.com/ios-filled/50/000000/car-seat.png"
+                                width="22">
                         </span>
                         <input type="text" id="inputTempatDuduk" class="form-control" placeholder="Pilih Kursi" readonly>
                         <span class="input-group-text bg-white">
@@ -225,7 +226,8 @@
                             <div class="row text-center" id="seatmapWrapper">
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="1">
-                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>1
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png"
+                                            width="32"><br>1
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
@@ -236,22 +238,26 @@
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="2">
-                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>2
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png"
+                                            width="32"><br>2
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="3">
-                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>3
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png"
+                                            width="32"><br>3
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="4">
-                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>4
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png"
+                                            width="32"><br>4
                                     </button>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <button class="btn seat-btn" data-seat="5">
-                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="32"><br>5
+                                        <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png"
+                                            width="32"><br>5
                                     </button>
                                 </div>
                             </div>
@@ -265,78 +271,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <!-- Modal Pembayaran -->
-    <div class="modal fade" id="popupPembayaran" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content">
-                <div class="modal-header modal-header-custom d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="mb-1"><i class="bi bi-geo-alt"></i> <span id="modal-rute"></span></div>
-                        <div><i class="bi bi-calendar"></i> <span id="modal-tanggal"></span></div>
-                    </div>
-                    <div class="text-end">
-                        <div class="mb-1"><i class="bi bi-car-front-fill"></i> <span id="modal-plat"></div>
-                        <div><i class="bi bi-person"></i> <span id="modal-jumlah"></span></div>
-                    </div>
-                </div>
-                <div class="modal-custom">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-dark fw-bold">Total</small>
-                            <h5 class="mb-1" id="modal-total"></h5>
-                            <small class="text-muted">Order ID <span id="modal-order"></span></small>
-                        </div>
-                        <div class="timer-text">Pilih dalam <span id="countdown">23:59:59</span></div>
-                    </div>
-                </div>
-                <div class="modal-body px-4">
-                    <div class="mb-2 fw-semibold">Pilih Metode</div>
-                    <div class="mb-3">
-                        <div class="fw-semibold mb-1">Transfer Bank</div>
-                        <div class="logo-bank d-flex flex-wrap">
-                            <div class="payment-option">
-                                <img src="{{ asset('storage/BCA.png') }}" alt="BCA">
-                            </div>
-                            <div class="payment-option">
-                                <img src="{{ asset('storage/Mandiri.png') }}" alt="Mandiri">
-                            </div>
-                            <div class="payment-option">
-                                <img src="{{ asset('storage/BNI.png') }}" alt="BNI">
-                            </div>
-                            <div class="payment-option">
-                                <img src="{{ asset('storage/BRI.png') }}" alt="BRI">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="fw-semibold mb-1">Gopay / QRIS</div>
-                        <div class="logo-qris d-flex flex-wrap">
-                            <div class="payment-option">
-                                <img src="{{ asset('storage/Gopay.png') }}" alt="Gopay">
-                            </div>
-                            <div class="payment-option">
-                                <img src="{{ asset('storage/Qris.png') }}" alt="QRIS">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
-                        <button type="button" class="btn btn-po" id="pay-button">Konfirmasi &
-                            Lanjutkan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @if (isset($snapToken))
-        <script>
-            console.log("Snap Token:", "{{ $snapToken }}");
-            const bayarModal = new bootstrap.Modal(document.getElementById('popupPembayaran'));
-            bayarModal.show();
-        </script>
-    @endif --}}
 @endsection
 
 @push('headerspwa')
@@ -556,9 +490,21 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                location.reload(); // Refresh agar modal hilang dan data tampil
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil Login!',
+                                    text: 'Selamat datang kembali.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.reload(); // Refresh setelah alert selesai
+                                });
                             } else {
-                                alert(response.message);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: response.message || 'Login gagal, coba lagi.'
+                                });
                             }
                         },
                         error: function(xhr) {
@@ -566,7 +512,12 @@
                             if (xhr.responseJSON?.message) {
                                 msg = xhr.responseJSON.message;
                             }
-                            alert(msg);
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: msg
+                            });
                         },
                         complete: function() {
                             $btn.prop('disabled', false).html('LOGIN');
@@ -673,61 +624,4 @@
             });
         });
     </script>
-
-    {{-- <script>
-        // Countdown Timer
-        function startCountdown(duration, display) {
-            let timer = duration,
-                hours, minutes, seconds;
-            setInterval(function() {
-                hours = Math.floor(timer / 3600);
-                minutes = Math.floor((timer % 3600) / 60);
-                seconds = timer % 60;
-
-                display.textContent = `${hours.toString().padStart(2, '0')}:${minutes
-        .toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-                if (--timer < 0) timer = 0;
-            }, 1000);
-        }
-
-        window.onload = function() {
-            const countdownDisplay = document.getElementById("countdown");
-            startCountdown(60 * 60, countdownDisplay); // 1 jam
-        };
-    </script> --}}
-
-    {{-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const modal = new bootstrap.Modal(document.getElementById('popupPembayaran'));
-            const form = document.querySelector('form');
-            const btnShowModal = document.getElementById('btnShowModal');
-
-            btnShowModal.addEventListener('click', function() {
-                // Ambil nilai dari input atau session
-                const asal = "{{ session('cityfrom') }}";
-                const tujuan = "{{ session('cityto') }}";
-                const tanggal = "{{ formatIndonesianDate(session('tanggal')) }}";
-                const jumlah = "{{ session('jumlah_penumpang') }}";
-                const total = "{{ number_format($total_harga, 0, ',', '.') }}";
-                const orderId = "BK-{{ strtoupper(Str::random(6)) }}"; // contoh dummy
-                const platNomor =
-                    "{{ session('nomor_polisi') }}"; // bisa diganti dengan dinamis jika datanya ada
-
-                // Tampilkan ke modal
-                document.getElementById('modal-rute').textContent = asal + " – " + tujuan;
-                document.getElementById('modal-tanggal').textContent = tanggal;
-                document.getElementById('modal-plat').textContent = platNomor;
-                document.getElementById('modal-jumlah').textContent = jumlah + " Penumpang";
-                document.getElementById('modal-total').textContent = "Rp. " + total;
-                document.getElementById('modal-order').textContent = orderId;
-
-                modal.show();
-            });
-
-            document.getElementById('btnConfirmPayment').addEventListener('click', function() {
-                form.submit();
-            });
-        });
-    </script> --}}
 @endpush

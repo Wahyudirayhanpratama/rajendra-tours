@@ -37,18 +37,14 @@ class TiketController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $cityfromSingkat = $singkatanKota[strtolower($cityfrom)] ?? strtoupper($cityfrom);
-        $citytoSingkat = $singkatanKota[strtolower($cityto)] ?? strtoupper($cityto);
-
         return view('pelanggan.tiket', compact(
             'userId',
             'pemesanans',
             'cityfrom',
             'cityto',
-            'cityfromSingkat',
-            'citytoSingkat',
             'pemesanansAktif'
         ));
+        // dd(session()->all());
     }
     public function show(Request $request, $id)
     {

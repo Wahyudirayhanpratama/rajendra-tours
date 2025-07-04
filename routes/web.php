@@ -42,7 +42,6 @@ Route::get('/', [JadwalController::class, 'showCari'])->name('cari-jadwal');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
-// Logout menggunakan controller
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Middleware manual cek session agar tidak bisa akses dashboard kalau belum login

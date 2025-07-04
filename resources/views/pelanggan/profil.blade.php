@@ -59,7 +59,7 @@
                     <div><i class="bi bi-ticket-perforated me-2"></i> Tiket Saya</div>
                     <i class="bi bi-chevron-right"></i>
                 </a>
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                <a href="#" data-confirm="logout"
                     class="d-flex justify-content-between align-items-center px-3 py-3 shadow bg-white rounded-4 text-decoration-none text-dark border-0">
                     <div><i class="bi bi-box-arrow-right me-2"></i> Keluar</div>
                     <i class="bi bi-chevron-right"></i>

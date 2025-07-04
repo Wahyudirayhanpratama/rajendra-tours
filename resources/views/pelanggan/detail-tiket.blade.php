@@ -73,12 +73,12 @@
         <div class="d-grid gap-2 mx-3 btn-fix">
             @if ($pemesanan->status !== 'Tiket dibatalkan')
                 <form action="{{ route('tiket.batalkan', $pemesanan->pemesanan_id) }}" method="POST"
-                    onsubmit="return confirm('Yakin ingin membatalkan tiket ini?')" class="w-100">
+                    class="form-batalkan d-inline">
                     @csrf
-                    <button type="submit" class="btn btn-po fw-bold w-100">Batalkan Pesanan</button>
+                    <button type="submit" class="btn btn-po fw-bold w-100 btn-confirm-batalkan">Batalkan Pesanan</button>
                 </form>
             @endif
-            <button class="btn btn-outline-po fw-bold" onclick="history.back()">Cancel</button>
+            <a href="{{ route('tiket') }}" class="btn btn-outline-po fw-bold">Cancel</a>
         </div>
     </div>
 @endsection
@@ -124,4 +124,34 @@
             margin-top: 150px;
         }
     </style>
+@endpush
+
+@push('scriptspwa')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('.form-batalkan');
+
+            forms.forEach(function(form) {
+                const button = form.querySelector('.btn-confirm-batalkan');
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: 'Batalkan Tiket?',
+                        text: 'Apakah kamu yakin ingin membatalkan pesanan ini?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, Batalkan!',
+                        cancelButtonText: 'Tidak'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 @endpush

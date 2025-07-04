@@ -151,7 +151,7 @@ class PenumpangController extends Controller
         $snapToken = $midtrans->createSnapToken(
             'ORDER-' . uniqid(),
             $jadwal->harga, // atau total harga pemesanan sementara
-            auth('pelanggan')->user()->nama
+            auth('pelanggan')->user()->nama??''
         );
 
         // Ambil semua kursi yang sudah dipilih untuk jadwal & mobil ini

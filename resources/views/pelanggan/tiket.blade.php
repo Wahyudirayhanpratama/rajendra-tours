@@ -35,7 +35,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="p-2 border rounded d-flex justify-content-between align-items-center"
-                                        style="height: 36px; width: 6cm;">
+                                        style="height: 36px; width: 7cm;">
                                         <span class="fw-bold fs-7 mb-0">No Tiket:
                                             <strong>{{ $pemesanan->tiket->no_tiket ?? '-' }}</strong></span>
                                     </div>
@@ -46,15 +46,24 @@
                         </div>
                         <div class="card-body text-center">
                             <div class="row justify-content-center">
-                                <div class="col-10">
+                                <div class="col-12 col-sm-10">
                                     <div class="d-flex justify-content-between align-items-center fs-20 fw-bold text-dark">
-                                        <span>{{ $cityfromSingkat }}</span>
-                                        <span style="flex-grow: 1; text-align: center;">
+                                        <span class="fw-bold fs-6 fs-sm-5 text-start">
+                                            {{ singkatanKota($pemesanan->jadwal->kota_asal?? '?' ) }}</span>
+
+                                        <span class="flex-grow-1 text-center d-none d-sm-block">
                                             <span style="font-size: 18px;">⭘</span>
-                                            <span style="letter-spacing: 3px;">----------------------</span>
+                                            <span class="d-inline-block"
+                                                style="letter-spacing: 3px;">----------------------</span>
                                             <span style="font-size: 18px;">→</span>
                                         </span>
-                                        <span>{{ $citytoSingkat }}</span>
+                                        <!-- Gaya alternatif untuk mobile -->
+                                        <span class="w-100 text-center d-block d-sm-none my-2">
+                                            <span class="d-inline-block mx-2" style="font-size: 12px;">→</span>
+                                        </span>
+
+                                        <span class="fw-bold fs-6 fs-sm-5 text-end">
+                                            {{ singkatanKota($pemesanan->jadwal->kota_tujuan?? '?') }}</span>
                                     </div>
                                 </div>
                             </div>

@@ -16,6 +16,9 @@
 <!-- CDN SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+{{-- Panggil helper --}}
+{!! sweetAlert() !!}
+
 {{-- PWA --}}
 <script>
     if ('serviceWorker' in navigator) {

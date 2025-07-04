@@ -42,3 +42,15 @@ function formatHariTanggalPendek($dateString)
         return $dateString;
     }
 }
+
+function singkatanKota($nama)
+{
+    $singkatan = [
+        'pekanbaru' => 'PKU',
+        'padang' => 'PDG',
+        'duri' => 'DURI',
+    ];
+
+    $nama = strtolower($nama ?? '-');
+    return $singkatan[$nama] ?? strtoupper($nama);
+}
