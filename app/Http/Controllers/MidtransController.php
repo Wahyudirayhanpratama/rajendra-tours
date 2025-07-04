@@ -35,9 +35,14 @@ class MidtransController extends Controller
     }
     public function handleNotification(Request $request)
     {
+        // Parsing JSON dari Midtrans
+        $request->merge(json_decode($request->getContent(), true) ?? []);
+
+        Log::info('Midtrans Callback:', $request->all());
+
+
         $serverKey = config('midtrans.server_key');
-        $computedSignature = hash(
-            'sha512',
+        $computedSignature = hash('sha512',
             $request->order_id .
                 $request->status_code .
                 $request->gross_amount .

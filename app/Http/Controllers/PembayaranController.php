@@ -8,10 +8,11 @@ use App\Models\Jadwal;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Illuminate\Support\Facades\Auth;
+use App\Services\MidtransService;
 
 class PembayaranController extends Controller
 {
-    public function preview(Request $request)
+    public function preview(Request $request, MidtransService $midtrans)
     {
         // Validasi data minimal dulu (opsional)
         $request->validate([
@@ -68,7 +69,7 @@ class PembayaranController extends Controller
             ]
         ];
 
-        $snapToken = Snap::getSnapToken($payload);
+        $snapToken = $midtrans->createSnapTransaction($payload);
 
         return view('pelanggan.bayar', [
             'cityfrom' => session('cityfrom'),
