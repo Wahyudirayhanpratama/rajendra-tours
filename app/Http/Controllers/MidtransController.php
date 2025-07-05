@@ -41,10 +41,13 @@ class MidtransController extends Controller
         $data = $request->all();
         // Jika request body kosong, coba ambil dari php://input (untuk beberapa kasus Midtrans)
         if (empty($data)) {
-            $data = json_decode(file_get_contents('php://input'), true);
+            $rawInput = file_get_contents('php://input');
+            $decodedInput = json_decode($rawInput, true);
+            // Pastikan $data selalu berupa array, bahkan jika decoding gagal
+            $data = is_array($decodedInput) ? $decodedInput : [];
         }
 
-        Log::info('DATA RECEIVED:', $data); // Log data lengkap yang diterima
+        Log::info('DATA RECEIVED:', $data); // Sekarang $data dijamin berupa array
 
         // Pastikan order_id ada dalam data notifikasi
         if (!isset($data['order_id'])) {
