@@ -58,7 +58,7 @@ class MidtransController extends Controller
             $notif = new Notification();
 
             // Ambil data dari objek notifikasi
-            $transactionStatus = $request->transaction_status;
+            $transactionStatus = $notif->transaction_status;
             $orderId = $request->order_id;
             $grossAmount = (int) $request->gross_amount; // Pastikan ini integer
             $paymentType = $request->payment_type;
@@ -110,36 +110,23 @@ class MidtransController extends Controller
                 return response()->json(['message' => 'Pemesanan not found'], 404);
             }
 
-            $pembayaran = Pembayaran::where('order_id', $orderId)->first();
-
-            if ($pembayaran) {
-                // Update status jika notifikasi baru masuk
-                $pembayaran->update([
-                    'transaction_status' => $transactionStatus,
-                    'status' => $transactionStatus === 'settlement' ? 'paid' : 'pending',
-                    'transaction_id' => $transactionId,
-                    'gross_amount' => $grossAmount,
-                    'va_numbers' => $vaNumber,
-                    'fraud_status' => $fraudStatus,
-                    'payment_type' => $paymentType,
-                    'waktu_bayar' => $transactionTime ?? now(),
-                ]);
-            } else {
-                // Insert baru jika belum ada
-                Pembayaran::create([
-                    'pembayaran_id' => Str::uuid(),
+            // Simpan atau perbarui data pembayaran ke tabel 'pembayaran'
+            // Menggunakan updateOrCreate agar jika notifikasi datang berkali-kali, tidak membuat duplikat
+            Pembayaran::updateOrCreate(
+                ['order_id' => $orderId], // Kondisi untuk mencari record yang sudah ada
+                [
+                    'pembayaran_id' => Str::uuid(), // Generate UUID baru jika ini adalah record baru
                     'pemesanan_id' => $pemesanan->pemesanan_id,
-                    'order_id' => $orderId,
                     'transaction_id' => $transactionId,
                     'payment_type' => $paymentType,
                     'transaction_status' => $transactionStatus,
                     'fraud_status' => $fraudStatus ?? null,
-                    'gross_amount' => $grossAmount,
-                    'va_numbers' => $vaNumber,
-                    'status' => $transactionStatus === 'settlement' ? 'paid' : 'pending',
-                    'waktu_bayar' => $transactionTime ?? now(),
-                ]);
-            }
+                    'gross_amount' => $grossAmount, // Menggunakan grossAmount dari notifikasi
+                    'va_numbers' => $vaNumber, // Simpan sebagai JSON string
+                    'status' => $transactionStatus === 'settlement' ? 'paid' : 'pending', // Atur status pembayaran di tabel pembayaran
+                    'waktu_bayar' => $transactionTime ?? now(), // Waktu transaksi dari Midtrans
+                ]
+            );
 
             // Update status pemesanan berdasarkan transaction_status dari Midtrans
             if ($transactionStatus === 'settlement') {
@@ -176,6 +163,7 @@ class MidtransController extends Controller
             }
             Log::info('UPDATE DATA FINAL:', $updateData);
             return response()->json(['message' => 'Notification processed successfully'], 200);
+
         } catch (\Exception $e) {
             // Tangani error jika ada masalah saat memproses notifikasi
             Log::error('Error processing Midtrans notification: ' . $e->getMessage(), ['exception' => $e]);
