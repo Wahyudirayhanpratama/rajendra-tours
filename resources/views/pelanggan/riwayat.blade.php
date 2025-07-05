@@ -104,7 +104,7 @@
                             <!-- Nomor Transaksi -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <p class="mb-0">Nomor Transaksi</p>
-                                <p class="fw-medium mb-0">{{ $pemesanan->va_number }}</p>
+                                <p class="fw-medium mb-0">{{ strtoupper(str_replace('-', '', $pemesanan->transaction_id)) }}</p>
                             </div>
 
                             <!-- Tanggal Transaksi -->
