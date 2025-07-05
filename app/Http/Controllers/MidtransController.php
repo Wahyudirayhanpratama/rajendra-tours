@@ -116,30 +116,37 @@ class MidtransController extends Controller
             // Update status pemesanan berdasarkan transaction_status dari Midtrans
             if ($transactionStatus === 'settlement') {
                 // Jika pembayaran berhasil (settlement)
-                $pemesanan->update([
+                $updateData = [
                     'status' => 'Lunas',
                     'transaction_id' => $transactionId,
                     'transaction_time' => $transactionTime ?? now(),
                     'payment_type' => $paymentType,
                     'va_number' => $vaNumber, // Simpan VA number tunggal
                     'gross_amount' => $grossAmount, // Simpan gross_amount dari notifikasi
-                ]);
+                ];
+                // Log data yang akan di-update ke tabel pemesanan
+                Log::info('UPDATING PEMESANAN WITH DATA:', $updateData);
                 Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Lunas.');
             } elseif (in_array($transactionStatus, ['expire', 'cancel', 'deny'])) {
                 // Jika pembayaran kedaluwarsa, dibatalkan, atau ditolak
-                $pemesanan->update([
+                $updateData = [
                     'status' => 'Batal', // Atau 'Gagal' untuk 'deny'
                     'transaction_id' => $transactionId,
                     'transaction_time' => $transactionTime ?? now(),
                     'payment_type' => $paymentType,
                     'va_number' => $vaNumber, // Simpan VA number tunggal
                     'gross_amount' => $grossAmount, // Simpan gross_amount dari notifikasi
-                ]);
+                ];
+
+                // Log data yang akan di-update ke tabel pemesanan
+                Log::info('UPDATING PEMESANAN WITH DATA (CANCEL/EXPIRE):', $updateData);
+
+                // Jika pembayaran kedaluwarsa, dibatalkan, atau ditolak
+                $pemesanan->update($updateData);
                 Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Batal.');
             }
             // Anda bisa menambahkan kondisi lain untuk status 'pending', 'challenge', dll.
             // Untuk 'pending', status pemesanan bisa tetap 'belum_lunas' atau 'pending_pembayaran'
-
             return response()->json(['message' => 'Notification processed successfully'], 200);
         } catch (\Exception $e) {
             // Tangani error jika ada masalah saat memproses notifikasi
