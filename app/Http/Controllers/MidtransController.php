@@ -37,14 +37,19 @@ class MidtransController extends Controller
     {
         Log::info('MIDTRANS NOTIFICATION RECEIVED');
 
+        // Log raw input dari php://input untuk debugging
+        $rawInput = file_get_contents('php://input');
+        Log::info('RAW INPUT FROM PHP://INPUT:', ['raw_data' => $rawInput]);
+
         // Inisialisasi konfigurasi Midtrans (pastikan sesuai dengan env Anda)
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        Config::$isProduction = (bool) env('MIDTRANS_IS_PRODUCTION', false); // Sesuaikan dengan env Anda
+        Config::$isProduction = (bool) env('MIDTRANS_IS_PRODUCTION', false);
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
         try {
             // Gunakan Midtrans\Notification untuk membaca dan memverifikasi notifikasi
+            // Pustaka ini akan membaca rawInput secara internal
             $notif = new Notification();
 
             $transactionStatus = $notif->transaction_status;
@@ -54,7 +59,8 @@ class MidtransController extends Controller
             $transactionTime = $notif->transaction_time;
             $transactionId = $notif->transaction_id;
             $fraudStatus = $notif->fraud_status;
-            $vaNumbers = property_exists($notif, 'va_numbers') ? $notif->va_numbers : []; // Handle jika tidak ada VA numbers
+            // Menggunakan property_exists untuk memeriksa keberadaan properti sebelum mengaksesnya
+            $vaNumbers = property_exists($notif, 'va_numbers') ? $notif->va_numbers : [];
 
             // Log semua data yang diterima dari objek notifikasi untuk debugging
             Log::info('PARSED NOTIFICATION DATA:', [
@@ -113,8 +119,6 @@ class MidtransController extends Controller
                 ]);
                 Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Batal.');
             }
-            // Anda bisa menambahkan kondisi lain untuk status 'pending', 'challenge', dll.
-            // Untuk 'pending', status pemesanan bisa tetap 'belum_lunas' atau 'pending_pembayaran'
 
             return response()->json(['message' => 'Notification processed successfully'], 200);
         } catch (\Exception $e) {
