@@ -16,7 +16,7 @@ class RiwayatController extends Controller
         // Tiket lama (riwayat): tanggal keberangkatan sudah lewat
         $riwayatTiket = Pemesanan::with(['jadwal', 'tiket'])
             ->where('user_id', $userId)
-            ->whereRaw("LOWER(status) IN ('lunas', 'tiket dibatalkan')")
+            ->whereIn('status', ['Lunas', 'Tiket dibatalkan'])
             ->whereHas('jadwal', function ($query) {
                 $query->whereDate('tanggal', '<', Carbon::today());
             })

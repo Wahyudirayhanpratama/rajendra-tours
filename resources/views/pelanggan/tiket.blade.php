@@ -84,7 +84,7 @@
                     </div>
                 </a>
             @empty
-                <div class="text-center text-muted alert alert-secondary mt-3">
+                <div class="text-center text-muted alert alert-secondary mt-3 mx-2">
                     Belum ada tiket aktif.
                 </div>
             @endforelse
