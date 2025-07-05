@@ -8,6 +8,7 @@ use App\Models\Pembayaran;
 use App\Services\MidtransService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Midtrans\Config;
 use Midtrans\Notification;
@@ -51,6 +52,8 @@ class MidtransController extends Controller
             // Gunakan Midtrans\Notification untuk membaca dan memverifikasi notifikasi
             // Pustaka ini akan membaca rawInput secara internal dan memvalidasi signature_key
             $notif = new Notification();
+
+            Log::info($notif);
 
             // Ambil data dari objek notifikasi
             $transactionStatus = $notif->transaction_status;
