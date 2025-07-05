@@ -37,19 +37,13 @@ class MidtransController extends Controller
     {
         Log::info('📥 MIDTRANS MASUK');
 
-        $data = $request->all();
-        Log::info('📦 DATA DITERIMA:', $data);
-        $data = $request->all();
-        if (empty($data)) {
-            $data = json_decode(file_get_contents('php://input'), true);
-        }
-        Log::info('💡 NOTIFIKASI MASUK:', ['request' => $request->all()]);
-        Log::info('💡 JSON DECODED:', ['data' => $data]);
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
 
-        Log::info('Midtrans Callback:', $data);
+        Log::info('📦 RAW JSON:', ['raw' => $json]);
+        Log::info('📦 DATA PARSED:', ['data' => $data]);
 
-        // ❗️ Skip validasi signature dulu
-        if (!isset($data['order_id'])) {
+        if (!$data || !isset($data['order_id'])) {
             return response()->json(['message' => 'Invalid request'], 400);
         }
 
