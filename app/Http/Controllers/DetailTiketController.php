@@ -16,7 +16,7 @@ class DetailTiketController extends Controller
     }
     public function batalkan($id)
     {
-        $pemesanan = Pemesanan::with('jadwal')->where('pemesanan_id', $id)->firstOrFail();
+        $pemesanan = Pemesanan::with(['jadwal', 'penumpangs'])->where('pemesanan_id', $id)->firstOrFail();
 
         // Cek status sudah dibatalkan atau belum
         if ($pemesanan->status === 'Tiket dibatalkan') {
@@ -36,6 +36,11 @@ class DetailTiketController extends Controller
             'status' => 'Tiket dibatalkan',
         ]);
 
-        return redirect()->route('detail.show', $id)->with('success', 'Tiket berhasil dibatalkan.');
+        // Kosongkan nomor kursi penumpang agar bisa digunakan kembali
+        foreach ($pemesanan->penumpangs as $penumpang) {
+            $penumpang->update(['nomor_kursi' => null]);
+        }
+
+        return redirect()->route('detail.show', $id)->with('success', 'Tiket berhasil dibatalkan dan kursi dikembalikan.');
     }
 }
