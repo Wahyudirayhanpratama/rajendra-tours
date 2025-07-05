@@ -185,6 +185,7 @@ class MidtransController extends Controller
                 $pemesanan->update($updateData);
                 Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Batal.');
             }
+            Log::info('UPDATE DATA FINAL:', $updateData);
             return response()->json(['message' => 'Notification processed successfully'], 200);
 
         } catch (\Exception $e) {
