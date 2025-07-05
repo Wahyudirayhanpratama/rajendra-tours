@@ -126,6 +126,7 @@ class MidtransController extends Controller
                 ];
                 // Log data yang akan di-update ke tabel pemesanan
                 Log::info('UPDATING PEMESANAN WITH DATA:', $updateData);
+                $pemesanan->update($updateData);
                 Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Lunas.');
             } elseif (in_array($transactionStatus, ['expire', 'cancel', 'deny'])) {
                 // Jika pembayaran kedaluwarsa, dibatalkan, atau ditolak
@@ -137,7 +138,6 @@ class MidtransController extends Controller
                     'va_number' => $vaNumber, // Simpan VA number tunggal
                     'gross_amount' => $grossAmount, // Simpan gross_amount dari notifikasi
                 ];
-
                 // Log data yang akan di-update ke tabel pemesanan
                 Log::info('UPDATING PEMESANAN WITH DATA (CANCEL/EXPIRE):', $updateData);
 
@@ -148,6 +148,7 @@ class MidtransController extends Controller
             // Anda bisa menambahkan kondisi lain untuk status 'pending', 'challenge', dll.
             // Untuk 'pending', status pemesanan bisa tetap 'belum_lunas' atau 'pending_pembayaran'
             return response()->json(['message' => 'Notification processed successfully'], 200);
+            
         } catch (\Exception $e) {
             // Tangani error jika ada masalah saat memproses notifikasi
             Log::error('Error processing Midtrans notification: ' . $e->getMessage(), ['exception' => $e]);
