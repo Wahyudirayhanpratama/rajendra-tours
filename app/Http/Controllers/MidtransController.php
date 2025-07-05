@@ -39,7 +39,8 @@ class MidtransController extends Controller
         Log::info('MIDTRANS NOTIFICATION RECEIVED');
         Log::info($request->all());
         Log::info($request->va_numbers);
-        Log::info($request->va_numbers[0]->va_number);
+        Log::info($request->va_numbers[0]);
+        Log::info($request->va_numbers[0]['va_number']);
 
         // Log raw input dari php://input untuk debugging masalah server
         $rawInput = file_get_contents('php://input');
