@@ -75,8 +75,8 @@
     <div class="modal modal-bottom" id="profilModal" tabindex="-1" aria-labelledby="profilModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-fullscreen-sm-down">
             <div class="modal-content rounded-4 border-0">
-                <!-- Header dengan Logo dan Tombol Silang -->
-                <div class="d-flex justify-content-between align-items-center px-3 pt-3">
+                <!-- Header dengan Tombol Silang di Kanan -->
+                <div class="d-flex justify-content-end align-items-center px-3 pt-3">
                     <a href="#" data-bs-dismiss="modal">
                         <i class="uil uil-multiply fs-18 text-dark"></i>
                     </a>
