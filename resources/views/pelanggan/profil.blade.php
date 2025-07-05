@@ -75,11 +75,15 @@
     <div class="modal modal-bottom" id="profilModal" tabindex="-1" aria-labelledby="profilModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-fullscreen-sm-down">
             <div class="modal-content rounded-4 border-0">
-                <div class="modal-body">
-                    <a href="#" data-bs-dismiss="modal" class="position-absolute top-0 end-0 mt-5 me-3">
+                <div class="modal-body position-relative pt-4"> <!-- Tambahkan pt-4 untuk jarak atas -->
+                    <!-- Tombol silang di pojok kanan atas -->
+                    <a href="#" data-bs-dismiss="modal" class="position-absolute top-0 end-0 mt-2 me-3">
                         <i class="uil uil-multiply fs-18 text-dark"></i>
                     </a>
-                    <h6 class="text-center fw-bold mt-4 mb-4">PROFIL SAYA</h6>
+
+                    <!-- Judul tetap di tengah -->
+                    <h6 class="text-center fw-bold mt-2 mb-4">PROFIL SAYA</h6>
+
                     <form action="{{ route('profil.update') }}" method="POST">
                         @csrf
                         @method('PUT')
