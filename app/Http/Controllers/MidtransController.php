@@ -54,7 +54,7 @@ class MidtransController extends Controller
             $notif = new Notification();
 
             Log::error('Test');
-            Log::info($notif);
+            Log::info('NOTIF DATA (from $notif):', ['notif' => json_encode($notif)]);
 
 
             // Ambil data dari objek notifikasi
