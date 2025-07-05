@@ -61,18 +61,26 @@ class MidtransController extends Controller
             $transactionId = $notif->transaction_id;
             $fraudStatus = $notif->fraud_status;
             // Pastikan properti va_numbers ada sebelum diakses
-            $vaNumbers = property_exists($notif, 'va_numbers') ? $notif->va_numbers : [];
+            $vaNumbersRaw = property_exists($notif, 'va_numbers') ? $notif->va_numbers : [];
             // Ambil va_number tunggal jika ada (misal: untuk bank transfer)
             $vaNumber = null;
-            if (!empty($vaNumbers) && is_array($vaNumbers)) {
-                foreach ($vaNumbers as $va) {
+            if (!empty($vaNumbersRaw) && is_array($vaNumbersRaw)) {
+                foreach ($vaNumbersRaw as $va) {
+                    // Coba ambil va_number umum
                     if (isset($va->va_number)) {
                         $vaNumber = $va->va_number;
                         break;
                     }
+                    // Coba ambil bill_key untuk echannel (Mandiri Bill Payment)
+                    if (isset($va->bill_key) && isset($va->biller_code)) {
+                        $vaNumber = $va->biller_code . '-' . $va->bill_key; // Gabungkan biller_code dan bill_key
+                        break;
+                    }
                 }
             }
-
+            if ($vaNumber === null && property_exists($notif, 'bill_key') && property_exists($notif, 'biller_code')) {
+                $vaNumber = $notif->biller_code . '-' . $notif->bill_key;
+            }
 
             // Log semua data yang berhasil diurai dari objek notifikasi
             Log::info('PARSED NOTIFICATION DATA:', [
@@ -83,7 +91,7 @@ class MidtransController extends Controller
                 'transaction_time' => $transactionTime,
                 'transaction_id' => $transactionId,
                 'fraud_status' => $fraudStatus,
-                'va_numbers' => $vaNumbers,
+                'va_numbers' => $vaNumbersRaw,
                 'va_number_single' => $vaNumber, // Log VA number tunggal
             ]);
 
@@ -107,7 +115,7 @@ class MidtransController extends Controller
                     'transaction_status' => $transactionStatus,
                     'fraud_status' => $fraudStatus ?? null,
                     'gross_amount' => $grossAmount, // Menggunakan grossAmount dari notifikasi
-                    'va_numbers' => json_encode($vaNumbers), // Simpan sebagai JSON string
+                    'va_numbers' => json_encode($vaNumbersRaw), // Simpan sebagai JSON string
                     'status' => $transactionStatus === 'settlement' ? 'paid' : 'pending', // Atur status pembayaran di tabel pembayaran
                     'waktu_bayar' => $transactionTime ?? now(), // Waktu transaksi dari Midtrans
                 ]
@@ -128,6 +136,7 @@ class MidtransController extends Controller
                 Log::info('UPDATING PEMESANAN WITH DATA:', $updateData);
                 $pemesanan->update($updateData);
                 Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Lunas.');
+
             } elseif (in_array($transactionStatus, ['expire', 'cancel', 'deny'])) {
                 // Jika pembayaran kedaluwarsa, dibatalkan, atau ditolak
                 $updateData = [
