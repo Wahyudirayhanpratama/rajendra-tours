@@ -76,7 +76,7 @@
         <div class="modal-dialog modal-sm modal-fullscreen-sm-down">
             <div class="modal-content rounded-4 border-0">
                 <div class="modal-body">
-                    <a href="#" data-bs-dismiss="modal" class="position-absolute top-0 end-0 mt-4 me-3">
+                    <a href="#" data-bs-dismiss="modal" class="position-absolute top-0 end-0 mt-5 me-3">
                         <i class="uil uil-multiply fs-18 text-dark"></i>
                     </a>
                     <h6 class="text-center fw-bold mt-4 mb-4">PROFIL SAYA</h6>
