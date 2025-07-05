@@ -37,6 +37,7 @@ class MidtransController extends Controller
     public function handleNotification(Request $request)
     {
         Log::info('MIDTRANS NOTIFICATION RECEIVED');
+        Log::info($request->all());
 
         // Log raw input dari php://input untuk debugging masalah server
         $rawInput = file_get_contents('php://input');
