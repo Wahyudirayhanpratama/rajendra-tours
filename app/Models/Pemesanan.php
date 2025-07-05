@@ -20,7 +20,12 @@ class Pemesanan extends Model
         'jumlah_penumpang',
         'total_harga',
         'status',
-        'kode_booking'
+        'kode_booking',
+        'transaction_id',   // Ditambahkan dari migrasi
+        'transaction_time', // Ditambahkan dari migrasi
+        'payment_type',     // Ditambahkan dari migrasi
+        'va_number',        // Ditambahkan dari migrasi
+        'gross_amount',     // Ditambahkan dari migrasi
     ];
 
     public function user()

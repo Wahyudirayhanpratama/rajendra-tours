@@ -35,33 +35,48 @@ class PemesananController extends Controller
         ]);
 
         // Simpan data pemesanan
-        $pemesanan = Pemesanan::create([
-            'pemesanan_id' => Str::uuid(),
-            'user_id' => Auth::id(),
-            'jadwal_id' => $request->jadwal_id,
-            'jumlah_penumpang' => $request->jumlah_penumpang,
-            'total_harga' => $request->total_harga,
-            'status' => 'menunggu_pembayaran',
-            'kode_booking' => strtoupper(Str::random(8)),
-        ]);
-
-        // Simpan data penumpang (satu penumpang saja)
-        foreach ($request->nomor_kursi as $kursi) {
-            Penumpang::create([
-                'penumpang_id' => Str::uuid(),
-                'pemesanan_id' => $pemesanan->pemesanan_id,
-                'nama' => $request->nama,
-                'no_hp' => $request->no_hp,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'nomor_kursi' => $kursi,
-                'alamat_jemput' => $request->alamat_jemput,
-                'alamat_antar' => $request->alamat_antar,
+        DB::beginTransaction();
+        try {
+            // Simpan data pemesanan
+            $pemesanan = Pemesanan::create([
+                'pemesanan_id' => Str::uuid(),
+                'user_id' => Auth::id(),
+                'jadwal_id' => $request->jadwal_id,
+                'jumlah_penumpang' => $request->jumlah_penumpang,
+                'total_harga' => $request->total_harga,
+                'status' => 'belum_lunas', // Status awal: belum lunas
+                'kode_booking' => 'BK-' . strtoupper(Str::random(6)), // Generate kode booking di sini
+                'transaction_id' => null,
+                'transaction_time' => null,
+                'payment_type' => null,
+                'va_number' => null,
+                'gross_amount' => null,
             ]);
-        }
 
-        // Redirect atau response sukses
-        return redirect()->route('pemesanan.show', $pemesanan->pemesanan_id)
-            ->with('success', 'Pemesanan berhasil dibuat.');
+            // Simpan data penumpang (satu penumpang saja)
+            foreach ($request->nomor_kursi as $kursi) {
+                Penumpang::create([
+                    'penumpang_id' => Str::uuid(),
+                    'pemesanan_id' => $pemesanan->pemesanan_id,
+                    'nama' => $request->nama,
+                    'no_hp' => $request->no_hp,
+                    'jenis_kelamin' => $request->jenis_kelamin,
+                    'nomor_kursi' => $kursi,
+                    'alamat_jemput' => $request->alamat_jemput,
+                    'alamat_antar' => $request->alamat_antar,
+                ]);
+            }
+
+            DB::commit(); // Commit transaksi
+
+            // Redirect ke method di PembayaranController untuk inisiasi pembayaran
+            // Teruskan ID pemesanan yang baru dibuat
+            return redirect()->route('pembayaran.show', ['pemesanan_id' => $pemesanan->pemesanan_id]);
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback jika ada error
+            Log::error('Error creating pemesanan: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withInput()->withErrors('Terjadi kesalahan saat membuat pemesanan: ' . $e->getMessage());
+        }
     }
 
     public function show($id)
@@ -95,17 +110,32 @@ class PemesananController extends Controller
         $jadwal = Jadwal::findOrFail($request->jadwal_id);
         $total_harga = $jadwal->harga * $request->jumlah_penumpang;
 
-        $pemesanan = Pemesanan::create([
-            'pemesanan_id' => Str::uuid(),
-            'user_id' => $user->id,
-            'jadwal_id' => $jadwal->jadwal_id,
-            'jumlah_penumpang' => $request->jumlah_penumpang,
-            'total_harga' => $total_harga,
-            'status' => 'belum_lunas',
-            'kode_booking' => 'BK-' . strtoupper(Str::random(6)),
-        ]);
+        DB::beginTransaction();
+        try {
+            $pemesanan = Pemesanan::create([
+                'pemesanan_id' => Str::uuid(),
+                'user_id' => $user->id,
+                'jadwal_id' => $jadwal->jadwal_id,
+                'jumlah_penumpang' => $request->jumlah_penumpang,
+                'total_harga' => $total_harga,
+                'status' => 'belum_lunas',
+                'kode_booking' => 'BK-' . strtoupper(Str::random(6)),
+                'transaction_id' => null,
+                'transaction_time' => null,
+                'payment_type' => null,
+                'va_number' => null,
+                'gross_amount' => null,
+            ]);
 
-        return redirect()->route('data-pemesanan', $pemesanan->pemesanan_id);
+            DB::commit();
+
+            // Redirect ke method di PembayaranController untuk inisiasi pembayaran
+            return redirect()->route('pembayaran.show', ['pemesanan_id' => $pemesanan->pemesanan_id]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating pemesanan (storePemesanan): ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withInput()->withErrors('Terjadi kesalahan saat membuat pemesanan: ' . $e->getMessage());
+        }
     }
     public function bayarTiket($id)
     {

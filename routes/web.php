@@ -20,6 +20,7 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\MobilController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\MidtransController;
 
 Route::post('pelanggan.jadwal/set-tanggal', function (\Illuminate\Http\Request $request) {
     $tanggal = $request->input('date');
@@ -112,10 +113,13 @@ Route::middleware(RedirectIfNotPelanggan::class)->group(function () {
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
     //Bayar
     Route::post('/pembayaran/preview', [PembayaranController::class, 'preview'])->name('pembayaran.preview');
+    Route::get('/pembayaran/{pemesanan_id}', [PembayaranController::class, 'showPaymentPage'])->name('pembayaran.show');
     Route::get('/bayar/{id}', [PemesananController::class, 'bayarTiket'])->name('bayar');
 });
 //Modal Popup Login Pada Data Pemesan Pelanggan
 Route::get('/penumpang/create', [PenumpangController::class, 'create'])->name('penumpang.create');
+
+Route::post('/midtrans/notification', [MidtransController::class, 'handleNotification'])->name('midtrans.notification');
 
 //sementara utk testing midtrans di postman
 Route::get('/test-signature', function () {

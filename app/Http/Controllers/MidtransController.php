@@ -37,32 +37,44 @@ class MidtransController extends Controller
     {
         Log::info('MIDTRANS NOTIFICATION RECEIVED');
 
-        // Log raw input dari php://input untuk debugging
+        // Log raw input dari php://input untuk debugging masalah server
         $rawInput = file_get_contents('php://input');
         Log::info('RAW INPUT FROM PHP://INPUT:', ['raw_data' => $rawInput]);
 
-        // Inisialisasi konfigurasi Midtrans (pastikan sesuai dengan env Anda)
+        // Inisialisasi konfigurasi Midtrans
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        Config::$isProduction = (bool) env('MIDTRANS_IS_PRODUCTION', false);
+        Config::$isProduction = (bool) env('MIDTRANS_IS_PRODUCTION', false); // Sesuaikan dengan env Anda
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
         try {
             // Gunakan Midtrans\Notification untuk membaca dan memverifikasi notifikasi
-            // Pustaka ini akan membaca rawInput secara internal
+            // Pustaka ini akan membaca rawInput secara internal dan memvalidasi signature_key
             $notif = new Notification();
 
+            // Ambil data dari objek notifikasi
             $transactionStatus = $notif->transaction_status;
             $orderId = $notif->order_id;
-            $grossAmount = $notif->gross_amount;
+            $grossAmount = (int) $notif->gross_amount; // Pastikan ini integer
             $paymentType = $notif->payment_type;
             $transactionTime = $notif->transaction_time;
             $transactionId = $notif->transaction_id;
             $fraudStatus = $notif->fraud_status;
-            // Menggunakan property_exists untuk memeriksa keberadaan properti sebelum mengaksesnya
+            // Pastikan properti va_numbers ada sebelum diakses
             $vaNumbers = property_exists($notif, 'va_numbers') ? $notif->va_numbers : [];
+            // Ambil va_number tunggal jika ada (misal: untuk bank transfer)
+            $vaNumber = null;
+            if (!empty($vaNumbers) && is_array($vaNumbers)) {
+                foreach ($vaNumbers as $va) {
+                    if (isset($va->va_number)) {
+                        $vaNumber = $va->va_number;
+                        break;
+                    }
+                }
+            }
 
-            // Log semua data yang diterima dari objek notifikasi untuk debugging
+
+            // Log semua data yang berhasil diurai dari objek notifikasi
             Log::info('PARSED NOTIFICATION DATA:', [
                 'transaction_status' => $transactionStatus,
                 'order_id' => $orderId,
@@ -72,6 +84,7 @@ class MidtransController extends Controller
                 'transaction_id' => $transactionId,
                 'fraud_status' => $fraudStatus,
                 'va_numbers' => $vaNumbers,
+                'va_number_single' => $vaNumber, // Log VA number tunggal
             ]);
 
             // Cari pemesanan berdasarkan kode_booking (yang sama dengan order_id Midtrans)
@@ -83,6 +96,7 @@ class MidtransController extends Controller
             }
 
             // Simpan atau perbarui data pembayaran ke tabel 'pembayaran'
+            // Menggunakan updateOrCreate agar jika notifikasi datang berkali-kali, tidak membuat duplikat
             Pembayaran::updateOrCreate(
                 ['order_id' => $orderId], // Kondisi untuk mencari record yang sudah ada
                 [
@@ -92,7 +106,7 @@ class MidtransController extends Controller
                     'payment_type' => $paymentType,
                     'transaction_status' => $transactionStatus,
                     'fraud_status' => $fraudStatus ?? null,
-                    'gross_amount' => (int)$grossAmount,
+                    'gross_amount' => $grossAmount, // Menggunakan grossAmount dari notifikasi
                     'va_numbers' => json_encode($vaNumbers), // Simpan sebagai JSON string
                     'status' => $transactionStatus === 'settlement' ? 'paid' : 'pending', // Atur status pembayaran di tabel pembayaran
                     'waktu_bayar' => $transactionTime ?? now(), // Waktu transaksi dari Midtrans
@@ -104,24 +118,31 @@ class MidtransController extends Controller
                 // Jika pembayaran berhasil (settlement)
                 $pemesanan->update([
                     'status' => 'Lunas',
-                    'metode_pembayaran' => $paymentType,
-                    'nomor_transaksi' => $transactionId,
-                    'waktu_pembayaran' => $transactionTime ?? now(),
+                    'transaction_id' => $transactionId,
+                    'transaction_time' => $transactionTime ?? now(),
+                    'payment_type' => $paymentType,
+                    'va_number' => $vaNumber, // Simpan VA number tunggal
+                    'gross_amount' => $grossAmount, // Simpan gross_amount dari notifikasi
                 ]);
                 Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Lunas.');
             } elseif (in_array($transactionStatus, ['expire', 'cancel', 'deny'])) {
                 // Jika pembayaran kedaluwarsa, dibatalkan, atau ditolak
                 $pemesanan->update([
                     'status' => 'Batal', // Atau 'Gagal' untuk 'deny'
-                    'metode_pembayaran' => $paymentType,
-                    'nomor_transaksi' => $transactionId,
-                    'waktu_pembayaran' => $transactionTime ?? now(),
+                    'transaction_id' => $transactionId,
+                    'transaction_time' => $transactionTime ?? now(),
+                    'payment_type' => $paymentType,
+                    'va_number' => $vaNumber, // Simpan VA number tunggal
+                    'gross_amount' => $grossAmount, // Simpan gross_amount dari notifikasi
                 ]);
                 Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Batal.');
             }
+            // Anda bisa menambahkan kondisi lain untuk status 'pending', 'challenge', dll.
+            // Untuk 'pending', status pemesanan bisa tetap 'belum_lunas' atau 'pending_pembayaran'
 
             return response()->json(['message' => 'Notification processed successfully'], 200);
         } catch (\Exception $e) {
+            // Tangani error jika ada masalah saat memproses notifikasi
             Log::error('Error processing Midtrans notification: ' . $e->getMessage(), ['exception' => $e]);
             return response()->json(['message' => 'Error processing notification'], 500);
         }

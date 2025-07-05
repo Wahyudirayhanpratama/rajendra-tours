@@ -16,7 +16,7 @@ class Pembayaran extends Model
     protected $fillable = [
         'pembayaran_id',
         'pemesanan_id',
-        'order_id', // ✅ TAMBAHKAN INI
+        'order_id',
         'transaction_id',
         'payment_type',
         'transaction_status',
@@ -26,4 +26,9 @@ class Pembayaran extends Model
         'status',
         'waktu_bayar'
     ];
+
+    public function pemesanan()
+    {
+        return $this->belongsTo(Pemesanan::class, 'pemesanan_id', 'pemesanan_id');
+    }
 }
