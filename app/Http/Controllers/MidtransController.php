@@ -53,7 +53,9 @@ class MidtransController extends Controller
             // Pustaka ini akan membaca rawInput secara internal dan memvalidasi signature_key
             $notif = new Notification();
 
+            Log::error('Test');
             Log::info($notif);
+
 
             // Ambil data dari objek notifikasi
             $transactionStatus = $notif->transaction_status;
