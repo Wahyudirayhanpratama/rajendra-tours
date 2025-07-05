@@ -107,10 +107,10 @@ class MidtransController extends Controller
                 $vaNumber = $notif->biller_code . '-' . $notif->bill_key;
                 Log::info('Extracted bill_key/biller_code (from root):', ['va_number' => $vaNumber]);
             }
-            // Tambahan pengecekan untuk virtual_account_number (beberapa payment type mungkin menggunakan ini)
-            if ($vaNumber === null && property_exists($notif, 'virtual_account_number') && $notif->virtual_account_number !== null) {
-                $vaNumber = $notif->virtual_account_number;
-                Log::info('Extracted virtual_account_number (from root):', ['va_number' => $vaNumber]);
+            // Tambahan pengecekan untuk va_numbers (beberapa payment type mungkin menggunakan ini)
+            if ($vaNumber === null && property_exists($notif, 'va_numbers') && $notif->va_numbers !== null) {
+                $vaNumber = $notif->va_numbers;
+                Log::info('Extracted va_numbers (from root):', ['va_number' => $vaNumber]);
             }
 
             // Log semua data yang berhasil diurai dari objek notifikasi
