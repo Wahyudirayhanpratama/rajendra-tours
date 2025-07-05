@@ -151,7 +151,7 @@ class PenumpangController extends Controller
         $snapToken = $midtrans->createSnapToken(
             'ORDER-' . uniqid(),
             $jadwal->harga, // atau total harga pemesanan sementara
-            auth('pelanggan')->user()->nama??''
+            auth('pelanggan')->user()->nama ?? ''
         );
 
         // Ambil semua kursi yang sudah dipilih untuk jadwal & mobil ini
@@ -161,6 +161,8 @@ class PenumpangController extends Controller
             ->join('mobils', 'jadwals.mobil_id', '=', 'mobils.mobil_id')
             ->where('pemesanans.jadwal_id', $jadwal_id)
             ->where('mobils.nomor_polisi', $jadwal->mobil->nomor_polisi)
+            ->where('pemesanans.status', '!=', 'Tiket dibatalkan') // hanya kursi dari pemesanan aktif
+            ->whereNotNull('penumpangs.nomor_kursi')               // hanya yang sudah pilih kursi
             ->pluck('penumpangs.nomor_kursi') // hasil: ['2,4', '5']
             ->toArray();
 

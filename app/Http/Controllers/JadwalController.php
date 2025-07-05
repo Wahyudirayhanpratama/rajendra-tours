@@ -67,6 +67,8 @@ class JadwalController extends Controller
             $kursi_db = DB::table('penumpangs')
                 ->join('pemesanans', 'penumpangs.pemesanan_id', '=', 'pemesanans.pemesanan_id')
                 ->where('pemesanans.jadwal_id', $jadwal->jadwal_id)
+                ->where('pemesanans.status', '!=', 'Tiket dibatalkan') // hanya hitung tiket aktif
+                ->whereNotNull('penumpangs.nomor_kursi')               // pastikan kursi sudah dipilih
                 ->pluck('penumpangs.nomor_kursi')
                 ->toArray();
 
