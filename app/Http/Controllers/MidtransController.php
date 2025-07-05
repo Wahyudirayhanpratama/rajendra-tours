@@ -35,75 +35,91 @@ class MidtransController extends Controller
     }
     public function handleNotification(Request $request)
     {
-        Log::info('MIDTRANS NOTIFICATION RECEIVED'); // Log awal untuk debugging
+        Log::info('MIDTRANS NOTIFICATION RECEIVED');
 
-        // Ambil data dari request
-        $data = $request->all();
-        // Jika request body kosong, coba ambil dari php://input (untuk beberapa kasus Midtrans)
-        if (empty($data)) {
-            $rawInput = file_get_contents('php://input');
-            $decodedInput = json_decode($rawInput, true);
-            // Pastikan $data selalu berupa array, bahkan jika decoding gagal
-            $data = is_array($decodedInput) ? $decodedInput : [];
-        }
+        // Inisialisasi konfigurasi Midtrans (pastikan sesuai dengan env Anda)
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = (bool) env('MIDTRANS_IS_PRODUCTION', false); // Sesuaikan dengan env Anda
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
 
-        Log::info('DATA RECEIVED:', $data); // Sekarang $data dijamin berupa array
+        try {
+            // Gunakan Midtrans\Notification untuk membaca dan memverifikasi notifikasi
+            $notif = new Notification();
 
-        // Pastikan order_id ada dalam data notifikasi
-        if (!isset($data['order_id'])) {
-            Log::error('Order ID not found in Midtrans notification data.');
-            return response()->json(['message' => 'Order ID not found'], 400);
-        }
+            $transactionStatus = $notif->transaction_status;
+            $orderId = $notif->order_id;
+            $grossAmount = $notif->gross_amount;
+            $paymentType = $notif->payment_type;
+            $transactionTime = $notif->transaction_time;
+            $transactionId = $notif->transaction_id;
+            $fraudStatus = $notif->fraud_status;
+            $vaNumbers = property_exists($notif, 'va_numbers') ? $notif->va_numbers : []; // Handle jika tidak ada VA numbers
 
-        // Cari pemesanan berdasarkan kode_booking (yang sama dengan order_id Midtrans)
-        $pemesanan = Pemesanan::where('kode_booking', $data['order_id'])->first();
-
-        if (!$pemesanan) {
-            Log::error('Pemesanan not found for order_id: ' . $data['order_id']);
-            return response()->json(['message' => 'Pemesanan not found'], 404);
-        }
-
-        // Simpan atau perbarui data pembayaran ke tabel 'pembayaran'
-        // Menggunakan updateOrCreate agar jika notifikasi datang berkali-kali, tidak membuat duplikat
-        Pembayaran::updateOrCreate(
-            ['order_id' => $data['order_id']], // Kondisi untuk mencari record yang sudah ada
-            [
-                'pembayaran_id' => Str::uuid(), // Generate UUID baru jika ini adalah record baru
-                'pemesanan_id' => $pemesanan->pemesanan_id,
-                'transaction_id' => $data['transaction_id'],
-                'payment_type' => $data['payment_type'],
-                'transaction_status' => $data['transaction_status'],
-                'fraud_status' => $data['fraud_status'] ?? null,
-                'gross_amount' => (int)$data['gross_amount'],
-                'va_numbers' => json_encode($data['va_numbers'] ?? []), // Simpan sebagai JSON string
-                'status' => $data['transaction_status'] === 'settlement' ? 'paid' : 'pending', // Atur status pembayaran di tabel pembayaran
-                'waktu_bayar' => $data['transaction_time'] ?? now(), // Waktu transaksi dari Midtrans
-            ]
-        );
-
-        // Update status pemesanan berdasarkan transaction_status dari Midtrans
-        if ($data['transaction_status'] === 'settlement') {
-            // Jika pembayaran berhasil (settlement)
-            $pemesanan->update([
-                'status' => 'Lunas',
-                'metode_pembayaran' => $data['payment_type'],
-                'nomor_transaksi' => $data['transaction_id'],
-                'waktu_pembayaran' => $data['transaction_time'] ?? now(),
+            // Log semua data yang diterima dari objek notifikasi untuk debugging
+            Log::info('PARSED NOTIFICATION DATA:', [
+                'transaction_status' => $transactionStatus,
+                'order_id' => $orderId,
+                'gross_amount' => $grossAmount,
+                'payment_type' => $paymentType,
+                'transaction_time' => $transactionTime,
+                'transaction_id' => $transactionId,
+                'fraud_status' => $fraudStatus,
+                'va_numbers' => $vaNumbers,
             ]);
-            Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Lunas.');
-        } elseif (in_array($data['transaction_status'], ['expire', 'cancel'])) {
-            // Jika pembayaran kedaluwarsa atau dibatalkan
-            $pemesanan->update([
-                'status' => 'Batal',
-                'metode_pembayaran' => $data['payment_type'],
-                'nomor_transaksi' => $data['transaction_id'],
-                'waktu_pembayaran' => $data['transaction_time'] ?? now(),
-            ]);
-            Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Batal.');
-        }
-        // Anda bisa menambahkan kondisi lain untuk status 'pending', 'deny', dll.
-        // Untuk 'pending', status pemesanan bisa tetap 'belum_lunas' atau 'pending_pembayaran'
 
-        return response()->json(['message' => 'Notification processed successfully'], 200);
+            // Cari pemesanan berdasarkan kode_booking (yang sama dengan order_id Midtrans)
+            $pemesanan = Pemesanan::where('kode_booking', $orderId)->first();
+
+            if (!$pemesanan) {
+                Log::error('Pemesanan not found for order_id: ' . $orderId);
+                return response()->json(['message' => 'Pemesanan not found'], 404);
+            }
+
+            // Simpan atau perbarui data pembayaran ke tabel 'pembayaran'
+            Pembayaran::updateOrCreate(
+                ['order_id' => $orderId], // Kondisi untuk mencari record yang sudah ada
+                [
+                    'pembayaran_id' => Str::uuid(), // Generate UUID baru jika ini adalah record baru
+                    'pemesanan_id' => $pemesanan->pemesanan_id,
+                    'transaction_id' => $transactionId,
+                    'payment_type' => $paymentType,
+                    'transaction_status' => $transactionStatus,
+                    'fraud_status' => $fraudStatus ?? null,
+                    'gross_amount' => (int)$grossAmount,
+                    'va_numbers' => json_encode($vaNumbers), // Simpan sebagai JSON string
+                    'status' => $transactionStatus === 'settlement' ? 'paid' : 'pending', // Atur status pembayaran di tabel pembayaran
+                    'waktu_bayar' => $transactionTime ?? now(), // Waktu transaksi dari Midtrans
+                ]
+            );
+
+            // Update status pemesanan berdasarkan transaction_status dari Midtrans
+            if ($transactionStatus === 'settlement') {
+                // Jika pembayaran berhasil (settlement)
+                $pemesanan->update([
+                    'status' => 'Lunas',
+                    'metode_pembayaran' => $paymentType,
+                    'nomor_transaksi' => $transactionId,
+                    'waktu_pembayaran' => $transactionTime ?? now(),
+                ]);
+                Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Lunas.');
+            } elseif (in_array($transactionStatus, ['expire', 'cancel', 'deny'])) {
+                // Jika pembayaran kedaluwarsa, dibatalkan, atau ditolak
+                $pemesanan->update([
+                    'status' => 'Batal', // Atau 'Gagal' untuk 'deny'
+                    'metode_pembayaran' => $paymentType,
+                    'nomor_transaksi' => $transactionId,
+                    'waktu_pembayaran' => $transactionTime ?? now(),
+                ]);
+                Log::info('Pemesanan ' . $pemesanan->kode_booking . ' updated to Batal.');
+            }
+            // Anda bisa menambahkan kondisi lain untuk status 'pending', 'challenge', dll.
+            // Untuk 'pending', status pemesanan bisa tetap 'belum_lunas' atau 'pending_pembayaran'
+
+            return response()->json(['message' => 'Notification processed successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error processing Midtrans notification: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['message' => 'Error processing notification'], 500);
+        }
     }
 }
