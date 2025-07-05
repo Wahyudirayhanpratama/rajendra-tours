@@ -57,54 +57,21 @@ class MidtransController extends Controller
             // Pustaka ini akan membaca rawInput secara internal dan memvalidasi signature_key
             $notif = new Notification();
 
-            Log::error('Test');
-            Log::info('NOTIF DATA (from $notif):', ['notif' => json_encode($notif)]);
-
-
             // Ambil data dari objek notifikasi
-            $transactionStatus = $notif->transaction_status;
-            $orderId = $notif->order_id;
-            $grossAmount = (int) $notif->gross_amount; // Pastikan ini integer
-            $paymentType = $notif->payment_type;
-            $transactionTime = $notif->transaction_time;
-            $transactionId = $notif->transaction_id;
-            $fraudStatus = $notif->fraud_status;
+            $transactionStatus = $request->transaction_status;
+            $orderId = $request->order_id;
+            $grossAmount = (int) $request->gross_amount; // Pastikan ini integer
+            $paymentType = $request->payment_type;
+            $transactionTime = $request->transaction_time;
+            $transactionId = $request->transaction_id;
+            $fraudStatus = $request->fraud_status;
 
             // Pastikan properti va_numbers ada sebelum diakses
             $vaNumbersRaw = property_exists($notif, 'va_numbers') ? $notif->va_numbers : [];
             Log::info('VA_NUMBERS RAW DATA (from $notif->va_numbers):', ['va_numbers' => json_encode($vaNumbersRaw)]);
 
             // Ambil va_number tunggal jika ada (misal: untuk bank transfer)
-            $vaNumber = null;
-
-            if (!empty($vaNumbersRaw) && is_array($vaNumbersRaw)) {
-                Log::info('Processing vaNumbersRaw array for VA extraction...');
-                foreach ($vaNumbersRaw as $key => $vaItem) {
-                    // Pastikan $vaItem adalah objek atau array yang bisa diakses
-                    $vaItem = (object) $vaItem; // Cast to object for consistent property access
-
-                    Log::info("Processing VA item at index {$key}:", ['va_item_data' => json_encode($vaItem)]);
-
-                    // Coba ambil va_number umum (untuk bank transfer selain Mandiri e-channel)
-                    if (property_exists($vaItem, 'va_number') && $vaItem->va_number !== null) {
-                        $vaNumber = $vaItem->va_number;
-                        Log::info('Extracted va_number (general):', ['va_number' => $vaNumber]);
-                        break;
-                    }
-                    // Coba ambil bill_key dan biller_code untuk echannel (Mandiri Bill Payment)
-                    elseif (property_exists($vaItem, 'bill_key') && property_exists($vaItem, 'biller_code') && $vaItem->bill_key !== null && $vaItem->biller_code !== null) {
-                        $vaNumber = $vaItem->biller_code . '-' . $vaItem->bill_key; // Gabungkan biller_code dan bill_key
-                        Log::info('Extracted bill_key/biller_code (echannel):', ['va_number' => $vaNumber]);
-                        break;
-                    }
-                    // Tambahan: Coba ambil permata_va_number jika ada di dalam array va_numbers (untuk Permata VA)
-                    elseif (property_exists($vaItem, 'permata_va_number') && $vaItem->permata_va_number !== null) {
-                        $vaNumber = $vaItem->permata_va_number;
-                        Log::info('Extracted permata_va_number (from VA array):', ['va_number' => $vaNumber]);
-                        break;
-                    }
-                }
-            }
+            $vaNumber = $request->va_numbers[0]['va_number'];
 
             // Tambahan pengecekan untuk permata_va_number jika ada langsung di notif root (kasus khusus Permata VA)
             if ($vaNumber === null && property_exists($notif, 'permata_va_number') && $notif->permata_va_number !== null) {
