@@ -81,7 +81,7 @@
                         <div class="modal-body">
                             <!-- Isi Modal -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <p class="fw-medium mb-0">Nomor Tiket</p>
+                                <p class="fw-medium">Nomor Tiket</p>
                                 {{-- <div class="text-end ms-auto"> --}}
                                 <p class="fw-bold">{{ $pemesanan->tiket->no_tiket }}</p>
                                 {{-- </div> --}}
