@@ -119,7 +119,7 @@ Route::get('/penumpang/create', [PenumpangController::class, 'create'])->name('p
 
 //sementara utk testing midtrans di postman
 Route::get('/test-signature', function () {
-    $orderId = 'BK-123456';
+    $orderId = 'BK-A07SGR';
     $grossAmount = '140000';
     $statusCode = '200';
     $serverKey = config('midtrans.server_key');
