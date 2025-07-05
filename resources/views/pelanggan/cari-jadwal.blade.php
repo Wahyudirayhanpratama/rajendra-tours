@@ -217,6 +217,12 @@
 
         function tampilkanKotaTujuanManual() {
             const asal = document.getElementById("cityfrom").value;
+
+            if (!asal) {
+                alert("Silakan pilih kota keberangkatan terlebih dahulu.");
+                return; // Hentikan fungsi
+            }
+
             const tujuan = semuaKota.filter(kota => kota !== asal);
             const daftar = tujuan.map(kota =>
                 `<button type="button" class="list-group-item list-group-item-action" onclick="pilihKotaTujuan('${kota}')">${kota}</button>`
