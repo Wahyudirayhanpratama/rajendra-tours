@@ -41,6 +41,6 @@ class DetailTiketController extends Controller
             $penumpang->update(['nomor_kursi' => null]);
         }
 
-        return redirect()->route('detail.show', $id)->with('success', 'Tiket berhasil dibatalkan dan kursi dikembalikan.');
+        return redirect()->route('detail.tiket', $id)->with('success', 'Tiket berhasil dibatalkan dan kursi dikembalikan.');
     }
 }
