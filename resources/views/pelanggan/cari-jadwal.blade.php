@@ -219,8 +219,14 @@
             const asal = document.getElementById("cityfrom").value;
 
             if (!asal) {
-                alert("Silakan pilih kota keberangkatan terlebih dahulu.");
-                return; // Hentikan fungsi
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Pilih Kota Keberangkatan!',
+                    text: 'Silakan pilih kota keberangkatan terlebih dahulu.',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Oke'
+                });
+                return;
             }
 
             const tujuan = semuaKota.filter(kota => kota !== asal);
