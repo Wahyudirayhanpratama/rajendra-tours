@@ -49,8 +49,8 @@
                         <div class="bg-white p-1 radius-1">
                             <div class="form-group searchbox2">
                                 <input type="date" class="form-control fs-15" id="date" name="date"
-                                    placeholder="Tanggal Keberangkatan" min="2025-04-30" max="2025-10-25"
-                                    value="{{ old('date') }}" required>
+                                    placeholder="Tanggal Keberangkatan" min="{{ date('Y-m-d') }}" max="2025-10-25"
+                                    value="{{ old('date', date('Y-m-d')) }}" required>
                                 <i class="input-icon">
                                     <i class="uil uil-calendar-alt fs-25 text-dark"></i>
                                 </i>
