@@ -75,14 +75,13 @@
     <div class="modal modal-bottom" id="profilModal" tabindex="-1" aria-labelledby="profilModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-fullscreen-sm-down">
             <div class="modal-content rounded-4 border-0">
-                <!-- Header dengan Tombol Silang di Kanan -->
-                <div class="d-flex justify-content-end align-items-center px-3 pt-3">
-                    <a href="#" data-bs-dismiss="modal">
-                        <i class="uil uil-multiply fs-18 text-dark"></i>
-                    </a>
-                </div>
                 <div class="modal-body">
-                    <h6 class="text-center fw-bold mb-4">PROFIL SAYA</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6 class="fw-bold mb-0">PROFIL SAYA</h6>
+                        <a href="#" data-bs-dismiss="modal">
+                            <i class="uil uil-multiply fs-18 text-dark"></i>
+                        </a>
+                    </div>
                     <form action="{{ route('profil.update') }}" method="POST">
                         @csrf
                         @method('PUT')
