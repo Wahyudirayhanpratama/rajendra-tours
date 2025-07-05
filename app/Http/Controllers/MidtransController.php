@@ -122,7 +122,7 @@ class MidtransController extends Controller
                     'transaction_status' => $transactionStatus,
                     'fraud_status' => $fraudStatus ?? null,
                     'gross_amount' => $grossAmount, // Menggunakan grossAmount dari notifikasi
-                    'va_numbers' => json_encode($vaNumbersRaw), // Simpan sebagai JSON string
+                    'va_numbers' => $vaNumber, // Simpan sebagai JSON string
                     'status' => $transactionStatus === 'settlement' ? 'paid' : 'pending', // Atur status pembayaran di tabel pembayaran
                     'waktu_bayar' => $transactionTime ?? now(), // Waktu transaksi dari Midtrans
                 ]
