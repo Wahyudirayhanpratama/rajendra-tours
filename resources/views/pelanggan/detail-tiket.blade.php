@@ -78,7 +78,7 @@
                     <button type="submit" class="btn btn-po fw-bold w-100 btn-confirm-batalkan">Batalkan Pesanan</button>
                 </form>
             @endif
-            <a href="{{ route('tiket') }}" class="btn btn-outline-po fw-bold">Cancel</a>
+            <a href="{{ route('tiket') }}" class="btn btn-outline-po fw-bold">Kembali</a>
         </div>
     </div>
 @endsection

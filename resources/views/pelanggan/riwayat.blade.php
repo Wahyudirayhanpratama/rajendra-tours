@@ -104,19 +104,19 @@
                             <!-- Nomor Transaksi -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <p class="mb-0">Nomor Transaksi</p>
-                                <p class="fw-medium mb-0">4831415974654</p>
+                                <p class="fw-medium mb-0">{{ $pemesanan->va_number }}</p>
                             </div>
 
                             <!-- Tanggal Transaksi -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <p class="mb-0">Tanggal Transaksi</p>
-                                <p class="fw-medium mb-0">22 Maret 2025, 20:50</p>
+                                <p class="fw-medium mb-0">{{ $pemesanan->transaction_time }}</p>
                             </div>
 
                             <!-- Metode Pembayaran -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <p class="mb-0">Metode Pembayaran</p>
-                                <p class="fw-medium mb-0">VA MANDIRI</p>
+                                <p class="fw-medium mb-0">{{ ucfirst(str_replace('_', ' ', $pemesanan->payment_type)) }}</p>
                             </div>
 
                             <!-- Total -->
