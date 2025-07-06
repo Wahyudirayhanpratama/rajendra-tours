@@ -222,7 +222,11 @@
 
         function tampilkanKotaKeberangkatan() {
             const daftar = semuaKota.map(kota =>
-                `<button type="button" class="list-group-item list-group-item-action" onclick="pilihKotaKeberangkatan('${kota}')">${kota}</button>`
+                `<button type="button" class="list-group-item list-group-item-action d-flex align-items-center gap-2 py-3 rounded-3 shadow-sm border-0 mb-2"
+                onclick="pilihKotaKeberangkatan('${kota}')"style="background-color: #f8f9fa;">
+                <i class="uil uil-map-marker text-primary fs-5"></i>
+            <span class="fw-semibold text-dark">${kota}</span>
+            </button>`
             ).join("");
             document.getElementById("modalTitle").innerText = "Pilih Kota Keberangkatan";
             document.getElementById("daftarkota").innerHTML = daftar;
@@ -246,7 +250,11 @@
 
             const tujuan = semuaKota.filter(kota => kota !== asal);
             const daftar = tujuan.map(kota =>
-                `<button type="button" class="list-group-item list-group-item-action" onclick="pilihKotaTujuan('${kota}')">${kota}</button>`
+                `<button type="button" class="list-group-item list-group-item-action d-flex align-items-center gap-2 py-3 rounded-3 shadow-sm border-0 mb-2"
+                onclick="pilihKotaTujuan('${kota}')"style="background-color: #f8f9fa;">
+                <i class="uil uil-map-marker text-primary fs-5"></i>
+            <span class="fw-semibold text-dark">${kota}</span>
+            </button>`
             ).join("");
             document.getElementById("modalTitle").innerText = "Pilih Kota Tujuan";
             document.getElementById("daftarkota").innerHTML = daftar;
