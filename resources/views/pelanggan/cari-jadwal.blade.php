@@ -89,11 +89,13 @@
         <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="modal-header d-flex justify-content-between align-items-center">
-                        <div class="fs-16 fw-bold" id="modalTitle">Pilih Kota</div>
-                        <a href="#" data-bs-dismiss="modal">
-                            <i class="uil uil-multiply fs-18 text-dark"></i>
-                        </a>
+                    <div class="d-flex justify-content-between align-items-center px-3 pt-3">
+                        <div class="col-11 fs-16 fw-bold" id="modalTitle">Pilih Kota</div>
+                        <div class="col-1 text-end">
+                            <a href="#" data-bs-dismiss="modal">
+                                <i class="uil uil-multiply fs-18 text-dark"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-body pt-1 mt-3">
