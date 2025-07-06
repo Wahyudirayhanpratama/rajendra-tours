@@ -8,7 +8,7 @@
         <div class="login-container">
             <!-- Ganti dengan path gambar logo Rajendra Tours Anda -->
             <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Rajendra Tours" class="logo">
-            <h5 class="text-center mt-2 mb-3 fw-semibold">Masuk</h5>
+            <h5 class="text-center mb-3 fw-semibold">Masuk</h5>
             <form method="POST" action="{{ route('login.submit') }}">
                 @csrf
                 <div class="mb-3">
