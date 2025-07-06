@@ -86,9 +86,9 @@
 
     <!-- Modal Search City -->
     <div class="modal fade" id="modalCity" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header d-flex justify-content-between align-items-center px-3 py-2 border-0">
+                <div class="modal-header d-flex justify-content-between align-items-center px-3 py-2 border-0 w-100">
                     <h5 class="modal-title fs-6 fw-bold m-0" id="modalTitle">Pilih Kota</h5>
                     <a href="#" data-bs-dismiss="modal">
                         <i class="uil uil-multiply fs-18 text-dark"></i>
