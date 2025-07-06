@@ -20,7 +20,7 @@
                 <button type="submit" class="btn btn-po text-white">Login</button>
             </form>
             @if ($errors->any())
-                <div class="alert alert-danger mt-2">
+                <div class="alert alert-danger mt-3">
                     <strong>Terjadi kesalahan:</strong>
                     <ul class="mb-0">
                         @foreach ($errors->all() as $error)
