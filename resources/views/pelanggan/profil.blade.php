@@ -72,8 +72,8 @@
         </div>
     </div>
     <!-- Modal Profil -->
-    <div class="modal modal-bottom" id="profilModal" tabindex="-1" aria-labelledby="profilModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-fullscreen-sm-down">
+    <div class="modal fade modal-bottom" id="profilModal" tabindex="-1" aria-labelledby="profilModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content rounded-4 border-0">
                 <div class="modal-body">
                     <a href="#" data-bs-dismiss="modal" class="position-absolute top-0 end-0 mt-3 me-3">

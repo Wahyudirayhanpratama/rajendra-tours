@@ -66,9 +66,9 @@
                 </div>
             </div>
             <!-- Modal (Popup Detail) -->
-            <div class="modal modal-bottom" id="detailModal-{{ $loop->index }}" tabindex="-1"
+            <div class="modal fade modal-bottom" id="detailModal-{{ $loop->index }}" tabindex="-1"
                 aria-labelledby="detailModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm modal-fullscreen-sm-down">
+                <div class="modal-dialog modal-sm">
                     <div class="modal-content rounded-top-4">
                         <!-- Header dengan Logo dan Tombol Silang -->
                         <div class="d-flex justify-content-between align-items-center px-3 pt-3">
