@@ -18,6 +18,7 @@
         <div class="container">
             @if ($errors->any())
                 <div class="alert alert-danger">
+                    <strong>Terjadi kesalahan:</strong>
                     <ul class="mb-0">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>

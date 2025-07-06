@@ -13,25 +13,23 @@
         </section>
 
         <div class="container">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Terjadi kesalahan:</strong>
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @if ($errors->has('general_error'))
+                <div class="alert alert-danger">
+                    {{ $errors->first('general_error') }}
+                </div>
+            @endif
             <form action="{{ route('store-data-penumpang') }}" method="POST">
                 @csrf
-
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Terjadi kesalahan:</strong>
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                @if ($errors->has('general_error'))
-                    <div class="alert alert-danger">
-                        {{ $errors->first('general_error') }}
-                    </div>
-                @endif
-
                 <!-- Pilih Pelanggan -->
                 <div class="mb-3">
                     <label for="user_id" class="form-label">Nama Pemesan</label>

@@ -16,9 +16,14 @@
         </section>
 
         <div class="container">
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Terjadi kesalahan:</strong>
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
             <form action="{{ route('store-pelanggan') }}" method="POST">

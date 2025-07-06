@@ -13,8 +13,15 @@
         </section>
 
         <div class="container">
-            @if ($errors->has('error'))
-                <div class="alert alert-danger">{{ $errors->first('error') }}</div>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Terjadi kesalahan:</strong>
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
 
             <form action="{{ route('update-data-penumpang', $penumpang->penumpang_id) }}" method="POST">
