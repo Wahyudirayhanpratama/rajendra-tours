@@ -161,6 +161,12 @@
             background-color: #001B79;
             color: #fff;
         }
+
+        .list-group-item-action:hover {
+            background-color: #e9ecef !important;
+            transform: scale(1.02);
+            transition: 0.2s ease;
+        }
     </style>
 @endpush
 
