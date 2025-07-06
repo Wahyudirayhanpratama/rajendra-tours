@@ -15,7 +15,7 @@
         <div class="card">
 
             <div class="card-body">
-                <form action="{{ route('jadwal.cari') }}" method="GET">
+                <form id="formCariTiket" action="{{ route('jadwal.cari') }}" method="GET">
                     <div class="col-12 mt-2">
                         <div class="text-dark">Kota Keberangkatan</div>
                         <div class="p-1 radius-1">
@@ -194,7 +194,24 @@
             }
         });
     </script>
+    <script>
+        document.getElementById('formCariTiket').addEventListener('submit', function(e) {
+            const cityFrom = document.getElementById('cityfrom').value;
+            const cityTo = document.getElementById('cityto').value;
+            const date = document.getElementById('date').value;
+            const penumpang = document.getElementById('jumlah_penumpang').value;
 
+            if (!cityFrom || !cityTo || !date || !penumpang) {
+                e.preventDefault(); // hentikan submit form
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Belum Lengkap!',
+                    text: 'Silakan lengkapi semua field terlebih dahulu.',
+                });
+            }
+        });
+    </script>
     <script>
         function selectPassenger(button, value) {
             document.querySelectorAll('.passenger-options button').forEach(btn => btn.classList.remove('active'));
