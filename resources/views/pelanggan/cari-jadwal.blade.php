@@ -85,7 +85,7 @@
     </div>
 
     <!-- Modal Search City -->
-    <div class="modal fade modalbox" id="modalCity" tabindex="-1" role="dialog">
+    <div class="modal fade modal-bottom" id="modalCity" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
