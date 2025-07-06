@@ -165,6 +165,19 @@
             background-color: #001B79;
             color: #fff;
         }
+
+        .modal.modal-bottom .modal-dialog {
+            position: fixed;
+            bottom: 0;
+            margin: 0;
+            width: 100%;
+            max-width: none;
+            transition: transform 0.3s ease-out;
+        }
+
+        .modal.modal-bottom .modal-content {
+            border-radius: 1rem 1rem 0 0;
+        }
     </style>
 @endpush
 
