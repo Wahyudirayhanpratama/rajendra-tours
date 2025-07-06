@@ -208,6 +208,8 @@
                     icon: 'warning',
                     title: 'Data Belum Lengkap!',
                     text: 'Silakan lengkapi semua field terlebih dahulu.',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Oke'
                 });
             }
         });
