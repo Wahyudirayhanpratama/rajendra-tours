@@ -169,14 +169,21 @@
         .modal.modal-bottom .modal-dialog {
             position: fixed;
             bottom: 0;
+            left: 0;
+            right: 0;
             margin: 0;
-            width: 100%;
-            max-width: none;
+            max-width: 100%;
+            transform: translateY(100%);
             transition: transform 0.3s ease-out;
         }
 
+        .modal.show.modal-bottom .modal-dialog {
+            transform: translateY(0);
+        }
+
         .modal.modal-bottom .modal-content {
-            border-radius: 1rem 1rem 0 0;
+            border-radius: 20px 20px 0 0;
+            padding-bottom: 20px;
         }
     </style>
 @endpush
