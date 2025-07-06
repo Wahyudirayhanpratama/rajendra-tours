@@ -5,6 +5,8 @@
         <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo Rajendra">
     </a>
 
+    <div class="border-bottom my-2"></div>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar Menu -->
