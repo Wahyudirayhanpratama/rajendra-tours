@@ -32,16 +32,34 @@
                 </div>
 
                 <!-- Kota Asal -->
+                @php
+                    $semuaKota = ['Duri', 'Pekanbaru', 'Padang'];
+                @endphp
                 <div class="mb-3">
                     <label for="kota_asal">Kota Asal</label>
-                    <input type="text" name="kota_asal" class="form-control" value="{{ $jadwal->kota_asal }}" required>
+                    <select name="kota_asal" id="kota_asal" class="form-select" required onchange="filterTujuanEdit()">
+                        <option value="" disabled {{ $jadwal->kota_asal ? '' : 'selected' }}>Pilih Kota Asal</option>
+                        @foreach ($semuaKota as $kota)
+                            <option value="{{ $kota }}" {{ $jadwal->kota_asal === $kota ? 'selected' : '' }}>
+                                {{ $kota }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <!-- Kota Tujuan -->
                 <div class="mb-3">
                     <label for="kota_tujuan">Kota Tujuan</label>
-                    <input type="text" name="kota_tujuan" class="form-control" value="{{ $jadwal->kota_tujuan }}"
-                        required>
+                    <select name="kota_tujuan" id="kota_tujuan" class="form-select" required>
+                        <option value="" disabled {{ $jadwal->kota_tujuan ? '' : 'selected' }}>Pilih Kota Tujuan
+                        </option>
+                        @foreach ($semuaKota as $kota)
+                            @if ($kota !== $jadwal->kota_asal)
+                                {{-- Hindari kota yang sama --}}
+                                <option value="{{ $kota }}"
+                                    {{ $jadwal->kota_tujuan === $kota ? 'selected' : '' }}>{{ $kota }}</option>
+                            @endif
+                        @endforeach
+                    </select>
                 </div>
 
                 <!-- Jam Keberangkatan -->
@@ -86,4 +104,37 @@
             border: 1px solid #ddd;
         }
     </style>
+@endpush
+
+@push('scripts')
+    <script>
+        const semuaKota = @json($semuaKota);
+        const kotaTujuanTerpilih = "{{ $jadwal->kota_tujuan }}";
+
+        function filterTujuanEdit() {
+            const asal = document.getElementById("kota_asal").value;
+            const tujuanSelect = document.getElementById("kota_tujuan");
+
+            // Reset opsi
+            tujuanSelect.innerHTML = '<option value="" disabled selected>Pilih Kota Tujuan</option>';
+
+            // Tampilkan kota selain kota asal
+            semuaKota.forEach(kota => {
+                if (kota !== asal) {
+                    const option = document.createElement("option");
+                    option.value = kota;
+                    option.text = kota;
+                    if (kota === kotaTujuanTerpilih) {
+                        option.selected = true;
+                    }
+                    tujuanSelect.appendChild(option);
+                }
+            });
+        }
+
+        // Jalankan sekali untuk inisialisasi saat load
+        document.addEventListener("DOMContentLoaded", function() {
+            filterTujuanEdit();
+        });
+    </script>
 @endpush

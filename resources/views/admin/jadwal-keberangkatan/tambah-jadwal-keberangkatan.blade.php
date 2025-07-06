@@ -29,15 +29,29 @@
                     </select>
                 </div>
 
-                <!-- Rute -->
+                <!-- Kota Asal -->
+                @php
+                    $semuaKota = ['Duri', 'Pekanbaru', 'Padang'];
+                @endphp
                 <div class="mb-3">
                     <label for="kota_asal">Kota Asal</label>
-                    <input type="text" name="kota_asal" class="form-control" placeholder="Contoh: Duri" required>
+                    <select name="kota_asal" id="kota_asal" class="form-select" required onchange="filterTujuan()">
+                        <option value="" disabled selected>Pilih Kota Asal</option>
+                        @foreach ($semuaKota as $kota)
+                            <option value="{{ $kota }}">{{ $kota }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
+                <!-- Kota Tujuan -->
                 <div class="mb-3">
                     <label for="kota_tujuan">Kota Tujuan</label>
-                    <input type="text" name="kota_tujuan" class="form-control" placeholder="Contoh: Pekanbaru" required>
+                    <select name="kota_tujuan" id="kota_tujuan" class="form-select" required>
+                        <option value="" disabled selected>Pilih Kota Tujuan</option>
+                        @foreach ($semuaKota as $kota)
+                            <option value="{{ $kota }}">{{ $kota }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <!-- Jam Keberangkatan -->
@@ -83,4 +97,28 @@
             margin-bottom: 20px;
         }
     </style>
+@endpush
+
+@push('scripts')
+    <script>
+        const semuaKota = @json($semuaKota);
+
+        function filterTujuan() {
+            const asal = document.getElementById("kota_asal").value;
+            const tujuanSelect = document.getElementById("kota_tujuan");
+
+            // Hapus semua opsi tujuan dulu
+            tujuanSelect.innerHTML = '<option value="" disabled selected>Pilih Kota Tujuan</option>';
+
+            // Tambahkan kota tujuan yang berbeda dengan asal
+            semuaKota.forEach(kota => {
+                if (kota !== asal) {
+                    const option = document.createElement("option");
+                    option.value = kota;
+                    option.text = kota;
+                    tujuanSelect.appendChild(option);
+                }
+            });
+        }
+    </script>
 @endpush
