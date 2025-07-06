@@ -85,8 +85,8 @@
     </div>
 
     <!-- Modal Search City -->
-    <div class="modal fade modal-bottom" id="modalCity" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
+    <div class="modal fade" id="modalCity" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row w-100 align-items-center">
@@ -164,26 +164,6 @@
         .passenger-options button.active {
             background-color: #001B79;
             color: #fff;
-        }
-
-        .modal.modal-bottom .modal-dialog {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: 0;
-            max-width: 100%;
-            transform: translateY(100%);
-            transition: transform 0.3s ease-out;
-        }
-
-        .modal.show.modal-bottom .modal-dialog {
-            transform: translateY(0);
-        }
-
-        .modal.modal-bottom .modal-content {
-            border-radius: 20px 20px 0 0;
-            padding-bottom: 20px;
         }
     </style>
 @endpush
