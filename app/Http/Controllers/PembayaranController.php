@@ -15,14 +15,10 @@ use Illuminate\Support\Facades\DB;
 
 class PembayaranController extends Controller
 {
-    // Method preview yang Anda berikan sebelumnya, TIDAK LAGI MEMBUAT PEMESANAN
-    // Method ini sekarang hanya akan menampilkan preview jika diperlukan, atau bisa dihapus
-    // jika alur langsung dari PemesananController@store ke showPaymentPage
     public function preview(Request $request)
     {
         // Ambil data dari jadwal
         $jadwal = Jadwal::with('mobil')->where('jadwal_id', $request->jadwal_id)->firstOrFail();
-
         // Simpan sementara ke session atau teruskan ke view preview
         // Tidak ada Pemesanan::create di sini lagi
         session([
@@ -53,8 +49,6 @@ class PembayaranController extends Controller
             'request' => $request->all(),
         ]);
     }
-
-
     // Method baru untuk menampilkan halaman pembayaran dan membuat Snap Token
     // Ini akan dipanggil setelah pemesanan dibuat di PemesananController
     public function showPaymentPage($pemesanan_id, MidtransService $midtrans)

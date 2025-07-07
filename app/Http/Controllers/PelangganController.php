@@ -10,12 +10,6 @@ use Illuminate\Support\Str;
 
 class PelangganController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:pelanggan'); // Gunakan guard 'pelanggan'
-    //     $this->middleware('auth:admin'); // Gunakan guard 'pelanggan'
-    // }
-    // Tampilkan data pelanggan
     public function dataPelanggan()
     {
         $pelanggan = User::where('role', 'pelanggan')->get();
