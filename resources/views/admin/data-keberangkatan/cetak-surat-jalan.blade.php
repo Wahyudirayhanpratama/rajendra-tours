@@ -15,6 +15,9 @@
         </section>
 
         <div class="container">
+            <a href="" class="brand-link d-flex justify-content-center mt-4">
+                <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo Rajendra">
+            </a>
             <table class="no-border">
                 <tr>
                     <td><strong>Tanggal Keberangkatan:</strong></td>
