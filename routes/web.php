@@ -21,6 +21,7 @@ use App\Http\Controllers\MobilController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\SuratJalanController;
 
 Route::post('pelanggan.jadwal/set-tanggal', function (\Illuminate\Http\Request $request) {
     $tanggal = $request->input('date');
@@ -80,13 +81,16 @@ Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () 
     // Route::get('/data-pemesanan/edit/{id}', [PemesananController::class, 'editPemesanan'])->name('edit-data-pemesanan');
     // Route::put('/data-pemesanan/update/{id}', [PemesananController::class, 'updatePemesanan'])->name('update-data-pemesanan');
     // Route::delete('/data-pemesanan/hapus/{id}', [PemesananController::class, 'destroyPemesanan'])->name('hapus-data-pemesanan');
-    //CURD Penumpang
+    //CRUD Penumpang
     Route::get('/data-penumpang', [PenumpangController::class, 'index'])->name('data.penumpang');
     Route::get('/data-penumpang/tambah', [PenumpangController::class, 'createPenumpang'])->name('tambah-data-penumpang');
     Route::post('/data-penumpang/store', [PenumpangController::class, 'storePenumpang'])->name('store-data-penumpang');
     Route::get('/data-penumpang/edit/{id}', [PenumpangController::class, 'editPenumpang'])->name('edit-data-penumpang');
     Route::put('/data-penumpang/update/{id}', [PenumpangController::class, 'updatePenumpang'])->name('update-data-penumpang');
     Route::delete('/data-penumpang/hapus/{id}', [PenumpangController::class, 'destroyPenumpang'])->name('hapus-data-penumpang');
+    //Surat Jalan
+    Route::get('/surat-jalan', [SuratJalanController::class, 'index'])->name('surat.jalan');
+    Route::get('/cetak-surat-jalan/{id}', [SuratJalanController::class, 'cetak'])->name('cetak.surat-jalan');
 });
 
 Route::middleware(RedirectIfNotPemilik::class)->group(function () {

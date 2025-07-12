@@ -57,6 +57,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('surat.jalan') }}"
+                            class="nav-link {{ request()->routeIs('surat.jalan') ? 'active' : '' }}">
+                            <i class="side-icon bi-file-earmark-text"></i>
+                            <p class="text-white">Data Akun</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('data-pelanggan') }}"
                             class="nav-link {{ request()->routeIs('data-pelanggan') ? 'active' : '' }}">
                             <i class="side-icon bi bi-person-plus-fill"></i>

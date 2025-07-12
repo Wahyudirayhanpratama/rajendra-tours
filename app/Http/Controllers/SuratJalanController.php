@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Jadwal;
+use Carbon\Carbon;
+
+class SuratJalanController extends Controller
+{
+    // Menampilkan daftar unit yang berangkat hari ini
+    public function index()
+    {
+        $today = Carbon::today();
+
+        // Ambil semua jadwal hari ini beserta data mobil dan pemesanan
+        $jadwalHariIni = Jadwal::with(['mobil', 'pemesanans'])
+            ->whereDate('tanggal', $today)
+            ->get();
+
+        return view('admin.data-keberangkatan.surat-jalan', compact('jadwalHariIni'));
+    }
+
+    // Menampilkan halaman cetak surat jalan
+    public function cetak($id)
+    {
+        $jadwal = Jadwal::with(['mobil', 'pemesanans.penumpang'])->findOrFail($id);
+
+        return view('admin.cetak-surat-jalan', compact('jadwal'));
+    }
+}
