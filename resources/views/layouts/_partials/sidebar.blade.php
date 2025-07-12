@@ -90,7 +90,7 @@
 
                 <!-- Logout (Tampil untuk semua role) -->
                 <li class="nav-item mt-auto">
-                    <a href="#" data-confirm="logout">
+                    <a href="#" class="nav-link" id="logout-link" data-confirm="logout">
                         <i class="side-icon fa-solid fa-right-from-bracket text-white"></i>
                         <p class="text-white">Logout</p>
                     </a>
