@@ -48,7 +48,7 @@
                             <td>{{ formatJam($jadwal->jam_berangkat) }} WIB</td>
                             <td>
                                 <a href="{{ route('cetak.surat-jalan', $jadwal->jadwal_id) }}" target="_blank"
-                                    class="btn btn-sm btn-primary">
+                                    class="btn btn-sm btn-pp text-white">
                                     <i class="fas fa-print"></i> Print
                                 </a>
                             </td>

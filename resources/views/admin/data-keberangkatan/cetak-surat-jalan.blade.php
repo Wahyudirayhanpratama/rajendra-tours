@@ -9,36 +9,38 @@
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h1 class="m-0 font-weight-bold">Surat Jalan</h1>
-                    {{-- <a href="{{ route('tambah-data-pemesanan') }}" class="btn btn-tambah text-white">Tambah Pemesanan</a> --}}
                 </div>
             </div>
         </section>
 
         <div class="container">
-            <a href="" class="brand-link d-flex justify-content-center mt-4">
-                <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo Rajendra">
+            <a class="brand-link d-flex">
+                <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo Rajendra" style="height: 60px">
             </a>
             <table class="no-border">
                 <tr>
-                    <td><strong>Tanggal Keberangkatan:</strong></td>
+                    <td><strong>Tanggal Keberangkatan </strong></td>
+                    <td><strong>:</strong></td>
                     <td>{{ formatIndonesianDate($jadwal->tanggal) }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Nomor Polisi:</strong></td>
+                    <td><strong>Nomor Polisi </strong></td>
+                    <td><strong>:</strong></td>
                     <td>{{ $jadwal->mobil->nomor_polisi }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Jam Keberangkatan:</strong></td>
+                    <td><strong>Jam Keberangkatan </strong></td>
+                    <td><strong>:</strong></td>
                     <td>{{ formatJam($jadwal->jam_berangkat) }} WIB</td>
                 </tr>
                 <tr>
-                    <td><strong>Rute:</strong></td>
+                    <td><strong>Rute </strong></td>
+                    <td><strong>:</strong></td>
                     <td>{{ $jadwal->kota_asal }} → {{ $jadwal->kota_tujuan }}</td>
                 </tr>
             </table>
 
-            <h4>Daftar Penumpang</h4>
-            <table>
+            <table class="table table-bordered mt-3">
                 <thead>
                     <tr>
                         <th>Nomor Kursi</th>
@@ -55,33 +57,32 @@
                         @foreach ($pemesanan->penumpangs as $i => $penumpang)
                             <tr>
                                 <td>{{ $penumpang->nomor_kursi }}</td>
-                                <td>{{ $penumpang->user->nama ?? '-' }}</td>
-                                <td>{{ $penumpang->user->no_hp ?? '-' }}</td>
+                                <td>{{ $penumpang->nama ?? '-' }}</td>
+                                <td>{{ $penumpang->no_hp ?? '-' }}</td>
                                 <td>{{ $penumpang->alamat_jemput }}</td>
-                                <td>{{ $penumpang->alamat_tujuan }}</td>
-                                <td>Rp{{ number_format($pemesanan->harga_tiket, 0, ',', '.') }}</td>
+                                <td>{{ $penumpang->alamat_antar }}</td>
+                                <td>Rp{{ number_format($jadwal->harga, 0, ',', '.') }}</td>
                             </tr>
-                            @php $total += $pemesanan->harga_tiket; @endphp
+                            @php $total += $pemesanan->total_harga; @endphp
                         @endforeach
                     @endforeach
+                    <tr>
+                        <td colspan="5" class="text-right"><strong>Total :</strong></td>
+                        <td><strong>Rp{{ number_format($total, 0, ',', '.') }}</strong></td>
+                    </tr>
                 </tbody>
             </table>
 
-            <table class="no-border">
-                <tr>
-                    <td><strong>Total Harga Tiket:</strong></td>
-                    <td><strong>Rp{{ number_format($total, 0, ',', '.') }}</strong></td>
-                </tr>
-            </table>
-
-            <div style="margin-top: 50px; text-align: right;">
+            <div class="mr-4" style="margin-top: 100px; text-align: right;">
                 <p>Tanda Tangan Sopir</p>
                 <br><br>
                 <p>______________________</p>
             </div>
 
             <div class="no-print">
-                <button onclick="window.print()">Cetak Surat Jalan</button>
+                <button onclick="window.print()" class="btn btn-pp text-white shadow-sm">
+                    <i class="fas fa-print mr-2"></i> Cetak Surat Jalan
+                </button>
             </div>
         </div>
     </div>

@@ -144,4 +144,14 @@ class PemesananController extends Controller
 
         return view('pelanggan.bayar', compact('pemesanan', 'snapToken'));
     }
+    public function cetakNota($id)
+    {
+        $pemesanan = Pemesanan::with([
+            'penumpangs',
+            'jadwal.mobil',
+            'jadwal'
+        ])->findOrFail($id);
+
+        return view('admin.data-pemesanan.cetak-nota', compact('pemesanan'));
+    }
 }

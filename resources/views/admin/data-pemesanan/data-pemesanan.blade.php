@@ -27,7 +27,7 @@
                         <th>Status</th>
                         <th>Jumlah Penumpang</th>
                         <th>Rute</th>
-                        {{-- <th>Aksi</th> --}}
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,16 +40,12 @@
                             <td>{{ ucfirst(str_replace('_', ' ', $pemesanan->status)) }}</td>
                             <td>{{ $pemesanan->jumlah_penumpang }}</td>
                             <td>{{ $pemesanan->jadwal->kota_asal }} - {{ $pemesanan->jadwal->kota_tujuan }}</td>
-                            {{-- <td>
-                                <a href="{{ route('edit-data-pemesanan', $pemesanan->pemesanan_id) }}"
-                                    class="btn btn-sm btn-pp text-white">Edit</a>
-                                <form action="{{ route('hapus-data-pemesanan', $pemesanan->pemesanan_id) }}" method="POST"
-                                    style="display:inline;" data-confirm="true">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">Hapus</button>
-                                </form>
-                            </td> --}}
+                            <td>
+                                <a href="{{ route('cetak.nota', $pemesanan->pemesanan_id) }}" target="_blank"
+                                    class="btn btn-sm btn-pp text-white">
+                                    <i class="fas fa-print"></i> Print
+                                </a>
+                            </td>
                         </tr>
                     @empty
                         <tr>

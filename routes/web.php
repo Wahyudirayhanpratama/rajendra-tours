@@ -77,10 +77,7 @@ Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () 
     //CRUD Pemesanan
     Route::get('/data-pemesanan', [PemesananController::class, 'pemesanan'])->name('data-pemesanan');
     Route::post('/data-pemesanan/store', [PemesananController::class, 'storePemesanan'])->name('store-data-pemesanan');
-    // Route::get('/data-pemesanan/tambah', [PemesananController::class, 'createPemesanan'])->name('tambah-data-pemesanan');
-    // Route::get('/data-pemesanan/edit/{id}', [PemesananController::class, 'editPemesanan'])->name('edit-data-pemesanan');
-    // Route::put('/data-pemesanan/update/{id}', [PemesananController::class, 'updatePemesanan'])->name('update-data-pemesanan');
-    // Route::delete('/data-pemesanan/hapus/{id}', [PemesananController::class, 'destroyPemesanan'])->name('hapus-data-pemesanan');
+    Route::get('/cetak-nota/{id}', [PemesananController::class, 'cetakNota'])->name('cetak.nota');
     //CRUD Penumpang
     Route::get('/data-penumpang', [PenumpangController::class, 'index'])->name('data.penumpang');
     Route::get('/data-penumpang/tambah', [PenumpangController::class, 'createPenumpang'])->name('tambah-data-penumpang');
