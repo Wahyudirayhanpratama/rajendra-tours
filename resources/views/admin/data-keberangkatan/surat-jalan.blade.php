@@ -14,10 +14,10 @@
         </section>
 
         <div class="container">
-            <h3 class="card-title"><strong>Unit Berangkat Hari Ini</strong></h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>No Polisi</th>
                         <th>Rute</th>
                         <th>Tanggal</th>
@@ -35,6 +35,7 @@
                             $jumlahPenumpang = $jadwal->pemesanans->sum('jumlah_penumpang');
                         @endphp
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $jadwal->mobil->nomor_polisi }}</td>
                             <td>{{ $jadwal->kota_asal }} - {{ $jadwal->kota_tujuan }}</td>
                             <td>{{ formatIndonesianDate($jadwal->tanggal) }}</td>
