@@ -26,7 +26,7 @@
                 <div class="col-md-6">
                     <div class="mb-2"><strong>Nomor Tiket:</strong> {{ $pemesanan->tiket->no_tiket ?? '-' }}</div>
                     <div class="mb-2"><strong>Jumlah Penumpang:</strong> {{ $pemesanan->jumlah_penumpang }}</div>
-                    <div class="mb-2"><strong>Nomor Transaksi:</strong> {{ $pemesanan->transaction_id }}</div>
+                    <div class="mb-2"><strong>Nomor Transaksi:</strong> {{ strtoupper(str_replace('-', '', $pemesanan->transaction_id)) }}</div>
                     <div class="mb-2"><strong>Tanggal Keberangkatan:</strong>
                         {{ formatIndonesianDate($pemesanan->jadwal->tanggal) }}</div>
                 </div>
