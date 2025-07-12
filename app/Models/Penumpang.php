@@ -32,4 +32,8 @@ class Penumpang extends Model
     {
         return $this->belongsTo(Mobil::class, 'mobil_id', 'mobil_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
