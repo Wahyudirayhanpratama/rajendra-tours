@@ -83,3 +83,13 @@
         </div>
     </div>
 @endsection
+
+@push('headers')
+    <style>
+        .container {
+            max-width: 98%;
+            overflow-x: auto;
+            margin-left: 10px;
+        }
+    </style>
+@endpush
