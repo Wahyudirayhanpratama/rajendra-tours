@@ -59,8 +59,8 @@
                     <li class="nav-item">
                         <a href="{{ route('surat.jalan') }}"
                             class="nav-link {{ request()->routeIs('surat.jalan') ? 'active' : '' }}">
-                            <i class="side-icon bi-file-earmark-text"></i>
-                            <p class="text-white">Data Akun</p>
+                            <i class="side-icon bi bi-journal-text"></i>
+                            <p class="text-white">Surat Jalan</p>
                         </a>
                     </li>
                     <li class="nav-item">
