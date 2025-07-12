@@ -25,6 +25,6 @@ class SuratJalanController extends Controller
     public function cetak($id)
     {
         $jadwal = Jadwal::with(['mobil', 'pemesanans.penumpangs.user'])->findOrFail($id);
-        return view('cetak-surat-jalan', compact('jadwal'));
+        return view('admin.data-keberangkatan.cetak-surat-jalan', compact('jadwal'));
     }
 }
