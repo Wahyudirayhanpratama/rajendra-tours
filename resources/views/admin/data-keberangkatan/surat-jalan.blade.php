@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Data Pemesanan')
+@section('title', 'Data Keberangkatan')
 
 @section('content')
     <div class="content-wrapper">
