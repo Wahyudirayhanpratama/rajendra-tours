@@ -1,10 +1,19 @@
-@extends('layouts.master')
+@extends('layouts.master8')
 
 @section('title', 'Surat Jalan')
 
 @section('content')
     <div class="content-wrapper">
-        <h2>Surat Jalan</h2>
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1 class="m-0 font-weight-bold">Surat Jalan</h1>
+                    {{-- <a href="{{ route('tambah-data-pemesanan') }}" class="btn btn-tambah text-white">Tambah Pemesanan</a> --}}
+                </div>
+            </div>
+        </section>
+
         <div class="container">
             <table class="no-border">
                 <tr>
