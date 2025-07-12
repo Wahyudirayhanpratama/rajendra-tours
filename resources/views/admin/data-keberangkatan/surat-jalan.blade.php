@@ -55,7 +55,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted">Tidak ada jadwal keberangkatan hari
+                            <td colspan="8" class="text-center text-muted">Tidak ada jadwal keberangkatan hari
                                 ini.</td>
                         </tr>
                     @endforelse
