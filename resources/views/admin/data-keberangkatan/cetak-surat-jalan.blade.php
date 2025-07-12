@@ -45,8 +45,8 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $penumpang->nomor_kursi }}</td>
-                        <td>{{ $penumpang->user->nama }}</td>
-                        <td>{{ $penumpang->user->no_hp }}</td>
+                        <td>{{ $penumpang->user->nama ?? '-' }}</td>
+                        <td>{{ $penumpang->user->no_hp ?? '-' }}</td>
                         <td>{{ $penumpang->alamat_jemput }}</td>
                         <td>{{ $penumpang->alamat_tujuan }}</td>
                         <td>Rp{{ number_format($pemesanan->harga_tiket, 0, ',', '.') }}</td>
@@ -73,5 +73,5 @@
     <div class="no-print">
         <button onclick="window.print()">Cetak Surat Jalan</button>
     </div>
-    
+
 @endsection
