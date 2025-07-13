@@ -27,6 +27,16 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Login berhasil!',
+                    'user' => [
+                        'username' => $user->nama,
+                        'role' => $user->role,
+                    ],
+                ], 200);
+            }
+
             if ($user->role === 'admin') {
                 Auth::guard('admin')->login($user);
                 $request->session()->regenerate();
@@ -38,6 +48,11 @@ class AuthController extends Controller
             } else {
                 return back()->withErrors(['username' => 'Role tidak dikenali.']);
             }
+        }
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Username atau password salah.'
+            ], 401);
         }
 
         return back()->withErrors(['username' => 'Username atau password salah.']);
@@ -60,7 +75,24 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Login berhasil!',
+                    'user' => [
+                        'nama' => $user->nama,
+                        'no_hp' => $user->no_hp,
+                        'role' => $user->role,
+                    ],
+                ], 200);
+            }
+
             return redirect()->route('cari-jadwal');
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Nomor HP atau password salah.'
+            ], 401);
         }
 
         return back()->withErrors([

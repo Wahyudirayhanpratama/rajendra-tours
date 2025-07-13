@@ -106,7 +106,7 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
-        User::create([
+        $user = User::create([
             'user_id' => Str::uuid(),
             'nama' => $request->nama,
             'no_hp' => $request->no_hp,
@@ -115,7 +115,25 @@ class UserController extends Controller
             'role' => 'pelanggan',
         ]);
 
-        return redirect()->route('login.pelanggan')->with('success', 'Registrasi berhasil! Silakan login.');
+        $datareponse = [
+            'user_id' => Str::uuid(),
+            'nama' => $user->nama,
+            'no_hp' => $user->no_hp,
+            'alamat' => $user->alamat,
+            'role' => 'pelanggan',
+        ];
 
+        if ($request->wantsJson()) {
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Registrasi berhasil! Silakan login.',
+                    'user' => $datareponse,
+                ],
+                201
+            );
+        }
+
+        return redirect()->route('login.pelanggan')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }
