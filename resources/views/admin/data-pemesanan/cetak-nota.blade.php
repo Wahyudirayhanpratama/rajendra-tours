@@ -24,58 +24,78 @@
 
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <div class="mb-2"><strong>Nomor Tiket:</strong> {{ $pemesanan->tiket->no_tiket ?? '-' }}</div>
-                    <div class="mb-2"><strong>Nomor Transaksi:</strong>
-                        {{ strtoupper(str_replace('-', '', $pemesanan->transaction_id)) }}</div>
-                    <div class="mb-2"><strong>Tanggal Keberangkatan:</strong>
-                        {{ formatIndonesianDate($pemesanan->jadwal->tanggal) }}</div>
-                    <div class="mb-2"><strong>Jumlah Penumpang:</strong> {{ $pemesanan->jumlah_penumpang }}</div>
+                    <table class="no-border">
+                        <tr>
+                            <td><strong>Nomor Tiket </strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ $pemesanan->tiket->no_tiket ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nomor Transaksi </strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ strtoupper(str_replace('-', '', $pemesanan->transaction_id)) }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tanggal Keberangkatan </strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ formatIndonesianDate($pemesanan->jadwal->tanggal) }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jumlah Penumpang </strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ $pemesanan->jumlah_penumpang }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jam Keberangkatan </strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ formatJam($pemesanan->jadwal->jam_berangkat) }} WIB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nomor Polisi </strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ $pemesanan->jadwal->mobil->nomor_polisi ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rute </strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ $pemesanan->jadwal->kota_asal }} →
+                                {{ $pemesanan->jadwal->kota_tujuan }}</td>
+                        </tr>
+                    </table>
                 </div>
-                <div class="col-md-6">
-                    <div class="mb-2"><strong>Jam Keberangkatan:</strong>
-                        {{ formatJam($pemesanan->jadwal->jam_berangkat) }} WIB</div>
-                    <div class="mb-2"><strong>Nomor Polisi:</strong>
-                        {{ $pemesanan->jadwal->mobil->nomor_polisi ?? '-' }}</div>
-                    <div class="mb-2"><strong>Rute:</strong> {{ $pemesanan->jadwal->kota_asal }} →
-                        {{ $pemesanan->jadwal->kota_tujuan }}</div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
                 <div class="col-md-6">
                     <div class="p-3 bg-light border rounded mb-2">
                         <div><strong>Harga Tiket:</strong></div>
                         <div class="h5 mb-0">Rp{{ number_format($pemesanan->jadwal->harga ?? 0, 0, ',', '.') }}</div>
                     </div>
-                </div>
-                <div class="col-md-6">
                     <div class="p-3 bg-success text-white border rounded mb-2">
                         <div><strong>Total Bayar:</strong></div>
                         <div class="h5 mb-0">Rp{{ number_format($pemesanan->total_harga, 0, ',', '.') }}</div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="mb-3 mt-2">
+                            <h6 class="fw-bold">Detail Penumpang</h6>
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>No HP</th>
+                                        <th>No Kursi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($pemesanan->penumpangs as $penumpang)
+                                        <tr>
+                                            <td>{{ $penumpang->nama ?? '-' }}</td>
+                                            <td>{{ $penumpang->no_hp ?? '-' }}</td>
+                                            <td>{{ $penumpang->nomor_kursi ?? '-' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="mb-3">
-                <h6 class="fw-bold">Detail Penumpang</h6>
-                <table class="table table-bordered table-sm">
-                    <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>No HP</th>
-                            <th>No Kursi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($pemesanan->penumpangs as $penumpang)
-                            <tr>
-                                <td>{{ $penumpang->nama ?? '-' }}</td>
-                                <td>{{ $penumpang->no_hp ?? '-' }}</td>
-                                <td>{{ $penumpang->nomor_kursi ?? '-' }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
