@@ -5,7 +5,8 @@
 @section('content')
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="{{ asset('storage/logo_jendra.png') }}" alt="Logo Rajendra" height="200" width="200">
+        <img class="animation__shake" src="{{ asset('storage/logo_jendra.png') }}" alt="Logo Rajendra" height="200"
+            width="200">
     </div>
     <!-- Site wrapper -->
     <div class="wrapper">
@@ -24,49 +25,51 @@
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
-                        <div class="col-sm-6">
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
                             <div class="small-box bg-primary">
                                 <div class="inner">
                                     <h3>{{ $jumlahPelanggan }}</h3>
                                     <p>Jumlah Customer</p>
-                                    <p style="font-size: 14px;">dari Total di bulan {{ formatIndonesia(date('F Y')) }}</p>
+                                    <p>dari Total di bulan {{ formatIndonesia(date('F Y')) }}</p>
                                 </div>
                                 <div class="icon">
-                                    <i class="fas fa-users fa-3x" style="color: white"></i>
+                                    <i class="fas fa-users"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
                             <div class="small-box bg-primary">
                                 <div class="inner">
                                     <h3>{{ $pemesananBulanIni }}</h3>
                                     <p>Jumlah Pemesanan</p>
-                                    <p style="font-size: 14px;">dari Total di bulan {{ formatIndonesia(date('F Y')) }}</p>
+                                    <p>dari Total di bulan {{ formatIndonesia(date('F Y')) }}</p>
                                 </div>
                                 <div class="icon">
-                                    <i class="fas fa-clipboard-list fa-3x" style="color: white"></i>
+                                    <i class="fas fa-clipboard-list"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="small-box bg-blue">
-                                <div class="inner">
-                                    <h3>{{ $jumlahMobil }}</h3>
-                                    <p>Jumlah Unit</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-car fa-3x" style="color: white"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="small-box bg-blue">
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                            <div class="small-box bg-primary">
                                 <div class="inner">
                                     <h3>{{ $pembatalanBulanIni }}</h3>
-                                    <p>Total Pembatalan Tiket di Bulan {{ formatIndonesia(date('F Y')) }}</p>
+                                    <p>Jumlah Pembatalan Tiket</p>
+                                    <p>dari Total di bulan {{ formatIndonesia(date('F Y')) }}</p>
                                 </div>
                                 <div class="icon">
-                                    <i class="fas fa-chart-line fa-3x" style="color: white"></i>
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    <h3>{{ $jumlahMobil }}</h3>
+                                    <p>Jumlah Mobil</p>
+                                    <p>Pada Saat Ini</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-car"></i>
                                 </div>
                             </div>
                         </div>
