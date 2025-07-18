@@ -39,7 +39,7 @@ class PembayaranController extends Controller
             ]
         ]);
 
-        return view('pelanggan.preview_pemesanan', [ // Buat view preview_pemesanan jika perlu
+        return view('pelanggan.preview_pemesanan', [
             'cityfrom' => session('cityfrom'),
             'cityto' => session('cityto'),
             'tanggal' => session('tanggal'),
