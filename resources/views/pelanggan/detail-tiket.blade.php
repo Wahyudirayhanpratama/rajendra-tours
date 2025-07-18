@@ -85,7 +85,7 @@
                     </button>
                 </form>
                 {{-- Tombol Bayar jika belum lunas --}}
-                @if ($pemesanan->status !== 'lunas')
+                @if ($pemesanan->status !== 'Lunas')
                     <a href="{{ route('bayar', ['id' => $pemesanan->pemesanan_id]) }}"
                         class="btn btn-po fw-bold w-100">
                         Bayar Sekarang
