@@ -31,9 +31,6 @@
                                     <h5>{{ $totalTiketBulanIni }}</h5>
                                     <p style="font-size: 14px;">di bulan ini</p>
                                 </div>
-                                <div class="icon">
-                                    <i class="fas fa-ticket fa-3x"></i>
-                                </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
@@ -42,9 +39,6 @@
                                     <h4>Total Pembatalan Tiket</h4>
                                     <h5>{{ $totalPembatalanBulanIni }}</h5>
                                     <p style="font-size: 14px;">di bulan ini</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-clipboard-list fa-3x"></i>
                                 </div>
                             </div>
                         </div>
@@ -55,9 +49,6 @@
                                     <h5>Rp. {{ number_format($pendapatanBulanan, 0, ',', '.') }}</h5>
                                     <p style="font-size: 14px;">Pada Saat Ini</p>
                                 </div>
-                                <div class="icon">
-                                    <i class="fas fa-money-bill-wave fa-3x"></i>
-                                </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
@@ -66,9 +57,6 @@
                                     <h4>Pendapatan Pertahun</h4>
                                     <h5>Rp. {{ number_format($pendapatanTahunan, 0, ',', '.') }}</h5>
                                     <p style="font-size: 14px;">Pada Saat Ini</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-chart-line fa-3x"></i>
                                 </div>
                             </div>
                         </div>
