@@ -24,48 +24,56 @@
 
         <!-- Detail Info -->
         <div class="mx-3 mt-5">
-            <p class="fw-bold mb-2">
-                No Tiket:
-                <strong>{{ $pemesanan->tiket->no_tiket ?? '-' }}</strong>
-            </p>
+            <div class="mb-3 d-flex align-items-start">
+                <i class="bi bi-ticket-perforated me-2 fs-5 text-secondary"></i>
+                <div class="flex-grow-1 d-flex justify-content-between">
+                    <strong>No Tiket</strong>
+                    <strong>{{ $pemesanan->tiket->no_tiket ?? '-' }}</strong>
+                </div>
+            </div>
 
             <div class="mb-2 d-flex align-items-start">
                 <i class="bi bi-clipboard-check me-2 fs-5"></i>
-                <span>Kode Booking :
+                <div class="flex-grow-1 d-flex justify-content-between">
+                    <span>Kode Booking</span>
                     <strong>{{ $pemesanan->kode_booking }}</strong>
-                </span>
+                </div>
             </div>
 
             <div class="mb-2 d-flex align-items-start">
                 <i class="bi bi-signpost me-2 fs-5"></i>
-                <span>Rute :
+                <div class="flex-grow-1 d-flex justify-content-between">
+                    <span>Rute</span>
                     <strong>{{ $pemesanan->jadwal->kota_asal ?? '?' }} -
                         {{ $pemesanan->jadwal->kota_tujuan ?? '?' }}</strong>
-                </span>
+                </div>
             </div>
 
             <div class="mb-2 d-flex align-items-start">
                 <i class="bi bi-calendar-event me-2 fs-5"></i>
-                <span>Jadwal :
+                <div class="flex-grow-1 d-flex justify-content-between">
+                    <span>Jadwal</span>
                     <strong>
                         {{ formatIndonesianDate($pemesanan->jadwal->tanggal) }},
                         {{ formatJam($pemesanan->jadwal->jam_berangkat) }} WIB
                     </strong>
-                </span>
+                </div>
             </div>
 
             <div class="mb-2 d-flex align-items-start">
                 <i class="bi bi-currency-dollar me-2 fs-5"></i>
-                <span>Harga :
+                <div class="flex-grow-1 d-flex justify-content-between">
+                    <span>Harga</span>
                     <strong>Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</strong>
-                </span>
+                </div>
             </div>
 
             <div class="mb-4 d-flex align-items-start">
                 <i class="bi bi-person-bounding-box me-2 fs-5"></i>
-                <span>No Kursi :
+                <div class="flex-grow-1 d-flex justify-content-between">
+                    <span>No Kursi</span>
                     <strong>{{ $pemesanan->tiket->nomor_kursi ?? '-' }}</strong>
-                </span>
+                </div>
             </div>
         </div>
 

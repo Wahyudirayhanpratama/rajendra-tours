@@ -78,7 +78,7 @@
                             <td>{{ $item->jadwal->kota_asal }} - {{ $item->jadwal->kota_tujuan }}</td>
                             <td>{{ \Carbon\Carbon::parse($item->jadwal->tanggal)->format('d-m-Y') }}</td>
                             <td>Rp. {{ number_format($item->total_harga, 0, ',', '.') }}</td>
-                            <td>{{ ucfirst($item->status) }}</td>
+                            <td>{{ ucfirst(str_replace('_', ' ', $item->status)) }}</td>
                         </tr>
                     @empty
                         <tr>

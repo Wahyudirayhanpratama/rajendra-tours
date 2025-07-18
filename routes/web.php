@@ -38,13 +38,13 @@ Route::get('/login-pelanggan', [AuthController::class, 'showPelangganLoginForm']
 Route::post('/login-pelanggan-ajax', [AuthController::class, 'loginAjax'])->name('login.pelanggan.ajax');
 Route::post('/logout-pelanggan', [AuthController::class, 'logoutPelanggan'])->name('logout.pelanggan');
 
-Route::resource('jadwals', JadwalController::class);
-Route::get('/jadwal/cari/{tanggal?}', [JadwalController::class, 'cari'])->name('jadwal.cari');
-Route::get('/', [JadwalController::class, 'showCari'])->name('cari-jadwal');
-
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::resource('jadwals', JadwalController::class);
+Route::get('/jadwal/cari/{tanggal?}', [JadwalController::class, 'cari'])->name('jadwal.cari');
+Route::get('/', [JadwalController::class, 'showCari'])->name('cari-jadwal');
 
 // Middleware manual cek session agar tidak bisa akses dashboard kalau belum login
 Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () {
@@ -56,7 +56,7 @@ Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () 
     Route::get('/pelanggan/tambah', [PelangganController::class, 'createPelanggan'])->name('tambah-data-pelanggan');
     Route::post('/pelanggan/tambah', [PelangganController::class, 'storePelanggan'])->name('store-pelanggan');
     Route::get('/pelanggan/edit/{id}', [PelangganController::class, 'editPelanggan'])->name('edit-data-pelanggan');
-    Route::post('/pelanggan/update/{id}', [PelangganController::class, 'updatePelanggan'])->name('update-data-pelanggan');
+    Route::put('/pelanggan/update/{id}', [PelangganController::class, 'updatePelanggan'])->name('update-data-pelanggan');
     Route::delete('/pelanggan/hapus/{id}', [PelangganController::class, 'deletePelanggan'])->name('hapus-data-pelanggan');
     // CRUD Mobil
     Route::get('/mobil', [MobilController::class, 'dataMobil'])->name('data-mobil');

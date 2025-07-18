@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Jadwal;
 use App\Models\Mobil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class JadwalController extends Controller
 {
@@ -82,6 +84,14 @@ class JadwalController extends Controller
             $jadwal->kursi_tersisa = ($jadwal->mobil->kapasitas ?? 0) - count($kursi_terpakai);
         }
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Jadwal ditemukan',
+                'data' => $jadwals
+            ]);
+        }
+
         $tanggalCarbon = Carbon::parse($tanggal);
         $prevDate = $tanggalCarbon->copy()->subDay()->format('Y-m-d');
         $nextDate = $tanggalCarbon->copy()->addDay()->format('Y-m-d');
@@ -101,6 +111,14 @@ class JadwalController extends Controller
     public function jadwalKeberangkatan(Request $request)
     {
         $jadwals = Jadwal::with('mobil')->get();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'data' => $jadwals
+            ]);
+        }
+
         return view('admin.jadwal-keberangkatan.jadwal-keberangkatan', compact('jadwals'));
     }
 
@@ -121,17 +139,42 @@ class JadwalController extends Controller
             'harga' => 'required|numeric',
         ]);
 
-        Jadwal::create([
-            'jadwal_id' => Str::uuid(),
-            'mobil_id' => $request->mobil_id,
-            'kota_asal' => $request->kota_asal,
-            'kota_tujuan' => $request->kota_tujuan,
-            'tanggal' => $request->tanggal,
-            'jam_berangkat' => $request->jam_berangkat,
-            'harga' => $request->harga,
-        ]);
+        DB::beginTransaction();
 
-        return redirect()->route('jadwal-keberangkatan')->with('success', 'Jadwal berhasil ditambahkan.');
+        try {
+            $jadwal = Jadwal::create([
+                'jadwal_id' => Str::uuid(),
+                'mobil_id' => $request->mobil_id,
+                'kota_asal' => $request->kota_asal,
+                'kota_tujuan' => $request->kota_tujuan,
+                'tanggal' => $request->tanggal,
+                'jam_berangkat' => $request->jam_berangkat,
+                'harga' => $request->harga,
+            ]);
+
+            DB::commit();
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Jadwal berhasil ditambahkan.',
+                    'jadwal' => $jadwal
+                ], 201);
+            }
+            return redirect()->route('jadwal-keberangkatan')->with('success', 'Jadwal berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            DB::rollback(); // Jika ada yang gagal, rollback semua
+            Log::error('Gagal menyimpan jadwal', ['error' => $e->getMessage()]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menyimpan jadwal keberangkatan.',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+            return back()->withInput()->withErrors(['general_error' => 'Gagal menyimpan jadwal keberangkatan: ' . $e->getMessage()]);
+        }
     }
 
     public function editJadwal($id)
@@ -155,13 +198,37 @@ class JadwalController extends Controller
         $jadwal = Jadwal::findOrFail($id);
         $jadwal->update($request->all());
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Jadwal berhasil diperbarui.',
+                'mobil' => $jadwal
+            ], 200);
+        }
+
         return redirect()->route('jadwal-keberangkatan')->with('success', 'Jadwal berhasil diupdate.');
     }
 
-    public function deleteJadwal($id)
+    public function deleteJadwal(Request $request, $id)
     {
         $jadwal = Jadwal::findOrFail($id);
         $jadwal->delete();
+
+        if (!$jadwal) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Jadwal tidak ditemukan.'
+            ], 404);
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Jadwal berhasil dihapus.',
+                'jadwal_id' => $id
+            ], 200);
+        }
+
         return redirect()->route('jadwal-keberangkatan')->with('success', 'Jadwal berhasil dihapus.');
     }
 }

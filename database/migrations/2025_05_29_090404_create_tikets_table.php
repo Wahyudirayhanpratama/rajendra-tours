@@ -15,8 +15,8 @@ return new class extends Migration
             $table->uuid('tiket_id')->primary();
             $table->uuid('pemesanan_id');
             $table->string('no_tiket');
+            $table->string('nomor_kursi');
             $table->string('nama_penumpang');
-            $table->string('nomor_kursi')->after('no_tiket');
             $table->timestamps();
 
             $table->foreign('pemesanan_id')->references('pemesanan_id')->on('pemesanans')->onDelete('cascade');

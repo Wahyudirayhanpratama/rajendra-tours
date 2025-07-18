@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
             'pemilik' => \App\Http\Middleware\RedirectIfNotPemilik::class,
             'pelanggan' => \App\Http\Middleware\RedirectIfNotPelanggan::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

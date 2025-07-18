@@ -52,6 +52,10 @@ return [
             'driver' => 'session',
             'provider' => 'pemiliks',
         ],
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
     ],
 
     /*

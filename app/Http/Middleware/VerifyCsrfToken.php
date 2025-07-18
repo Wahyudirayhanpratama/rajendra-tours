@@ -9,9 +9,10 @@ class VerifyCsrfToken extends Middleware
 {
     protected $except = [
         'api/midtrans/callback',
-        '/register',            // dengan slash
-        'register',             // tanpa slash (jaga-jaga)
-        'http://127.0.0.1:8000/register'
+        // Mobil
+        '/mobil/tambah',
+        '/mobil/update/*',
+        '/mobil/hapus/*',
     ];
     protected function tokensMatch($request)
     {

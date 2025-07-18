@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -9,6 +10,64 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function loginAdminPemilikApi(Request $request)
+    {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('nama', $request->username)
+            ->whereIn('role', ['admin', 'pemilik'])
+            ->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Username atau password salah.'], 401);
+        }
+
+        // Hapus token lama (opsional)
+        $user->tokens()->delete();
+
+        $token = $user->createToken($user->role . '-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login berhasil!',
+            'token' => $token,
+            'user' => [
+                'nama' => $user->nama,
+                'role' => $user->role,
+            ]
+        ]);
+    }
+    public function loginPelangganApi(Request $request)
+    {
+        $request->validate([
+            'no_hp' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('no_hp', $request->no_hp)
+            ->where('role', 'pelanggan')
+            ->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Nomor HP atau password salah.'], 401);
+        }
+
+        $user->tokens()->delete();
+
+        $token = $user->createToken('pelanggan-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login berhasil!',
+            'token' => $token,
+            'user' => [
+                'nama' => $user->nama,
+                'no_hp' => $user->no_hp,
+                'role' => $user->role,
+            ]
+        ]);
+    }
     public function login(Request $request)
     {
         $request->validate([
@@ -27,6 +86,18 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
+            if ($request->expectsJson()) {
+                Auth::guard('admin')->login($user); // aktifkan guard admin
+                $request->session()->regenerate();
+                return response()->json([
+                    'message' => 'Login berhasil!',
+                    'user' => [
+                        'username' => $user->nama,
+                        'role' => $user->role,
+                    ],
+                ], 200);
+            }
+
             if ($user->role === 'admin') {
                 Auth::guard('admin')->login($user);
                 $request->session()->regenerate();
@@ -38,6 +109,11 @@ class AuthController extends Controller
             } else {
                 return back()->withErrors(['username' => 'Role tidak dikenali.']);
             }
+        }
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Username atau password salah.'
+            ], 401);
         }
 
         return back()->withErrors(['username' => 'Username atau password salah.']);
@@ -57,9 +133,27 @@ class AuthController extends Controller
 
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::guard('pelanggan')->login($user); // gunakan guard pelanggan
+
             $request->session()->regenerate();
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Login berhasil!',
+                    'user' => [
+                        'nama' => $user->nama,
+                        'no_hp' => $user->no_hp,
+                        'role' => $user->role,
+                    ],
+                ], 200);
+            }
+
             return redirect()->route('cari-jadwal');
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Nomor HP atau password salah.'
+            ], 401);
         }
 
         return back()->withErrors([
@@ -141,5 +235,13 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+    public function logoutApi(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logout berhasil!'
+        ]);
     }
 }
