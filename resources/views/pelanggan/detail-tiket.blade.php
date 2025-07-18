@@ -12,9 +12,10 @@
         <!-- Status -->
         <div class="text-end mt-5">
             @php
-                $badgeClass = $pemesanan->status === 'Tiket dibatalkan'
-                    ? 'bg-danger text-white'
-                    : 'bg-success bg-opacity-25 text-success';
+                $badgeClass =
+                    $pemesanan->status === 'Tiket dibatalkan'
+                        ? 'bg-danger text-white'
+                        : 'bg-success bg-opacity-25 text-success';
             @endphp
             <span class="badge {{ $badgeClass }} px-4 py-2 fw-semibold">
                 {{ ucfirst(str_replace('_', ' ', $pemesanan->status)) }}
@@ -83,6 +84,13 @@
                         Batalkan Pesanan
                     </button>
                 </form>
+                {{-- Tombol Bayar jika belum lunas --}}
+                @if (!$pemesanan->pembayaran || $pemesanan->pembayaran->status !== 'lunas')
+                    <a href="{{ route('bayar', ['id' => $pemesanan->pemesanan_id]) }}"
+                        class="btn btn-po fw-bold w-100">
+                        Bayar Sekarang
+                    </a>
+                @endif
             @endif
             <a href="{{ route('tiket') }}" class="btn btn-outline-po fw-bold">Kembali</a>
         </div>

@@ -59,12 +59,9 @@
             <button type="button" class="btn btn-po fw-bold" id="pay-button">
                 <i class="bi bi-credit-card me-1"></i> Konfirmasi & Lanjutkan
             </button>
-            {{-- Tombol Kembali hanya muncul jika status pembayaran lunas --}}
-            @if ($pemesanan->status === 'lunas')
-                <button class="btn btn-outline-po fw-bold" onclick="location.href='{{ route('tiket') }}'">
-                    <i class="bi bi-arrow-left me-1"></i> Kembali
-                </button>
-            @endif
+            <button class="btn btn-outline-po fw-bold" onclick="location.href='{{ route('tiket') }}'">
+                <i class="bi bi-arrow-left me-1"></i> Kembali
+            </button>
         </div>
     </div>
 @endsection
