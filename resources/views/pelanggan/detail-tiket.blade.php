@@ -10,88 +10,81 @@
         </div>
 
         <!-- Status -->
-        <div class="d-flex justify-content-end mt-5 mb-3">
+        <div class="text-end mt-5">
             @php
-                $badgeClass =
-                    $pemesanan->status === 'Tiket dibatalkan'
-                        ? 'bg-danger text-white'
-                        : 'bg-success bg-opacity-25 text-success';
+                $badgeClass = $pemesanan->status === 'Tiket dibatalkan'
+                    ? 'bg-danger text-white'
+                    : 'bg-success bg-opacity-25 text-success';
             @endphp
-            <span class="badge {{ $badgeClass }} px-5 py-2 fw-semibold">
+            <span class="badge {{ $badgeClass }} px-4 py-2 fw-semibold">
                 {{ ucfirst(str_replace('_', ' ', $pemesanan->status)) }}
             </span>
         </div>
 
-        <!-- Detail Info -->
-        <div class="card shadow-sm border-0 rounded-4 mb-4">
-            <div class="card-body p-4">
+        <!-- Detail Card -->
+        <div class="card mt-4 shadow-sm border-0">
+            <div class="card-body px-4 py-3">
 
-                <h5 class="fw-bold mb-4">Informasi Tiket</h5>
-                <div class="mb-3 d-flex align-items-start">
-                    <i class="bi bi-ticket-perforated me-2 fs-5 text-secondary"></i>
-                    <div class="flex-grow-1 d-flex justify-content-between">
-                        <strong>No Tiket</strong>
-                        <strong>{{ $pemesanan->tiket->no_tiket ?? '-' }}</strong>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <small class="text-muted">No Tiket</small><br>
+                        <i class="bi bi-ticket-perforated me-2 fs-5 text-secondary"></i>
+                        <span class="fw-bold">{{ $pemesanan->tiket->no_tiket ?? '-' }}</span>
                     </div>
-                </div>
 
-                <div class="mb-2 d-flex align-items-start">
-                    <i class="bi bi-clipboard-check me-2 fs-5"></i>
-                    <div class="flex-grow-1 d-flex justify-content-between">
-                        <span>Kode Booking</span>
-                        <strong>{{ $pemesanan->kode_booking }}</strong>
+                    <div class="col-12">
+                        <small class="text-muted">Kode Booking</small><br>
+                        <i class="bi bi-clipboard-check me-2 fs-5"></i>
+                        <span class="fw-bold">{{ $pemesanan->kode_booking }}</span>
                     </div>
-                </div>
 
-                <div class="mb-2 d-flex align-items-start">
-                    <i class="bi bi-signpost me-2 fs-5"></i>
-                    <div class="flex-grow-1 d-flex justify-content-between">
-                        <span>Rute</span>
-                        <strong>{{ $pemesanan->jadwal->kota_asal ?? '?' }} -
-                            {{ $pemesanan->jadwal->kota_tujuan ?? '?' }}</strong>
+                    <div class="col-12">
+                        <small class="text-muted">Rute</small><br>
+                        <i class="bi bi-signpost me-2 fs-5"></i>
+                        <span class="fw-bold">
+                            {{ $pemesanan->jadwal->kota_asal ?? '?' }} -
+                            {{ $pemesanan->jadwal->kota_tujuan ?? '?' }}
+                        </span>
                     </div>
-                </div>
 
-                <div class="mb-2 d-flex align-items-start">
-                    <i class="bi bi-calendar-event me-2 fs-5"></i>
-                    <div class="flex-grow-1 d-flex justify-content-between">
-                        <span>Jadwal</span>
-                        <strong>
+                    <div class="col-12">
+                        <small class="text-muted">Jadwal</small><br>
+                        <i class="bi bi-calendar-event me-2 fs-5"></i>
+                        <span class="fw-bold">
                             {{ formatIndonesianDate($pemesanan->jadwal->tanggal) }},
                             {{ formatJam($pemesanan->jadwal->jam_berangkat) }} WIB
-                        </strong>
+                        </span>
                     </div>
-                </div>
 
-                <div class="mb-2 d-flex align-items-start">
-                    <i class="bi bi-currency-dollar me-2 fs-5"></i>
-                    <div class="flex-grow-1 d-flex justify-content-between">
-                        <span>Harga</span>
-                        <strong>Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</strong>
+                    <div class="col-12">
+                        <small class="text-muted">Harga</small><br>
+                        <i class="bi bi-currency-dollar me-2 fs-5"></i>
+                        <span class="fw-bold">
+                            Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}
+                        </span>
                     </div>
-                </div>
 
-                <div class="mb-4 d-flex align-items-start">
-                    <i class="bi bi-person-bounding-box me-2 fs-5"></i>
-                    <div class="flex-grow-1 d-flex justify-content-between">
-                        <span>No Kursi</span>
-                        <strong>{{ $pemesanan->tiket->nomor_kursi ?? '-' }}</strong>
+                    <div class="col-12">
+                        <small class="text-muted">No Kursi</small><br>
+                        <i class="bi bi-person-bounding-box me-2 fs-5"></i>
+                        <span class="fw-bold">{{ $pemesanan->tiket->nomor_kursi ?? '-' }}</span>
                     </div>
-                </div>
-
-                <!-- Buttons -->
-                <div class="d-grid gap-2 mx-3 btn-fix">
-                    @if ($pemesanan->status !== 'Tiket dibatalkan')
-                        <form action="{{ route('tiket.batalkan', $pemesanan->pemesanan_id) }}" method="POST"
-                            class="form-batalkan d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-po fw-bold w-100 btn-confirm-batalkan">Batalkan
-                                Pesanan</button>
-                        </form>
-                    @endif
-                    <a href="{{ route('tiket') }}" class="btn btn-outline-po fw-bold">Kembali</a>
                 </div>
             </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-grid gap-2 mt-4">
+            @if ($pemesanan->status !== 'Tiket dibatalkan')
+                <form action="{{ route('tiket.batalkan', $pemesanan->pemesanan_id) }}" method="POST"
+                    class="form-batalkan">
+                    @csrf
+                    <button type="submit" class="btn btn-po fw-bold w-100 btn-confirm-batalkan">
+                        Batalkan Pesanan
+                    </button>
+                </form>
+            @endif
+            <a href="{{ route('tiket') }}" class="btn btn-outline-po fw-bold">Kembali</a>
         </div>
     </div>
 @endsection
