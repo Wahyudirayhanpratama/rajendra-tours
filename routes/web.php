@@ -32,7 +32,7 @@ Route::post('pelanggan.jadwal/set-tanggal', function (\Illuminate\Http\Request $
 Route::resource('users', UserController::class);
 
 Route::get('/register', [AuthController::class, 'showPelangganRegisterForm'])->name('register.pelanggan');
-// Route::post('/register', [UserController::class, 'registerPelanggan'])->name('register.pelanggan.submit');
+Route::post('/register', [UserController::class, 'registerPelanggan'])->name('register.pelanggan.submit');
 Route::post('/login-pelanggan', [AuthController::class, 'loginPelanggan'])->name('login.pelanggan.submit');
 Route::get('/login-pelanggan', [AuthController::class, 'showPelangganLoginForm'])->name('login.pelanggan');
 Route::post('/login-pelanggan-ajax', [AuthController::class, 'loginAjax'])->name('login.pelanggan.ajax');
