@@ -19,8 +19,7 @@ class PembayaranController extends Controller
     {
         // Ambil data dari jadwal
         $jadwal = Jadwal::with('mobil')->where('jadwal_id', $request->jadwal_id)->firstOrFail();
-        // Simpan sementara ke session atau teruskan ke view preview
-        // Tidak ada Pemesanan::create di sini lagi
+        // Simpan sementara ke session
         session([
             'preview_pemesanan' => [
                 'cityfrom' => session('cityfrom'),

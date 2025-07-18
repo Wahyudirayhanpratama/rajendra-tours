@@ -52,4 +52,8 @@ class Pemesanan extends Model
     {
         return $this->hasOne(Tiket::class, 'pemesanan_id', 'pemesanan_id');
     }
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class, 'pemesanan_id');
+    }
 }
