@@ -23,8 +23,8 @@
 
             <section class="content">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
+                    <div class="row mb-2">
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h4>Total Tiket Terjual</h4>
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <h4>Total Pembatalan Tiket</h4>
@@ -48,29 +48,35 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
                             <div class="small-box bg-warning">
                                 <div class="inner">
                                     <h4>Pendapatan Perbulan</h4>
                                     <h5>Rp. {{ number_format($pendapatanBulanan, 0, ',', '.') }}</h5>
+                                    <p style="font-size: 14px;">Pada Saat Ini</p>
                                 </div>
                                 <div class="icon">
                                     <i class="fas fa-money-bill-wave fa-3x"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <h4>Pendapatan Pertahun</h4>
                                     <h5>Rp. {{ number_format($pendapatanTahunan, 0, ',', '.') }}</h5>
+                                    <p style="font-size: 14px;">Pada Saat Ini</p>
                                 </div>
                                 <div class="icon">
                                     <i class="fas fa-chart-line fa-3x"></i>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+
+                    <!-- Donut Chart -->
+                    <div class="row">
                         <!-- Bar chart -->
                         <div class="col-md-12">
                             <div class="card card-primary card-outline">
@@ -82,8 +88,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Donut Chart -->
                         <div class="col-md-6 d-flex">
                             <div class="card card-primary card-outline flex-fill">
                                 <div class="card-header">
