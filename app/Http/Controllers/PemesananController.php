@@ -139,7 +139,7 @@ class PemesananController extends Controller
     }
     public function bayarTiket($id)
     {
-        $pemesanan = Pemesanan::with('jadwal.mobil')->findOrFail($id);
+        $pemesanan = Pemesanan::with('jadwal.mobil', 'pembayaran')->findOrFail($id);
         $snapToken = session('preview_pemesanan.snap_token');
 
         return view('pelanggan.bayar', compact('pemesanan', 'snapToken'));

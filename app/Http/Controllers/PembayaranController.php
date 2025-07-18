@@ -53,7 +53,7 @@ class PembayaranController extends Controller
     public function showPaymentPage($pemesanan_id, MidtransService $midtrans)
     {
         try {
-            $pemesanan = Pemesanan::with('user', 'jadwal', 'pembayaran')->findOrFail($pemesanan_id);
+            $pemesanan = Pemesanan::with('user', 'jadwal')->findOrFail($pemesanan_id);
 
             // Siapkan payload untuk Midtrans Snap dari data pemesanan yang sudah ada
             $payload = [
