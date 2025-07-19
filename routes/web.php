@@ -133,3 +133,7 @@ Route::get('/test-signature', function () {
 
     return $signature;
 });
+
+Route::get('/developer', function () {
+    return view('developer.profile');
+})->name('profil.developer');
