@@ -8,12 +8,6 @@
 
 <body>
 
-    <!-- loader -->
-    <div id="loader">
-        <div class="spinner-border text-light" role="status"></div>
-    </div>
-    <!-- * loader -->
-
     <!-- App Header -->
     <div class="loginbg bg-po">
         <div class="section">

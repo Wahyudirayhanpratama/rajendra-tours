@@ -61,12 +61,15 @@ var loader = document.getElementById('loader');
 //-----------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', function () {
-    const loginModal = new bootstrap.Modal(document.getElementById('actionSheetInsertLogin'));
+    const modalElement = document.getElementById('actionSheetInsertLogin');
+    if (modalElement) {
+        const loginModal = new bootstrap.Modal(modalElement);
 
-    if (isGuest) {
-        document.querySelectorAll('.form-control').forEach(el => el.disabled = true);
-        document.querySelectorAll('button[type="submit"]').forEach(el => el.disabled = true);
-        loginModal.show();
+        if (typeof isGuest !== 'undefined' && isGuest) {
+            document.querySelectorAll('.form-control').forEach(el => el.disabled = true);
+            document.querySelectorAll('button[type="submit"]').forEach(el => el.disabled = true);
+            loginModal.show();
+        }
     }
 });
 
@@ -86,12 +89,14 @@ if (Finapp.PWA.enable) {
 //-----------------------------------------------------------------------
 // Page Loader with preload
 //----------------------------------------------------------------------
-setTimeout(() => {
-    loader.setAttribute("style", "pointer-events: none; opacity: 0; transition: 0.2s ease-in-out;");
+if (loader) {
     setTimeout(() => {
-        loader.setAttribute("style", "display: none;")
-    }, 1000);
-}, 450);
+        loader.setAttribute("style", "pointer-events: none; opacity: 0; transition: 0.2s ease-in-out;");
+        setTimeout(() => {
+            loader.setAttribute("style", "display: none;");
+        }, 1000);
+    }, 450);
+}
 //-----------------------------------------------------------------------
 
 
