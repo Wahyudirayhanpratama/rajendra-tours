@@ -21,6 +21,9 @@ use App\Http\Controllers\Api\DetailTiketController;
 use App\Http\Controllers\Api\RiwayatController;
 use App\Http\Controllers\Api\PembayaranController;
 use App\Http\Controllers\Api\PemilikController;
+use App\Http\Controllers\Api\MidtransRefundController;
+
+Route::post('/midtrans/refund', [MidtransRefundController::class, 'refund']);
 
 Route::post('/midtrans/callback', [MidtransController::class, 'handleNotification']);
 

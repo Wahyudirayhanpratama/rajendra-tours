@@ -197,13 +197,18 @@ class PenumpangController extends Controller
     }
     public function index()
     {
-        $penumpangs = Penumpang::with(['pemesanan.jadwal.mobil'])->get();
+        $penumpangs = Penumpang::with(['pemesanan.jadwal.mobil'])->latest()->get();
         return view('admin.data-penumpang.penumpang', compact('penumpangs'));
     }
     //Create dari Admin
     public function createPenumpang(Request $request)
     {
-        $jadwals = Jadwal::with('mobil')->get();
+        $today = Carbon::today();
+
+        $jadwals = Jadwal::with('mobil')
+            ->whereDate('tanggal', '>=', $today)
+            ->orderBy('tanggal', 'asc')
+            ->get();
         $pelanggans = User::where('role', 'pelanggan')->get();
 
         $pemesanans = Pemesanan::with('penumpangs', 'tiket')

@@ -22,8 +22,8 @@ class MobilController extends Controller
                 $kursi_db = DB::table('penumpangs')
                     ->join('pemesanans', 'penumpangs.pemesanan_id', '=', 'pemesanans.pemesanan_id')
                     ->where('pemesanans.jadwal_id', $jadwalTerbaru->jadwal_id)
-                    ->where('pemesanans.status', '!=', 'Tiket dibatalkan') // ← tambahkan ini
-                    ->whereNotNull('penumpangs.nomor_kursi')              // ← penting agar tidak ikut null
+                    ->where('pemesanans.status', '!=', 'Tiket dibatalkan')
+                    ->whereNotNull('penumpangs.nomor_kursi')
                     ->pluck('penumpangs.nomor_kursi')
                     ->toArray();
 
