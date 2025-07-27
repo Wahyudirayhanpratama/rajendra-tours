@@ -1,6 +1,6 @@
 const CACHE_NAME = "pwa-cache-v1";
 const FILES_TO_CACHE = [
-    "/",                          // halaman utama
+    "/",
     "/css/caleran.min.css",
     "/css/style_pwa.css",
     "/css/color_palette.css",
@@ -17,7 +17,7 @@ const FILES_TO_CACHE = [
     "/manifest.json"
 ];
 
-// Install: simpan file ke cache
+// Simpan file ke cache
 self.addEventListener("install", (event) => {
     console.log("Service Worker installed");
     event.waitUntil(
@@ -26,7 +26,7 @@ self.addEventListener("install", (event) => {
     self.skipWaiting();
 });
 
-// Activate: hapus cache lama jika ada
+// Hapus cache lama jika ada
 self.addEventListener("activate", (event) => {
     console.log("Service Worker activated");
     event.waitUntil(
@@ -43,7 +43,7 @@ self.addEventListener("activate", (event) => {
     self.clients.claim();
 });
 
-// Fetch: gunakan cache jika ada, kalau tidak ambil dari server
+// Gunakan cache jika ada, kalau tidak ambil dari server
 self.addEventListener("fetch", (event) => {
     event.respondWith(
         caches.match(event.request).then((response) => {
