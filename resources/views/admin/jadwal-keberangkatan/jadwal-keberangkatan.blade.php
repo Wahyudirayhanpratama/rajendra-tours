@@ -25,7 +25,7 @@
                         <th>Rute</th>
                         <th>Jam Berangkat</th>
                         <th>Tanggal Berangkat</th>
-                        <th>Kursi</th>
+                        <th>Harga</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
