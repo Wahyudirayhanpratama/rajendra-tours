@@ -30,88 +30,102 @@
             @endif
             <form action="{{ route('store-data-penumpang') }}" method="POST">
                 @csrf
-                <!-- Pilih Pelanggan -->
-                <div class="mb-3">
-                    <label for="user_id" class="form-label">Nama Pemesan</label>
-                    <select name="user_id" id="user_id" class="form-select" required>
-                        <option selected disabled>Pilih Pelanggan</option>
-                        @foreach ($pelanggans as $pelanggan)
-                            <option value="{{ $pelanggan->user_id }}" data-nama="{{ $pelanggan->nama }}"
-                                data-nohp="{{ $pelanggan->no_hp }}">
-                                {{ $pelanggan->nama }} - {{ $pelanggan->no_hp }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <input type="hidden" id="nama" name="nama">
-                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Pilih Pelanggan -->
+                        <div class="mb-3">
+                            <label for="user_id" class="form-label">Nama Pemesan</label>
+                            <select name="user_id" id="user_id" class="form-select" required>
+                                <option selected disabled>Pilih Pelanggan</option>
+                                @foreach ($pelanggans as $pelanggan)
+                                    <option value="{{ $pelanggan->user_id }}" data-nama="{{ $pelanggan->nama }}"
+                                        data-nohp="{{ $pelanggan->no_hp }}">
+                                        {{ $pelanggan->nama }} - {{ $pelanggan->no_hp }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" id="nama" name="nama">
+                        </div>
 
-                <!-- Nomor HP -->
-                <div class="mb-3">
-                    <label for="no_hp" class="form-label">Nomor Telepon</label>
-                    <input type="text" id="no_hp" name="no_hp" class="form-control"
-                        placeholder="Masukkan Nomor Telepon" readonly required>
-                </div>
+                        <!-- Nomor HP -->
+                        <div class="mb-3">
+                            <label for="no_hp" class="form-label">Nomor Telepon</label>
+                            <input type="text" id="no_hp" name="no_hp" class="form-control"
+                                placeholder="Masukkan Nomor Telepon" readonly required>
+                        </div>
 
-                <!-- Tujuan -->
-                <div class="mb-3">
-                    <label for="kota_tujuan" class="form-label">Tujuan</label>
-                    <select id="kota_tujuan" class="form-select" required>
-                        <option selected disabled>Pilih Tujuan</option>
-                        @foreach ($jadwals as $jadwal)
-                            <option value="{{ $jadwal->jadwal_id }}" data-tujuan="{{ $jadwal->kota_tujuan }}"
-                                data-kapasitas="{{ $jadwal->mobil->kapasitas }}"
-                                data-nopol="{{ $jadwal->mobil->nomor_polisi }}" data-tanggal="{{ $jadwal->tanggal }}"
-                                data-jam="{{ $jadwal->jam_berangkat }}">
-                                {{ $jadwal->kota_asal }} ke {{ $jadwal->kota_tujuan }}
-                                ({{ formatIndonesianDate($jadwal->tanggal) }})
-                                - {{ $jadwal->mobil->nomor_polisi }} - {{ formatJam($jadwal->jam_berangkat) }} WIB
-                            </option>
-                        @endforeach
-                    </select>
-                    <input type="hidden" name="kota_tujuan" id="kota_tujuan">
-                    <input type="hidden" name="jam_berangkat" id="jam_berangkat">
-                    <input type="hidden" name="nomor_polisi" id="nomor_polisi">
-                    <input type="hidden" name="jadwal_id" id="jadwal_id">
-                </div>
+                        <!-- Tujuan -->
+                        <div class="mb-3">
+                            <label for="kota_tujuan" class="form-label">Tujuan</label>
+                            <select id="kota_tujuan" class="form-select" required>
+                                <option selected disabled>Pilih Tujuan</option>
+                                @foreach ($jadwals as $jadwal)
+                                    <option value="{{ $jadwal->jadwal_id }}" data-tujuan="{{ $jadwal->kota_tujuan }}"
+                                        data-kapasitas="{{ $jadwal->mobil->kapasitas }}"
+                                        data-nopol="{{ $jadwal->mobil->nomor_polisi }}"
+                                        data-tanggal="{{ $jadwal->tanggal }}" data-jam="{{ $jadwal->jam_berangkat }}">
+                                        {{ $jadwal->kota_asal }} ke {{ $jadwal->kota_tujuan }}
+                                        ({{ formatIndonesianDate($jadwal->tanggal) }})
+                                        - {{ $jadwal->mobil->nomor_polisi }} - {{ formatJam($jadwal->jam_berangkat) }} WIB
+                                    </option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" name="kota_tujuan" id="kota_tujuan">
+                            <input type="hidden" name="jam_berangkat" id="jam_berangkat">
+                            <input type="hidden" name="nomor_polisi" id="nomor_polisi">
+                            <input type="hidden" name="jadwal_id" id="jadwal_id">
+                        </div>
 
-                <!-- Jenis Kelamin -->
-                <div class="mb-3">
-                    <label class="form-label">Jenis Kelamin</label>
-                    <select name="jenis_kelamin" class="form-select" required>
-                        <option disabled selected>Pilih Jenis Kelamin</option>
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
-                    </select>
-                </div>
+                        <!-- Jenis Kelamin -->
+                        <div class="mb-3">
+                            <label class="form-label">Jenis Kelamin</label>
+                            <select name="jenis_kelamin" class="form-select" required>
+                                <option disabled selected>Pilih Jenis Kelamin</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                        <!-- Jumlah Penumpang -->
+                        <div class="mb-3">
+                            <label for="jumlah_penumpang" class="form-label">Jumlah Penumpang</label>
+                            <input type="number" name="jumlah_penumpang" id="jumlah_penumpang" class="form-control"
+                                value="1" min="1" required>
+                            <div class="text-muted" id="kursi_tersedia_text"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Nomor Kursi -->
+                        <div class="mb-3">
+                            <label for="nomor_kursi" class="form-label">Nomor Kursi</label>
+                            <select class="form-select" id="nomor_kursi">
+                                <option selected disabled>Pilih Kursi</option>
+                            </select>
+                            <input type="hidden" name="nomor_kursi" id="selectedSeatsInput">
+                            <div class="mt-2" id="selectedSeatsDisplay"></div>
+                        </div>
 
-                <!-- Jumlah Penumpang -->
-                <div class="mb-3">
-                    <label for="jumlah_penumpang" class="form-label">Jumlah Penumpang</label>
-                    <input type="number" name="jumlah_penumpang" id="jumlah_penumpang" class="form-control" value="1"
-                        min="1" required>
-                    <div class="text-muted" id="kursi_tersedia_text"></div>
-                </div>
+                        <!-- Alamat Jemput -->
+                        <div class="mb-3">
+                            <label class="form-label">Alamat Jemput</label>
+                            <input type="text" name="alamat_jemput" class="form-control" required>
+                        </div>
 
-                <!-- Nomor Kursi -->
-                <div class="mb-3">
-                    <label for="nomor_kursi" class="form-label">Nomor Kursi</label>
-                    <select class="form-select" id="nomor_kursi">
-                        <option selected disabled>Pilih Kursi</option>
-                    </select>
-                    <input type="hidden" name="nomor_kursi" id="selectedSeatsInput">
-                    <div class="mt-2" id="selectedSeatsDisplay"></div>
-                </div>
+                        <!-- Alamat Antar -->
+                        <div class="mb-3">
+                            <label class="form-label">Alamat Antar</label>
+                            <input type="text" name="alamat_antar" class="form-control" required>
+                        </div>
 
-                <!-- Alamat Jemput -->
-                <div class="mb-3">
-                    <label class="form-label">Alamat Jemput</label>
-                    <input type="text" name="alamat_jemput" class="form-control" required>
-                </div>
-
-                <!-- Alamat Antar -->
-                <div class="mb-3">
-                    <label class="form-label">Alamat Antar</label>
-                    <input type="text" name="alamat_antar" class="form-control" required>
+                        <!-- Metode Pembayaran -->
+                        <div class="mb-3">
+                            <label class="form-label">Metode Pembayaran</label>
+                            <select name="metode_pembayaran" class="form-select" required>
+                                <option value="" disabled selected>Pilih Metode Pembayaran</option>
+                                <option value="cod">Cash On Delivery (COD)</option>
+                                <option value="transfer">Transfer Bank</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tombol -->

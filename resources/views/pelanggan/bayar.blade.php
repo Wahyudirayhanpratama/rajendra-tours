@@ -1,4 +1,4 @@
-@extends('layouts.master4')
+@extends('layouts.master10')
 
 @section('title', 'Bayar Tiket')
 
@@ -14,10 +14,18 @@
             <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-body p-4">
                     <h5 class="text-center fw-bold mb-4 text-uppercase" style="letter-spacing: 1px;">Detail Pemesanan</h5>
-
                     <p class="text-center text-muted mb-4" style="font-size: 0.95rem;">Atas Nama:
                         <strong>{{ session('preview_pemesanan.nama') }}</strong>
                     </p>
+                    <!-- Status Pembayaran -->
+                    <div class="text-center mb-3">
+                        @if (strtolower($pemesanan->status) === 'lunas')
+                            <span class="badge bg-success text-uppercase px-3 rounded-pill">Lunas</span>
+                        @else
+                            <span class="badge bg-warning text-dark text-uppercase px-3 rounded-pill">Belum
+                                Lunas</span>
+                        @endif
+                    </div>
 
                     <div class="d-flex justify-content-between border-bottom py-2">
                         <span class="text-muted">Rute</span>
@@ -65,7 +73,6 @@
         </div>
     </div>
 @endsection
-
 
 @push('headerspwa')
     <style>
@@ -145,5 +152,16 @@
                 });
             });
         });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
     </script>
 @endpush

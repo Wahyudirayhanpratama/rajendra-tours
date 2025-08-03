@@ -8,13 +8,19 @@
         <!-- Bagian Background (warna biru) -->
         <div class="bg-po pt-5" style="min-height: 80vh;">
             <!-- Judul -->
-            <h5 class="text-center text-white pt-5">Daftar Member Rajendra Tours</h5>
+            <div class="text-center">
+                <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo Rajendra">
+                <h5 class="text-white pt-3">Daftar Member Rajendra Tours</h5>
+            </div>
+
             <!-- Card Registrasi -->
             <div class="card border-0 rounded-top-4" style="min-height: 80vh;">
                 <div class="p-4 p-md-5">
                     <form action="{{ route('register.pelanggan.submit') }}" method="POST">
                         @csrf
                         <!-- Nama -->
+                        <p class="text-muted">Anda harus menggunakan data valid. Data pemesanan anda akan tercatat sesuai
+                            data yang anda daftarkan</p>
                         <div class="form-group mb-2">
                             <div class="text-dark fw-semibold">Nama</div>
                             <div class="input-group">
@@ -78,7 +84,8 @@
 
                     <!-- Tombol Cari Jadwal -->
                     <div class="d-grid mt-4">
-                        <a href="{{ route('cari-jadwal') }}" class="btn btn-outline-primary fw-bold btn-outline-po">Cari Jadwal</a>
+                        <a href="{{ route('cari-jadwal') }}" class="btn btn-outline-primary fw-bold btn-outline-po">Cari
+                            Jadwal</a>
                     </div>
                 </div>
             </div>
@@ -209,4 +216,18 @@
             margin-left: 10px;
         }
     </style>
+@endpush
+
+@push('scriptspwa')
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
+    </script>
 @endpush

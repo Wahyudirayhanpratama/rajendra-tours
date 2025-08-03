@@ -20,7 +20,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th class="text-center">No</th>
                         <th>No Tiket</th>
                         <th>Kode Booking</th>
                         <th>Total Harga</th>
@@ -33,17 +33,42 @@
                 <tbody>
                     @forelse($pemesanans as $i => $pemesanan)
                         <tr>
-                            <td>{{ $i + 1 }}</td>
+                            <td class="text-center">{{ $pemesanans->firstItem() + $i }}</td>
                             <td>{{ $pemesanan->tiket->no_tiket ?? '-' }}</td>
                             <td>{{ $pemesanan->kode_booking }}</td>
                             <td>Rp{{ number_format($pemesanan->total_harga, 0, ',', '.') }}</td>
-                            <td>{{ ucfirst(str_replace('_', ' ', $pemesanan->status)) }}</td>
+                            <td>
+                                @php
+                                    $status = $pemesanan->status;
+                                    $statusText = ucfirst(str_replace('_', ' ', $status));
+
+                                    switch ($status) {
+                                        case 'lunas':
+                                            $badgeClass = 'success';
+                                            break;
+                                        case 'belum_lunas':
+                                            $badgeClass = 'warning';
+                                            break;
+                                        case 'Tiket dibatalkan':
+                                            $badgeClass = 'danger';
+                                            break;
+                                        default:
+                                            $badgeClass = 'secondary';
+                                            break;
+                                    }
+                                @endphp
+
+                                <span class="badge bg-{{ $badgeClass }}">
+                                    {{ $statusText }}
+                                </span>
+                            </td>
+
                             <td>{{ $pemesanan->jumlah_penumpang }}</td>
                             <td>{{ $pemesanan->jadwal->kota_asal }} - {{ $pemesanan->jadwal->kota_tujuan }}</td>
-                            <td>
+                            <td class="text-center">
                                 <a href="{{ route('cetak.nota', $pemesanan->pemesanan_id) }}" target="_blank"
                                     class="btn btn-sm btn-pp text-white">
-                                    <i class="fas fa-print"></i> Print
+                                    <i class="fas fa-print"></i>
                                 </a>
                             </td>
                         </tr>
@@ -54,6 +79,9 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="d-flex justify-content-end mt-3">
+                {{ $pemesanans->links() }}
+            </div>
         </div>
     </div>
 @endsection

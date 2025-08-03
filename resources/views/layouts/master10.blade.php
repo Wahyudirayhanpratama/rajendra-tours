@@ -6,7 +6,7 @@
     @include('layouts._partials.headerspwa')
 </head>
 
-<body style="height: 100%;">
+<body style="height: 100vh;">
     <main>
         @yield('content')
     </main>

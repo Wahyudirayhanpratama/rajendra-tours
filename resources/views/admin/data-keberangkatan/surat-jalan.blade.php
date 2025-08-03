@@ -17,7 +17,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th class="text-center">No</th>
                         <th>No Polisi</th>
                         <th>Rute</th>
                         <th>Tanggal</th>
@@ -35,7 +35,7 @@
                             $jumlahPenumpang = $jadwal->pemesanans->sum('jumlah_penumpang');
                         @endphp
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $loop->iteration }}</td>
                             <td>{{ $jadwal->mobil->nomor_polisi }}</td>
                             <td>{{ $jadwal->kota_asal }} - {{ $jadwal->kota_tujuan }}</td>
                             <td>{{ formatIndonesianDate($jadwal->tanggal) }}</td>
@@ -46,10 +46,10 @@
                             </td>
                             <td>{{ $jumlahPenumpang }}</td>
                             <td>{{ formatJam($jadwal->jam_berangkat) }} WIB</td>
-                            <td>
+                            <td class="text-center">
                                 <a href="{{ route('cetak.surat-jalan', $jadwal->jadwal_id) }}" target="_blank"
                                     class="btn btn-sm btn-pp text-white">
-                                    <i class="fas fa-print"></i> Print
+                                    <i class="fas fa-print"></i>
                                 </a>
                             </td>
                         </tr>
@@ -61,6 +61,9 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="d-flex justify-content-end mt-3">
+                {{ $jadwalHariIni->links() }}
+            </div>
         </div>
         <!-- /.card-body -->
     </div>

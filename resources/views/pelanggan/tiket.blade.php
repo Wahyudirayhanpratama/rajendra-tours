@@ -3,13 +3,6 @@
 @section('title', 'Tiket Saya')
 
 @section('content')
-
-    <!-- loader -->
-    <div id="loader">
-        <div class="spinner-border text-light" role="status"></div>
-    </div>
-    <!-- * loader -->
-
     <!-- App Header -->
     <div class="appHeader bg-po">
         <div class="left">
@@ -40,6 +33,33 @@
                                             <strong>{{ $pemesanan->tiket->no_tiket ?? '-' }}</strong></span>
                                     </div>
                                 </div>
+                                <div class="col-6 text-end">
+                                    @php
+                                        $status = $pemesanan->status ?? 'unknown';
+
+                                        switch ($status) {
+                                            case 'lunas':
+                                                $badgeClass = 'bg-success text-white';
+                                                break;
+                                            case 'belum_lunas':
+                                                $badgeClass = 'bg-warning text-dark';
+                                                break;
+                                            case 'Tiket dibatalkan':
+                                                $badgeClass = 'bg-danger text-white';
+                                                break;
+                                            default:
+                                                $badgeClass = 'bg-secondary text-white';
+                                                break;
+                                        }
+                                        $labelStatus = match ($status) {
+                                            'lunas' => 'Lunas',
+                                            'belum_lunas' => 'Menunggu Pembayaran',
+                                            'Tiket dibatalkan' => 'Tiket Dibatalkan',
+                                            default => ucfirst(str_replace('_', ' ', $status)),
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $badgeClass }}">{{ $labelStatus }}</span>
+                                </div>
                             </div>
                             <div class="dot bg-blue dot_start"></div>
                             <div class="dot bg-blue dot_end"></div>
@@ -49,7 +69,7 @@
                                 <div class="col-12 col-sm-10">
                                     <div class="d-flex justify-content-between align-items-center fs-20 fw-bold text-dark">
                                         <span class="fw-bold fs-6 fs-sm-5 text-start">
-                                            {{ singkatanKota($pemesanan->jadwal->kota_asal?? '?' ) }}</span>
+                                            {{ singkatanKota($pemesanan->jadwal->kota_asal ?? '?') }}</span>
 
                                         <span class="flex-grow-1 text-center d-none d-sm-block">
                                             <span style="font-size: 18px;">⭘</span>
@@ -63,7 +83,7 @@
                                         </span>
 
                                         <span class="fw-bold fs-6 fs-sm-5 text-end">
-                                            {{ singkatanKota($pemesanan->jadwal->kota_tujuan?? '?') }}</span>
+                                            {{ singkatanKota($pemesanan->jadwal->kota_tujuan ?? '?') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -75,9 +95,10 @@
                                         {{ formatIndonesianDate($pemesanan->jadwal->tanggal) }}
                                     </div>
                                 </div>
-                                <div class="col-5 text-end">
-                                    <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo"
-                                        style="height: 20px;">
+                                <div class="col-5">
+                                    <div class="fs-13 text-end lh-15 text-dark fw-600">
+                                        Rp. {{ number_format($pemesanan->total_harga, 0, ',', '.') }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -135,4 +156,15 @@
 @endpush
 
 @push('scriptspwa')
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
+    </script>
 @endpush

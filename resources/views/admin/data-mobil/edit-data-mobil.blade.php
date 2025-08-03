@@ -26,7 +26,7 @@
                     </ul>
                 </div>
             @endif
-            <form action="{{ route('update-data-mobil', $mobil->mobil_id) }}" method="POST">
+            <form action="{{ route('update-data-mobil', $mobil->mobil_id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
@@ -45,6 +45,11 @@
                     <label for="jumlah-seat">Jumlah Seat</label>
                     <input type="number" class="form-control" name="kapasitas" placeholder="Contoh: 7"
                         value="{{ $mobil->kapasitas }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="gambar">Upload Gambar Mobil</label>
+                    <input type="file" class="form-control" name="gambar" accept="image/*">
                 </div>
 
                 <div class="divider"></div>

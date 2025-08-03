@@ -18,7 +18,7 @@ class SuratJalanController extends Controller
         $jadwalHariIni = Jadwal::with(['mobil', 'pemesanans' => function ($query) {
             $query->where('status', 'lunas');
         }])->whereDate('tanggal', Carbon::today())
-            ->get();
+            ->paginate(5);
 
         return view('admin.data-keberangkatan.surat-jalan', compact('jadwalHariIni'));
     }
@@ -33,7 +33,7 @@ class SuratJalanController extends Controller
             },
             'pemesanans.penumpangs.user'
         ])->findOrFail($id);
-        
+
         return view('admin.data-keberangkatan.cetak-surat-jalan', compact(
             'jadwal',
         ));

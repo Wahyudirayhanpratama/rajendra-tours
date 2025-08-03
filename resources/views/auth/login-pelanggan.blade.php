@@ -8,7 +8,10 @@
         <!-- Bagian Background (warna biru) -->
         <div class="bg-po pt-5" style="min-height: 80vh;">
             <!-- Judul -->
-            <h5 class="text-center text-white pt-5">Masuk Rajendra Tours</h5>
+            <div class="text-center">
+                <img src="{{ asset('storage/logo_rajendra.png') }}" alt="Logo Rajendra">
+                <h5 class="text-white pt-3">Masuk Rajendra Tours</h5>
+            </div>
             <!-- Card Registrasi -->
             <div class="card border-0 rounded-top-4" style="min-height: 80vh;">
                 <div class="p-4 p-md-5">
@@ -22,6 +25,8 @@
                     <form action="{{ route('login.pelanggan.submit') }}" method="POST">
                         @csrf
                         <!-- Nama -->
+                        <p class="text-muted">Silakan masuk untuk melanjutkan pemesanan dan
+                            mengakses tiket perjalanan Anda.</p>
                         <div class="form-group mb-2">
                             <div class="text-dark fw-semibold">Nomor Telepon</div>
                             <div class="input-group">
@@ -194,4 +199,18 @@
             margin-left: 10px;
         }
     </style>
+@endpush
+
+@push('scriptspwa')
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
+    </script>
 @endpush

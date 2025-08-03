@@ -100,7 +100,7 @@ class JadwalController extends Controller
     }
     public function jadwalKeberangkatan(Request $request)
     {
-        $jadwals = Jadwal::with('mobil')->latest()->get();
+        $jadwals = Jadwal::with('mobil')->latest()->paginate(5);
         return view('admin.jadwal-keberangkatan.jadwal-keberangkatan', compact('jadwals'));
     }
 
@@ -109,7 +109,6 @@ class JadwalController extends Controller
         $mobils = Mobil::all();
         return view('admin.jadwal-keberangkatan.tambah-jadwal-keberangkatan', compact('mobils'));
     }
-
     public function storeJadwal(Request $request)
     {
         $request->validate([

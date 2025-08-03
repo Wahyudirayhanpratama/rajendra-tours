@@ -20,7 +20,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th class="text-center">No</th>
                         <th>Nama</th>
                         <th>No Telp</th>
                         <th>Jenis Kelamin</th>
@@ -38,7 +38,7 @@
                 <tbody>
                     @forelse ($penumpangs as $i => $penumpang)
                         <tr>
-                            <td>{{ $i + 1 }}</td>
+                            <td class="text-center">{{ $penumpangs->firstItem() + $i }}</td>
                             <td>{{ $penumpang->nama }}</td>
                             <td>{{ $penumpang->no_hp }}</td>
                             <td>{{ ucfirst($penumpang->jenis_kelamin) }}</td>
@@ -51,15 +51,15 @@
                                 {{ formatJam($penumpang->pemesanan->jadwal->jam_berangkat ?? '-') }}</td>
                             <td>{{ $penumpang->pemesanan->jumlah_penumpang }}</td>
                             <td>{{ $penumpang->nomor_kursi }}</td>
-                            <td>
+                            <td class="text-center">
                                 <a href="{{ route('edit-data-penumpang', $penumpang->penumpang_id) }}"
-                                    class="btn btn-sm btn-pp text-white mb-1">Edit</a>
+                                    class="btn btn-sm btn-pp text-white mb-1"><i class="fas fa-edit"></i></a>
 
                                 <form action="{{ route('hapus-data-penumpang', $penumpang->penumpang_id) }}" method="POST"
                                     style="display:inline;" data-confirm="true">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">Hapus</button>
+                                    <button class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -70,6 +70,9 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="d-flex justify-content-end mt-3">
+                {{ $penumpangs->links() }}
+            </div>
         </div>
     </div>
 @endsection

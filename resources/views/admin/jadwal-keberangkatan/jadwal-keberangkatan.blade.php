@@ -20,7 +20,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th class="text-center">No</th>
                         <th>No Polisi</th>
                         <th>Rute</th>
                         <th>Jam Berangkat</th>
@@ -32,20 +32,20 @@
                 <tbody>
                     @forelse ($jadwals as $index => $jadwal)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td class="text-center">{{ $jadwals->firstItem() + $index }}</td>
                             <td>{{ $jadwal->mobil->nomor_polisi }}</td>
                             <td>{{ $jadwal->kota_asal }} - {{ $jadwal->kota_tujuan }}</td>
-                            <td>{{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d-m-Y') }}</td>
+                            <td>{{ formatJam($jadwal->jam_berangkat) }} WIB</td>
+                            <td>{{ formatIndonesianDate($jadwal->tanggal) }}</td>
                             <td>Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</td>
-                            <td>
+                            <td class="text-center">
                                 <a href="{{ route('edit-jadwal-keberangkatan', $jadwal->jadwal_id) }}"
-                                    class="btn btn-sm btn-pp text-white">Edit</a>
+                                    class="btn btn-sm btn-pp text-white"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('hapus-jadwal-keberangkatan', $jadwal->jadwal_id) }}" method="POST"
                                     style="display:inline;" data-confirm="true">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">Hapus</button>
+                                    <button class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -56,6 +56,10 @@
                     @endforelse
                 </tbody>
             </table>
+            <!-- Pagination -->
+            <div class="d-flex justify-content-end mt-3">
+                {{ $jadwals->links() }}
+            </div>
         </div>
     </div>
 @endsection

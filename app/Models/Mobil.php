@@ -13,7 +13,7 @@ class Mobil extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['mobil_id', 'nama_mobil', 'nomor_polisi', 'kapasitas'];
+    protected $fillable = ['mobil_id', 'nama_mobil', 'nomor_polisi', 'kapasitas', 'gambar'];
 
     public function jadwalsAktif()
     {

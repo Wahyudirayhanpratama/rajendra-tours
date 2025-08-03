@@ -1,6 +1,13 @@
-const CACHE_NAME = "pwa-cache-v1";
+const CACHE_NAME = "pwa-cache-v2";
 const FILES_TO_CACHE = [
     "/",
+    "/cari-jadwal",
+    "/register",
+    "/profil",
+    "/tiket",
+    "/penumpang",
+    "/riwayat",
+    "/login-pelanggan",
     "/css/caleran.min.css",
     "/css/style_pwa.css",
     "/css/color_palette.css",
@@ -21,7 +28,17 @@ const FILES_TO_CACHE = [
 self.addEventListener("install", (event) => {
     console.log("Service Worker installed");
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
+        caches.open(CACHE_NAME).then((cache) => {
+            return Promise.all(
+                FILES_TO_CACHE.map((file) => {
+                    return cache.add(file)
+                        .then(() => console.log("✅ Cached:", file))
+                        .catch((error) => console.warn("❌ Failed to cache:", file, error));
+                })
+            );
+        }).catch((err) => {
+            console.error("🔥 Error opening cache:", err);
+        })
     );
     self.skipWaiting();
 });
@@ -34,6 +51,7 @@ self.addEventListener("activate", (event) => {
             Promise.all(
                 cacheNames.map((name) => {
                     if (name !== CACHE_NAME) {
+                        console.log("Deleting old cache:", name);
                         return caches.delete(name);
                     }
                 })
@@ -45,9 +63,27 @@ self.addEventListener("activate", (event) => {
 
 // Gunakan cache jika ada, kalau tidak ambil dari server
 self.addEventListener("fetch", (event) => {
+    const request = event.request;
+
+    // Jika permintaan HTML → ambil dari jaringan, fallback ke cache jika offline
+    if (request.headers.get("accept")?.includes("text/html")) {
+        event.respondWith(
+            fetch(request)
+                .then((response) => {
+                    return response;
+                })
+                .catch(() => {
+                    return caches.match(request);
+                })
+        );
+        return;
+    }
+
+    // Untuk asset statis lainnya
     event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
+        caches.match(request).then((cachedResponse) => {
+            return cachedResponse || fetch(request);
         })
     );
 });
+

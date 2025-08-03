@@ -181,10 +181,26 @@
                             </div>
 
                             <button type="submit" id="loginbtnModal" class="btn btn-po btn-block w-100">LOGIN</button>
+                            <!-- Tombol Kembali -->
+                            <a href="{{ route('jadwal.cari') }}" class="btn btn-secondary mt-2 w-100">Kembali ke Jadwal</a>
                         </form>
 
                         <div class="text-center mt-2">
-                            Belum punya akun? <a href="{{ route('register.pelanggan') }}">Daftar Sekarang</a>
+                            Belum punya akun? <form id="redirect-register-form" action="{{ route('register.redirect') }}"
+                                method="POST" style="display: none;">
+                                @csrf
+                                <input type="hidden" name="from" value="data-pemesan">
+                                <input type="hidden" name="jadwal_id" value="{{ $jadwal_id }}">
+                                <input type="hidden" name="cityfrom" value="{{ $cityfrom }}">
+                                <input type="hidden" name="cityto" value="{{ $cityto }}">
+                                <input type="hidden" name="tanggal" value="{{ $tanggal }}">
+                                <input type="hidden" name="jumlah_penumpang" value="{{ $jumlah_penumpang }}">
+                            </form>
+
+                            <a href="#"
+                                onclick="event.preventDefault(); document.getElementById('redirect-register-form').submit();">
+                                Daftar Sekarang
+                            </a>
                         </div>
 
                     </div>
@@ -468,6 +484,16 @@
 
 @push('scriptspwa')
     @guest('pelanggan')
+        @if (session('show_login_popup'))
+            <script>
+                $(document).ready(function() {
+                    $('#actionSheetInsetLogin').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    }).modal('show');
+                });
+            </script>
+        @endif
         <script>
             $(document).ready(function() {
                 $('#actionSheetInsetLogin').modal({
@@ -581,21 +607,32 @@
             // Klik kursi
             seatButtons.forEach(button => {
                 button.addEventListener("click", () => {
-                    if (button.disabled) return; // jangan lanjutkan jika tombol disabled
+                    if (button.disabled) return;
 
                     const seat = button.getAttribute("data-seat");
 
                     if (button.classList.contains("selected")) {
+                        // Batalkan jika diklik ulang
                         button.classList.remove("selected");
                         selectedSeats = selectedSeats.filter(s => s !== seat);
                     } else {
                         if (selectedSeats.length < jumlahPenumpang) {
+                            // Tambah jika belum penuh
                             button.classList.add("selected");
                             selectedSeats.push(seat);
+                        } else {
+                            // Jika sudah penuh, ganti kursi pertama
+                            const removedSeat = selectedSeats.shift(); // hapus kursi pertama
+                            const removedButton = [...seatButtons].find(btn => btn.dataset.seat ===
+                                removedSeat);
+                            if (removedButton) removedButton.classList.remove("selected");
+
+                            // Tambahkan kursi baru
+                            selectedSeats.push(seat);
+                            button.classList.add("selected");
                         }
                     }
 
-                    // Aktifkan tombol pilih jika jumlah kursi cukup
                     pilihSeatButton.disabled = selectedSeats.length !== jumlahPenumpang;
                 });
             });
@@ -623,5 +660,16 @@
                 seatModal.hide();
             });
         });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
     </script>
 @endpush

@@ -28,67 +28,80 @@
             <form action="{{ route('update-jadwal-keberangkatan', $jadwal->jadwal_id) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <!-- Nomor Polisi -->
-                <div class="mb-3">
-                    <label for="mobil_id">Pilih Mobil</label>
-                    <select name="mobil_id" class="form-select" required>
-                        @foreach ($mobils as $mobil)
-                            <option value="{{ $mobil->mobil_id }}"
-                                {{ $jadwal->mobil_id == $mobil->mobil_id ? 'selected' : '' }}>
-                                {{ $mobil->nomor_polisi }} - {{ $mobil->nama_mobil }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Nomor Polisi -->
+                        <div class="mb-3">
+                            <label for="mobil_id">Pilih Mobil</label>
+                            <select name="mobil_id" class="form-control" required>
+                                @foreach ($mobils as $mobil)
+                                    <option value="{{ $mobil->mobil_id }}"
+                                        {{ $jadwal->mobil_id == $mobil->mobil_id ? 'selected' : '' }}>
+                                        {{ $mobil->nomor_polisi }} - {{ $mobil->nama_mobil }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                <!-- Kota Asal -->
-                @php
-                    $semuaKota = ['Duri', 'Pekanbaru', 'Padang'];
-                @endphp
-                <div class="mb-3">
-                    <label for="kota_asal">Kota Asal</label>
-                    <select name="kota_asal" id="kota_asal" class="form-select" required onchange="filterTujuanEdit()">
-                        <option value="" disabled {{ $jadwal->kota_asal ? '' : 'selected' }}>Pilih Kota Asal</option>
-                        @foreach ($semuaKota as $kota)
-                            <option value="{{ $kota }}" {{ $jadwal->kota_asal === $kota ? 'selected' : '' }}>
-                                {{ $kota }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                        <!-- Kota Asal -->
+                        @php
+                            $semuaKota = ['Duri', 'Pekanbaru', 'Padang'];
+                        @endphp
+                        <div class="mb-3">
+                            <label for="kota_asal">Kota Asal</label>
+                            <select name="kota_asal" id="kota_asal" class="form-control" required
+                                onchange="filterTujuanEdit()">
+                                <option value="" disabled {{ $jadwal->kota_asal ? '' : 'selected' }}>Pilih Kota Asal
+                                </option>
+                                @foreach ($semuaKota as $kota)
+                                    <option value="{{ $kota }}"
+                                        {{ $jadwal->kota_asal === $kota ? 'selected' : '' }}>
+                                        {{ $kota }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                <!-- Kota Tujuan -->
-                <div class="mb-3">
-                    <label for="kota_tujuan">Kota Tujuan</label>
-                    <select name="kota_tujuan" id="kota_tujuan" class="form-select" required>
-                        <option value="" disabled {{ $jadwal->kota_tujuan ? '' : 'selected' }}>Pilih Kota Tujuan
-                        </option>
-                        @foreach ($semuaKota as $kota)
-                            @if ($kota !== $jadwal->kota_asal)
-                                {{-- Hindari kota yang sama --}}
-                                <option value="{{ $kota }}"
-                                    {{ $jadwal->kota_tujuan === $kota ? 'selected' : '' }}>{{ $kota }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
+                        <!-- Kota Tujuan -->
+                        <div class="mb-3">
+                            <label for="kota_tujuan">Kota Tujuan</label>
+                            <select name="kota_tujuan" id="kota_tujuan" class="form-control" required>
+                                <option value="" disabled {{ $jadwal->kota_tujuan ? '' : 'selected' }}>Pilih Kota
+                                    Tujuan
+                                </option>
+                                @foreach ($semuaKota as $kota)
+                                    @if ($kota !== $jadwal->kota_asal)
+                                        {{-- Hindari kota yang sama --}}
+                                        <option value="{{ $kota }}"
+                                            {{ $jadwal->kota_tujuan === $kota ? 'selected' : '' }}>{{ $kota }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
-                <!-- Jam Keberangkatan -->
-                <div class="mb-3">
-                    <label for="jam_berangkat">Jam Keberangkatan</label>
-                    <input type="time" name="jam_berangkat" class="form-control" value="{{ $jadwal->jam_berangkat }}"
-                        required>
-                </div>
+                    <div class="col-md-6">
+                        <!-- Jam Keberangkatan -->
+                        <div class="mb-3">
+                            <label for="jam_berangkat">Jam Keberangkatan</label>
+                            <input type="time" name="jam_berangkat" class="form-control"
+                                value="{{ $jadwal->jam_berangkat }}" required>
+                        </div>
 
-                <!-- Tanggal Keberangkatan -->
-                <div class="mb-3">
-                    <label for="tanggal">Tanggal Keberangkatan</label>
-                    <input type="date" name="tanggal" class="form-control" value="{{ $jadwal->tanggal }}" required>
-                </div>
+                        <!-- Tanggal Keberangkatan -->
+                        <div class="mb-3">
+                            <label for="tanggal">Tanggal Keberangkatan</label>
+                            <input type="date" name="tanggal" class="form-control" value="{{ $jadwal->tanggal }}"
+                                required>
+                        </div>
 
-                <!-- Harga -->
-                <div class="mb-3">
-                    <label for="harga">Harga Tiket (Rp)</label>
-                    <input type="number" name="harga" class="form-control" value="{{ $jadwal->harga }}" required>
+                        <!-- Harga -->
+                        <div class="mb-3">
+                            <label for="harga">Harga Tiket (Rp)</label>
+                            <input type="number" name="harga" class="form-control" value="{{ $jadwal->harga }}"
+                                required>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tombol Aksi -->

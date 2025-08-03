@@ -135,18 +135,33 @@ class PenumpangController extends Controller
 
     public function create(Request $request)
     {
+        $tanggal = $request->query('tanggal');
+        if ($tanggal) {
+            session(['tanggal' => $tanggal]);
+        } else {
+            $tanggal = session('tanggal');
+        }
+
         $cityfrom = session('cityfrom');
         $cityto = session('cityto');
-        $tanggal = session('tanggal');
         $jumlah_penumpang = session('jumlah_penumpang');
-        $jadwal_id = $request->input('jadwal');
-        $harga = $request->input('harga');
+        $jadwal_id = $request->input('jadwal') ?? session('jadwal_id');
+
+        if (!$jadwal_id) {
+            return redirect()->route('jadwal.index')->with('error', 'Silakan pilih jadwal terlebih dahulu.');
+        }
 
         $jadwal = Jadwal::with('mobil')->where('jadwal_id', $jadwal_id)->first();
 
+        if (!$jadwal) {
+            return redirect()->route('jadwal.index')->with('error', 'Jadwal tidak ditemukan.');
+        }
+
         // Hitung total
+        $harga = $request->input('harga') ?? $jadwal->harga;
         $total_harga = $jadwal->harga * $jumlah_penumpang;
         $kapasitas = $jadwal->mobil->kapasitas;
+        
         $midtrans = new MidtransService();
         $snapToken = $midtrans->createSnapToken(
             'ORDER-' . uniqid(),
@@ -192,12 +207,12 @@ class PenumpangController extends Controller
             'total_harga',
             'kapasitas',
             'kursi_terpakai',
-            'snapToken'
+            'snapToken',
         ));
     }
     public function index()
     {
-        $penumpangs = Penumpang::with(['pemesanan.jadwal.mobil'])->latest()->get();
+        $penumpangs = Penumpang::with(['pemesanan.jadwal.mobil'])->latest()->paginate(5);
         return view('admin.data-penumpang.penumpang', compact('penumpangs'));
     }
     //Create dari Admin
@@ -253,6 +268,7 @@ class PenumpangController extends Controller
             'nomor_kursi' => 'required|string',
             'alamat_jemput' => 'required|string',
             'alamat_antar' => 'required|string',
+            'metode_pembayaran' => 'required|in:cod,transfer',
         ]);
 
         $kursiList = array_map('trim', explode(',', $request->nomor_kursi));
@@ -272,6 +288,7 @@ class PenumpangController extends Controller
             $jadwal = Jadwal::where('jadwal_id', $request->jadwal_id)->firstOrFail();
             $hargaPerPenumpang = $jadwal->harga;
             $totalHarga = $hargaPerPenumpang * intval($request->jumlah_penumpang);
+            $status = 'lunas';
 
             $pemesanan = Pemesanan::create([
                 'pemesanan_id' => Str::uuid(),
@@ -279,7 +296,7 @@ class PenumpangController extends Controller
                 'jadwal_id' => $request->jadwal_id,
                 'jumlah_penumpang' => $request->jumlah_penumpang,
                 'total_harga' => $totalHarga,
-                'status' => 'belum_lunas',
+                'status' => $status,
                 'kode_booking' => 'BK-' . strtoupper(Str::random(6)),
             ]);
 

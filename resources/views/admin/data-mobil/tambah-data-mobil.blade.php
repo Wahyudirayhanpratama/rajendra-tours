@@ -26,7 +26,7 @@
                     </ul>
                 </div>
             @endif
-            <form action="{{ route('store-data-mobil') }}" method="POST">
+            <form action="{{ route('store-data-mobil') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                     <input type="text" class="form-control" name="nama_mobil" placeholder="Masukkan Merk Mobil" required>
@@ -39,6 +39,10 @@
 
                 <div class="mb-3">
                     <input type="number" class="form-control" name="kapasitas" placeholder="Jumlah Seat" required>
+                </div>
+
+                <div class="mb-3">
+                    <input type="file" class="form-control" name="gambar" placeholder="Upload Gambar" accept="image/*" required>
                 </div>
 
                 <div class="divider"></div>

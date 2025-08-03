@@ -1,4 +1,4 @@
-@extends('layouts.master4')
+@extends('layouts.master10')
 
 @section('title', 'Profil')
 
@@ -72,7 +72,8 @@
         </div>
     </div>
     <!-- Modal Profil -->
-    <div class="modal fade modal-bottom" id="profilModal" tabindex="-1" aria-labelledby="profilModalLabel" aria-hidden="true">
+    <div class="modal fade modal-bottom" id="profilModal" tabindex="-1" aria-labelledby="profilModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content rounded-top-4">
                 <div class="modal-body">
@@ -109,6 +110,7 @@
         </div>
     </div>
 @endsection
+
 @push('headerspwa')
     <style>
         .icon-regist {
@@ -139,4 +141,18 @@
             padding-bottom: 20px;
         }
     </style>
+@endpush
+
+@push('scriptspwa')
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
+    </script>
 @endpush

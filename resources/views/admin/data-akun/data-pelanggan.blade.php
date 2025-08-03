@@ -23,7 +23,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th class="text-center">No</th>
                             <th>Nama</th>
                             <th>No Hp</th>
                             <th>Alamat</th>
@@ -33,17 +33,17 @@
                     <tbody>
                         @forelse ($pelanggan as $index => $user)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td class="text-center">{{ $pelanggan->firstItem() + $index }}</td>
                                 <td>{{ $user->nama }}</td>
                                 <td>{{ $user->no_hp }}</td>
                                 <td>{{ $user->alamat }}</td>
-                                <td class="action-buttons">
-                                    <a href="{{ route('edit-data-pelanggan', $user->user_id) }}" class="edit-btn">Edit</a>
+                                <td class="text-center">
+                                    <a href="{{ route('edit-data-pelanggan', $user->user_id) }}" class="edit-btn"><i class="fas fa-edit"></i></a>
                                     <form action="{{ route('hapus-data-pelanggan', $user->user_id) }}" method="POST"
                                         style="display:inline;" data-confirm="true">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="delete-btn">Hapus</button>
+                                        <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -54,6 +54,9 @@
                         @endforelse
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-end mt-3">
+                    {{ $pelanggan->links() }}
+                </div>
             </div>
         </div>
     @else

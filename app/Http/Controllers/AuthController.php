@@ -59,7 +59,7 @@ class AuthController extends Controller
             Auth::guard('pelanggan')->login($user); // gunakan guard pelanggan
             $request->session()->regenerate();
 
-            return redirect()->route('cari-jadwal');
+            return redirect()->route('cari-jadwal')->with('success', 'Login berhasil!');
         }
 
         return back()->withErrors([

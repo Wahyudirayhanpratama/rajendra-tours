@@ -31,6 +31,7 @@ Route::post('pelanggan.jadwal/set-tanggal', function (\Illuminate\Http\Request $
 
 Route::resource('users', UserController::class);
 
+Route::post('/redirect-register', [UserController::class, 'redirectToRegister'])->name('register.redirect');
 Route::get('/register', [AuthController::class, 'showPelangganRegisterForm'])->name('register.pelanggan');
 Route::post('/register', [UserController::class, 'registerPelanggan'])->name('register.pelanggan.submit');
 Route::post('/login-pelanggan', [AuthController::class, 'loginPelanggan'])->name('login.pelanggan.submit');
@@ -44,7 +45,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::resource('jadwals', JadwalController::class);
 Route::get('/jadwal/cari/{tanggal?}', [JadwalController::class, 'cari'])->name('jadwal.cari');
-Route::get('/', [JadwalController::class, 'showCari'])->name('cari-jadwal');
+Route::get('/cari-jadwal', [JadwalController::class, 'showCari'])->name('cari-jadwal');
+
+Route::get('/', function () {
+    return view('pelanggan.landingpage');
+})->name('landingpage');
 
 // Middleware manual cek session agar tidak bisa akses dashboard kalau belum login
 Route::middleware(['auth:admin', RedirectIfNotAdmin::class])->group(function () {

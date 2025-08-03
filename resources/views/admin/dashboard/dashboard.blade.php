@@ -148,6 +148,94 @@
                         </div>
                         <!-- /.card-body -->
                     </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><strong>Daftar Pelanggan yang Berangkat</strong></h3>
+
+                            <div class="card-tools">
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <input type="text" name="table_search" class="form-control float-right"
+                                        placeholder="Search">
+
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover text-nowrap">
+                                <tbody>
+                                    @forelse ($jadwalHariIni as $jadwal)
+                                        @if ($jadwal->pemesanans->count())
+                                            <tr class="bg-dark text-white text-center">
+                                                <td colspan="6" class="font-weight-bold">
+                                                    {{ $jadwal->mobil->nama_mobil ?? 'Tidak diketahui' }} -
+                                                    <span
+                                                        class="text-primary">{{ $jadwal->mobil->nomor_polisi ?? 'N/A' }}</span>
+                                                    - {{ $jadwal->kota_tujuan }}
+                                                </td>
+                                            </tr>
+
+                                            {{-- Ulangi header di setiap jadwal --}}
+                                            <tr class="table-active">
+                                                <th>Nama</th>
+                                                <th>Tanggal Berangkat</th>
+                                                <th>Status Pembayaran</th>
+                                                <th>Nomor Kursi</th>
+                                                <th>Nomor Hp</th>
+                                            </tr>
+
+                                            @foreach ($jadwal->pemesanans as $pemesanan)
+                                                @php
+                                                    $statusPembayaran = $pemesanan->status ?? 'unknown';
+
+                                                    switch ($statusPembayaran) {
+                                                        case 'lunas':
+                                                            $badge = 'bg-success';
+                                                            break;
+                                                        case 'belum_lunas':
+                                                            $badge = 'bg-warning';
+                                                            break;
+                                                        case 'Tiket dibatalkan':
+                                                            $badge = 'bg-danger';
+                                                            break;
+                                                        default:
+                                                            $badge = 'bg-secondary';
+                                                            break;
+                                                    }
+
+                                                    $labelStatus = match ($statusPembayaran) {
+                                                        'lunas' => 'Lunas',
+                                                        'belum_lunas' => 'Menunggu Pembayaran',
+                                                        'Tiket dibatalkan' => 'Tiket Dibatalkan',
+                                                        default => ucfirst(str_replace('_', ' ', $statusPembayaran)),
+                                                    };
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $pemesanan->penumpang->nama ?? '-' }}</td>
+                                                    <td>{{ formatIndonesianDate($jadwal->tanggal) }}</td>
+                                                    <td><span class="badge {{ $badge }}">{{ $labelStatus }}</span>
+                                                    </td>
+                                                    <td>{{ $pemesanan->penumpang->nomor_kursi }}</td>
+                                                    <td>{{ $pemesanan->penumpang->no_hp }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">Tidak ada jadwal keberangkatan
+                                                hari ini.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
                 </div><!-- /.container-fluid -->
             </section>
         </div>

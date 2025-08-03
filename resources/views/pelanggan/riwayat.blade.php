@@ -104,7 +104,8 @@
                             <!-- Nomor Transaksi -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <p class="mb-0">Nomor Transaksi</p>
-                                <p class="fw-medium mb-0">{{ substr(strtoupper(str_replace('-', '', $pemesanan->transaction_id)), 0, 16) }}</p>
+                                <p class="fw-medium mb-0">
+                                    {{ substr(strtoupper(str_replace('-', '', $pemesanan->transaction_id)), 0, 16) }}</p>
                             </div>
 
                             <!-- Tanggal Transaksi -->
@@ -116,7 +117,8 @@
                             <!-- Metode Pembayaran -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <p class="mb-0">Metode Pembayaran</p>
-                                <p class="fw-medium mb-0">{{ ucfirst(str_replace('_', ' ', $pemesanan->payment_type)) }}</p>
+                                <p class="fw-medium mb-0">{{ ucfirst(str_replace('_', ' ', $pemesanan->payment_type)) }}
+                                </p>
                             </div>
 
                             <!-- Total -->
@@ -208,4 +210,18 @@
             padding-bottom: 20px;
         }
     </style>
+@endpush
+
+@push('scriptspwa')
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
+    </script>
 @endpush

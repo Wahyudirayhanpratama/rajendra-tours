@@ -57,7 +57,16 @@ class MobilController extends Controller
             'nama_mobil' => 'required',
             'nomor_polisi' => 'required|unique:mobils',
             'kapasitas' => 'required|numeric',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $gambarName = null;
+
+        if ($request->hasFile('gambar')) {
+            $gambar = $request->file('gambar');
+            $gambarName = time() . '_' . Str::random(3) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move(public_path('uploads/mobil'), $gambarName);
+        }
 
         DB::beginTransaction();
 
@@ -67,6 +76,7 @@ class MobilController extends Controller
                 'nama_mobil' => $request->nama_mobil,
                 'nomor_polisi' => $request->nomor_polisi,
                 'kapasitas' => $request->kapasitas,
+                'gambar' => $gambarName,
             ]);
 
             DB::commit();
@@ -78,6 +88,7 @@ class MobilController extends Controller
 
             return back()->withInput()->withErrors(['general_error' => 'Gagal menyimpan data mobil: ' . $e->getMessage()]);
         }
+        // dd($request->all());
     }
 
     public function editMobil($id)
@@ -92,18 +103,44 @@ class MobilController extends Controller
             'nama_mobil' => 'required',
             'nomor_polisi' => 'required',
             'kapasitas' => 'required|numeric',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $mobil = Mobil::where('mobil_id', $id)->first();
+        $namaFile = $mobil->gambar;
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika ada dan file-nya eksis
+            $pathLama = public_path('uploads/mobil/' . $mobil->gambar);
+            if ($mobil->gambar && file_exists($pathLama)) {
+                unlink($pathLama);
+            }
+
+            // Upload gambar baru
+            $file = $request->file('gambar');
+            $namaFile = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/mobil'), $namaFile);
+        }
 
         Mobil::where('mobil_id', $id)->update([
             'nama_mobil' => $request->nama_mobil,
             'nomor_polisi' => $request->nomor_polisi,
             'kapasitas' => $request->kapasitas,
+            'gambar' => $namaFile,
         ]);
         return redirect()->route('data-mobil')->with('success', 'Mobil berhasil diperbarui.');
     }
 
     public function deleteMobil($id)
     {
+        $mobil = Mobil::where('mobil_id', $id)->first();
+
+        // Hapus gambar jika ada dan file-nya masih ada di folder
+        if ($mobil && $mobil->gambar) {
+            $pathGambar = public_path('uploads/mobil/' . $mobil->gambar);
+            if (file_exists($pathGambar)) {
+                unlink($pathGambar);
+            }
+        }
         Mobil::where('mobil_id', $id)->delete();
         return redirect()->route('data-mobil')->with('success', 'Mobil berhasil dihapus.');
     }

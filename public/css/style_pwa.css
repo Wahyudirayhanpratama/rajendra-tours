@@ -294,7 +294,7 @@ a:focus {
     margin: 1px auto 3px auto;
     font-size: 24px;
     line-height: 1em;
-    color: #27173E;
+    color: #000080;
     display: block;
     margin-top: 1px;
     margin-bottom: 3px;
@@ -309,7 +309,7 @@ a:focus {
     align-items: center;
     justify-content: center;
     border-radius: 200px;
-    background: #6236FF;
+    background: #000080;
 }
 
 .appBottomMenu .item .action-button.large {
@@ -330,7 +330,7 @@ a:focus {
 .appBottomMenu .item strong {
     margin-top: 4px;
     display: block;
-    color: #27173E;
+    color: #000080;
     font-weight: 400;
 }
 
@@ -339,20 +339,20 @@ a:focus {
 }
 
 .appBottomMenu .item.active:before {
-    background: #6236FF;
+    background: #000080;
 }
 
 .appBottomMenu .item.active .icon,
 .appBottomMenu .item.active ion-icon,
 .appBottomMenu .item.active strong {
-    color: #6236FF !important;
+    color: #000080 !important;
     font-weight: 500;
 }
 
 .appBottomMenu .item:hover .icon,
 .appBottomMenu .item:hover ion-icon,
 .appBottomMenu .item:hover strong {
-    color: #27173E;
+    color: #000080;
 }
 
 .appBottomMenu.text-light {
@@ -1954,8 +1954,8 @@ a.badge-dark {
 }
 
 .btn-danger {
-    background: #FF396F !important;
-    border-color: #FF396F !important;
+    background: #dc3545;
+    border-color: #dc3545;
     color: #FFFFFF !important;
 }
 
@@ -1963,14 +1963,14 @@ a.badge-dark {
 .btn-danger:focus,
 .btn-danger:active,
 .btn-danger.active {
-    background: #ff205c !important;
-    border-color: #ff205c !important;
+    background: #c82333;
+    border-color: #bd2130;
 }
 
 .btn-danger.disabled,
 .btn-danger:disabled {
-    background: #FF396F;
-    border-color: #FF396F;
+    background: #dc3545;
+    border-color: #dc3545;
     opacity: 0.5;
 }
 

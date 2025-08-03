@@ -9,6 +9,9 @@
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h1 class="m-0 font-weight-bold">Surat Jalan</h1>
+                    <button onclick="window.print()" class="btn btn-pp text-white d-print-none">
+                        <i class="fas fa-print mr-2"></i> Cetak
+                    </button>
                 </div>
             </div>
         </section>
@@ -77,12 +80,6 @@
                 <p>Tanda Tangan Sopir</p>
                 <br><br>
                 <p>______________________</p>
-            </div>
-
-            <div class="no-print">
-                <button onclick="window.print()" class="btn btn-pp text-white shadow-sm">
-                    <i class="fas fa-print mr-2"></i> Cetak Surat Jalan
-                </button>
             </div>
         </div>
     </div>

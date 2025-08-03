@@ -62,6 +62,42 @@
                         </div>
                     </div>
 
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-car"></i> Mobil yang Sering Digunakan per Rute
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Mobil</th>
+                                            <th>Rute</th>
+                                            <th>Total Digunakan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($mobilRuteTerbanyak as $index => $data)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $data->nama_mobil }} - {{ $data->nomor_polisi }}</td>
+                                                <td>{{ $data->kota_asal }} - {{ $data->kota_tujuan }}</td>
+                                                <td>{{ $data->total }} kali</td>
+                                            </tr>
+                                        @endforeach
+                                        @if ($mobilRuteTerbanyak->isEmpty())
+                                            <tr>
+                                                <td colspan="4">Tidak ada data penggunaan mobil.</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Donut Chart -->
                     <div class="row">

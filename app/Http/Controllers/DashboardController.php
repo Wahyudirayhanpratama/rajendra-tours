@@ -131,13 +131,32 @@ class DashboardController extends Controller
                 ];
             });
 
+        $mobilRuteTerbanyak = DB::table('pemesanans')
+            ->select(
+                'mobils.nama_mobil',
+                'mobils.nomor_polisi',
+                'jadwals.kota_asal',
+                'jadwals.kota_tujuan',
+                DB::raw('COUNT(*) as total'),
+                DB::raw('MAX(jadwals.tanggal) as terakhir_tanggal'),
+                DB::raw('MAX(jadwals.jam_berangkat) as terakhir_jam')
+            )
+            ->join('jadwals', 'pemesanans.jadwal_id', '=', 'jadwals.jadwal_id')
+            ->join('mobils', 'jadwals.mobil_id', '=', 'mobils.mobil_id')
+            ->groupBy('mobils.nama_mobil', 'mobils.nomor_polisi', 'jadwals.kota_asal', 'jadwals.kota_tujuan')
+            ->orderByDesc('terakhir_tanggal')
+            ->orderByDesc('terakhir_jam')
+            ->limit(10)
+            ->get();
+
         return view('pemilik.dashboard.dashboard-pemilik', array_merge(
             compact(
                 'totalTiketBulanIni',
                 'totalPembatalanBulanIni',
                 'pendapatanBulanan',
                 'pendapatanTahunan',
-                'dataGrafik'
+                'dataGrafik',
+                'mobilRuteTerbanyak'
             ),
             ['donutData' => json_encode($donutData)],
             ['aktivitasHarian' => $aktivitasHarian]

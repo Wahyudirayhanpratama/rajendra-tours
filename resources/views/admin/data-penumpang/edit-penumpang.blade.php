@@ -27,62 +27,69 @@
             <form action="{{ route('update-data-penumpang', $penumpang->penumpang_id) }}" method="POST">
                 @csrf
                 @method('PUT')
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Nama Otomatis dari User -->
+                        <div class="mb-3">
+                            <label for="nama" class="form-label">Nama Pemesan</label>
+                            <input type="text" class="form-control"
+                                value="{{ $penumpang->pemesanan->user->nama ?? '-' }}" readonly>
+                        </div>
 
-                <!-- Nama Otomatis dari User -->
-                <div class="mb-3">
-                    <label for="nama" class="form-label">Nama Pemesan</label>
-                    <input type="text" class="form-control" value="{{ $penumpang->pemesanan->user->nama ?? '-' }}"
-                        readonly>
-                </div>
+                        <!-- No HP -->
+                        <div class="mb-3">
+                            <label for="no_hp" class="form-label">No HP</label>
+                            <input type="text" class="form-control"
+                                value="{{ $penumpang->pemesanan->user->no_hp ?? '-' }}" readonly>
+                        </div>
 
-                <!-- No HP -->
-                <div class="mb-3">
-                    <label for="no_hp" class="form-label">No HP</label>
-                    <input type="text" class="form-control" value="{{ $penumpang->pemesanan->user->no_hp ?? '-' }}"
-                        readonly>
-                </div>
+                        <!-- Jenis Kelamin -->
+                        <div class="mb-3">
+                            <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                            <select name="jenis_kelamin" class="form-select" required>
+                                <option value="L" {{ $penumpang->jenis_kelamin === 'L' ? 'selected' : '' }}>Laki-laki
+                                </option>
+                                <option value="P" {{ $penumpang->jenis_kelamin === 'P' ? 'selected' : '' }}>Perempuan
+                                </option>
+                            </select>
+                        </div>
 
-                <!-- Jenis Kelamin -->
-                <div class="mb-3">
-                    <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                    <select name="jenis_kelamin" class="form-select" required>
-                        <option value="L" {{ $penumpang->jenis_kelamin === 'L' ? 'selected' : '' }}>Laki-laki</option>
-                        <option value="P" {{ $penumpang->jenis_kelamin === 'P' ? 'selected' : '' }}>Perempuan</option>
-                    </select>
-                </div>
+                        <!-- Nomor Kursi -->
+                        <input type="hidden" name="jumlah_penumpang" class="form-control"
+                            value="{{ $pemesanan->jumlah_penumpang }}">
+                        <div class="mb-3">
+                            <label for="nomor_kursi">Nomor Kursi</label>
+                            <input type="hidden" name="nomor_kursi" id="selectedSeatsInput"
+                                value="{{ $penumpang->nomor_kursi }}">
+                            <select class="form-select" id="nomor_kursi">
+                                <option selected disabled>Pilih Kursi</option>
+                            </select>
+                            <div class="mt-2" id="selectedSeatsDisplay"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Alamat Jemput -->
+                        <div class="mb-3">
+                            <label for="alamat_jemput" class="form-label">Alamat Jemput</label>
+                            <input type="text" name="alamat_jemput" class="form-control"
+                                value="{{ $penumpang->alamat_jemput }}" required>
+                        </div>
 
-                <!-- Nomor Kursi -->
-                <input type="hidden" name="jumlah_penumpang" class="form-control"
-                    value="{{ $pemesanan->jumlah_penumpang }}">
-                <div class="mb-3">
-                    <label for="nomor_kursi">Nomor Kursi</label>
-                    <input type="hidden" name="nomor_kursi" id="selectedSeatsInput" value="{{ $penumpang->nomor_kursi }}">
-                    <select class="form-select" id="nomor_kursi">
-                        <option selected disabled>Pilih Kursi</option>
-                    </select>
-                    <div class="mt-2" id="selectedSeatsDisplay"></div>
-                </div>
+                        <!-- Alamat Antar -->
+                        <div class="mb-3">
+                            <label for="alamat_antar" class="form-label">Alamat Antar</label>
+                            <input type="text" name="alamat_antar" class="form-control"
+                                value="{{ $penumpang->alamat_antar }}" required>
+                        </div>
 
-                <!-- Alamat Jemput -->
-                <div class="mb-3">
-                    <label for="alamat_jemput" class="form-label">Alamat Jemput</label>
-                    <input type="text" name="alamat_jemput" class="form-control" value="{{ $penumpang->alamat_jemput }}"
-                        required>
-                </div>
-
-                <!-- Alamat Antar -->
-                <div class="mb-3">
-                    <label for="alamat_antar" class="form-label">Alamat Antar</label>
-                    <input type="text" name="alamat_antar" class="form-control" value="{{ $penumpang->alamat_antar }}"
-                        required>
-                </div>
-
-                <!-- Info Jadwal -->
-                <div class="mb-3">
-                    <label class="form-label">Tanggal & Jam Keberangkatan</label>
-                    <input type="text" class="form-control"
-                        value="{{ formatIndonesianDate($penumpang->pemesanan->jadwal->tanggal) }} - {{ $penumpang->pemesanan->jadwal->jam_berangkat }}"
-                        readonly>
+                        <!-- Info Jadwal -->
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal & Jam Keberangkatan</label>
+                            <input type="text" class="form-control"
+                                value="{{ formatIndonesianDate($penumpang->pemesanan->jadwal->tanggal) }} - {{ $penumpang->pemesanan->jadwal->jam_berangkat }}"
+                                readonly>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tombol -->

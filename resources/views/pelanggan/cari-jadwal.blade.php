@@ -172,6 +172,17 @@
 
 @push('scriptspwa')
     <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
+    </script>
+    <script>
         document.getElementById('formCariTiket').addEventListener('submit', function(e) {
             const cityFrom = document.getElementById('cityfrom').value;
             const cityTo = document.getElementById('cityto').value;
@@ -246,6 +257,11 @@
         function pilihKotaKeberangkatan(kota) {
             document.getElementById("cityfrom").value = kota;
             document.getElementById("cityfromlabel").value = kota;
+
+            // Reset kota tujuan
+            document.getElementById("cityto").value = "";
+            document.getElementById("citytolabel").value = "";
+
             bootstrap.Modal.getInstance(document.getElementById('modalCity')).hide();
         }
 

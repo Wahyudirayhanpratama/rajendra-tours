@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-8 text-center">
                         <div class="fw-600 fs-16 text-main" id="changedateLabel">
-                            <i class="uil uil-calendar-alt fs-20 fw-300"></i>{{ formatIndonesianDate($tanggal) }}
+                            <i class="uil uil-calendar-alt fs-20 fw-300"></i> {{ formatIndonesianDate($tanggal) }}
                         </div>
                     </div>
                     <div class="col-2 text-center">
@@ -75,12 +75,12 @@
                 <div class="row">
                     <div class="col-3 text-center fs-12 text-dark">
                         <div class="text-dark">
-                            <i class="uil uil-car fs-15 text-dark"></i> Unit
+                            <i class="fas fa-car fs-15 text-dark"></i> Unit
                         </div>
                     </div>
                     <div class="col-3 text-center fs-12 text-dark">
                         <div class="text-dark">
-                            <i class="uil uil-clock fs-15 text-dark"></i> Tujuan
+                            <i class="fas fa-clock fs-15 text-dark"></i> Tujuan
                         </div>
                     </div>
                     <div class="col-3 text-center fs-12 text-dark">
@@ -91,7 +91,7 @@
                     </div>
                     <div class="col-3 text-center fs-12 text-dark">
                         <div class="text-dark">
-                            <i class="uil uil-bill fs-15 text-dark"></i> Harga
+                            <i class="fas fa-money-bill-alt fs-15 text-dark"></i> Harga
                         </div>
                     </div>
                 </div>
@@ -107,15 +107,16 @@
                 @php
                     $jadwalDateTime = Carbon::parse($jadwal->tanggal . ' ' . $jadwal->jam_berangkat);
                     $isExpired = $jadwalDateTime->lt(now());
+                    $isHabis = $jadwal->kursi_tersisa == 0;
                 @endphp
 
-                @if (!$isExpired)
-                    <!-- Card aktif dengan link -->
-                    <a href="{{ route('penumpang.create') }}?jadwal={{ $jadwal->jadwal_id }}" class="text-decoration-none">
+                @if (!$isExpired && !$isHabis)
+                    <a href="{{ route('penumpang.create', ['jadwal' => $jadwal->jadwal_id, 'tanggal' => $jadwal->tanggal]) }}"
+                        class="text-decoration-none">
                 @endif
 
-                <div class="card mb-1 {{ $isExpired ? 'bg-light opacity-50' : '' }}"
-                    style="{{ $isExpired ? 'pointer-events: none;' : '' }}">
+                <div class="card mb-1 {{ $isExpired || $isHabis ? 'bg-light opacity-50' : '' }}"
+                    style="{{ $isExpired || $isHabis ? 'pointer-events: none;' : '' }}">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-6">
@@ -140,7 +141,26 @@
                             <div class="col-12">
                                 <div class="fs-18 text-center text-dark lh-15">{{ $jadwal->kota_tujuan }}</div>
                                 <div class="fs-18 text-center text-dark fw-bold">
-                                    {{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }} WIB
+                                    @php
+                                        $jam = \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i');
+                                        $hour = \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H');
+                                        $isSiang = $hour >= 6 && $hour < 18;
+                                    @endphp
+
+                                    <div
+                                        class="fs-18 text-center text-dark d-flex justify-content-center align-items-center mt-2">
+                                        @if ($isSiang)
+                                            <span
+                                                class="badge bg-warning text-dark px-3 py-2 rounded-pill d-flex align-items-center">
+                                                ☀️ <span class="ms-2">{{ $jam }} WIB</span>
+                                            </span>
+                                        @else
+                                            <span
+                                                class="badge bg-primary text-white px-3 py-2 rounded-pill d-flex align-items-center">
+                                                🌙 <span class="ms-2">{{ $jam }} WIB</span>
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +170,8 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="fs-13 text-start lh-15 text-dark fw-600">
-                                    Sisa {{ $jadwal->kursi_tersisa ?? 0 }} Seat
+                                    <img src="https://img.icons8.com/ios-filled/50/000000/car-seat.png" width="20"> Sisa
+                                    {{ $jadwal->kursi_tersisa ?? 0 }} Seat
                                 </div>
                             </div>
                             <div class="col-5">
@@ -162,16 +183,14 @@
                                     </div>
                                     @if ($isExpired)
                                         <div class="fs-12 text-danger lh-15">Lewat batas waktu pemesanan</div>
+                                    @elseif ($isHabis)
+                                        <div class="fs-12 text-danger lh-15">Kursi habis</div>
                                     @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                @if (!$isExpired)
-                    </a>
-                @endif
             @empty
                 <div class="alert alert-danger mt-3">
                     Tidak ada jadwal tersedia untuk kota dan tanggal tersebut.
@@ -221,4 +240,18 @@
             background: #EDEDF4;
         }
     </style>
+@endpush
+
+@push('scriptspwa')
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
+    </script>
 @endpush

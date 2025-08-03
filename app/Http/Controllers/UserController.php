@@ -115,25 +115,28 @@ class UserController extends Controller
             'role' => 'pelanggan',
         ]);
 
-        $datareponse = [
-            'user_id' => Str::uuid(),
-            'nama' => $user->nama,
-            'no_hp' => $user->no_hp,
-            'alamat' => $user->alamat,
-            'role' => 'pelanggan',
-        ];
-
-        if ($request->wantsJson()) {
-            return response()->json(
-                [
-                    'success' => true,
-                    'message' => 'Registrasi berhasil! Silakan login.',
-                    'user' => $datareponse,
-                ],
-                201
-            );
+        if (session('from') == 'data-pemesan') {
+            session()->forget('from'); // jangan lupa bersihkan agar tidak looping
+            return redirect()->route('penumpang.create');
         }
 
         return redirect()->route('login.pelanggan')->with('success', 'Registrasi berhasil! Silakan login.');
+    }
+    public function redirectToRegister(Request $request)
+    {
+        if ($request->from == 'data-pemesan') {
+            // Simpan semua data penting ke session
+            session([
+                'jadwal_id' => $request->jadwal_id,
+                'cityfrom' => $request->cityfrom,
+                'cityto' => $request->cityto,
+                'tanggal' => $request->tanggal,
+                'jumlah_penumpang' => $request->jumlah_penumpang,
+                'from' => 'data-pemesan',
+                'show_login_popup' => true
+            ]);
+        }
+
+        return redirect()->route('register.pelanggan');
     }
 }

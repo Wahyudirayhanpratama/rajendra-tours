@@ -59,10 +59,10 @@
             </div>
 
             <!-- Tabel Transaksi -->
-            <table class="table table-bordered">
-                <thead class="bg-primary text-white">
+            <table class="table table-striped table-bordered">
+                <thead>
                     <tr>
-                        <th>No</th>
+                        <th class="text-center">No</th>
                         <th>Nama Customer</th>
                         <th>Rute</th>
                         <th>Tanggal Berangkat</th>
@@ -73,12 +73,35 @@
                 <tbody>
                     @forelse ($pemesanans as $i => $item)
                         <tr>
-                            <td>{{ $i + 1 }}</td>
+                            <td class="text-center">{{ $i + 1 }}</td>
                             <td>{{ $item->penumpang->nama ?? '-' }}</td>
                             <td>{{ $item->jadwal->kota_asal }} - {{ $item->jadwal->kota_tujuan }}</td>
                             <td>{{ \Carbon\Carbon::parse($item->jadwal->tanggal)->format('d-m-Y') }}</td>
                             <td>Rp. {{ number_format($item->total_harga, 0, ',', '.') }}</td>
-                            <td>{{ ucfirst(str_replace('_', ' ', $item->status)) }}</td>
+                            <td>@php
+                                $status = $item->status;
+                                $statusText = ucfirst(str_replace('_', ' ', $status));
+
+                                switch ($status) {
+                                    case 'lunas':
+                                        $badgeClass = 'success';
+                                        break;
+                                    case 'belum_lunas':
+                                        $badgeClass = 'warning';
+                                        break;
+                                    case 'Tiket dibatalkan':
+                                        $badgeClass = 'danger';
+                                        break;
+                                    default:
+                                        $badgeClass = 'secondary';
+                                        break;
+                                }
+                            @endphp
+
+                                <span class="badge bg-{{ $badgeClass }} text-uppercase">
+                                    {{ $statusText }}
+                                </span>
+                            </td>
                         </tr>
                     @empty
                         <tr>

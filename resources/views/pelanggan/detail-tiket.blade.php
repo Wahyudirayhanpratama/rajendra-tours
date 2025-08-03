@@ -12,12 +12,24 @@
         <!-- Status -->
         <div class="text-end mt-5">
             @php
-                $badgeClass =
-                    $pemesanan->status === 'Tiket dibatalkan'
-                        ? 'bg-danger text-white'
-                        : 'bg-success bg-opacity-25 text-success';
+                $status = $pemesanan->status ?? 'unknown';
+
+                switch ($status) {
+                    case 'lunas':
+                        $badgeClass = 'bg-success text-white';
+                        break;
+                    case 'belum_lunas':
+                        $badgeClass = 'bg-warning text-dark';
+                        break;
+                    case 'Tiket dibatalkan':
+                        $badgeClass = 'bg-danger text-white';
+                        break;
+                    default:
+                        $badgeClass = 'bg-secondary text-white';
+                        break;
+                }
             @endphp
-            <span class="badge {{ $badgeClass }} px-4 py-2 fw-semibold">
+            <span class="badge {{ $badgeClass }} fw-bold text-uppercase">
                 {{ ucfirst(str_replace('_', ' ', $pemesanan->status)) }}
             </span>
         </div>
@@ -74,25 +86,35 @@
             </div>
         </div>
 
+        <!-- Syarat dan Ketentuan -->
+        <div class="alert"
+            style="border: 2px solid #000080; color: #000; font-size: 13px; padding: 10px; margin-top: 20px;">
+            <span style="color: #b30000; font-weight: 700;">PERHATIAN</span><br>
+            Syarat & ketentuan pemesanan yang berlaku:<br>
+            1. Reservasi dan pembatalan dapat dilakukan 3 jam sebelum berangkat.<br>
+            2. Jika melakukan pembatalan dilakukan setelah 3 jam sebelum berangkat, maka tidak ada pengembalian dana
+            (NO REFUND & NO RESCHEDULE)
+        </div>
+
         <!-- Action Buttons -->
         <div class="d-grid gap-2 mt-4">
+            <a href="{{ route('tiket') }}" class="btn btn-outline-po fw-bold">Kembali</a>
             @if ($pemesanan->status !== 'Tiket dibatalkan')
-                <form action="{{ route('tiket.batalkan', $pemesanan->pemesanan_id) }}" method="POST"
-                    class="form-batalkan">
-                    @csrf
-                    <button type="submit" class="btn btn-po fw-bold w-100 btn-confirm-batalkan">
-                        Batalkan Pesanan
-                    </button>
-                </form>
                 {{-- Tombol Bayar jika belum lunas --}}
-                @if ($pemesanan->status !== 'Lunas')
+                @if ($pemesanan->status !== 'Lunas' && $pemesanan->status !== 'lunas')
                     <a href="{{ route('bayar', ['id' => $pemesanan->pemesanan_id]) }}"
-                        class="btn btn-po fw-bold w-100">
+                        class="btn btn-warning fw-bold w-100">
                         Bayar Sekarang
                     </a>
                 @endif
+                <form action="{{ route('tiket.batalkan', $pemesanan->pemesanan_id) }}" method="POST"
+                    class="form-batalkan">
+                    @csrf
+                    <button type="submit" class="btn btn-danger fw-bold w-100 btn-confirm-batalkan">
+                        Batalkan Pesanan
+                    </button>
+                </form>
             @endif
-            <a href="{{ route('tiket') }}" class="btn btn-outline-po fw-bold">Kembali</a>
         </div>
     </div>
 @endsection
@@ -167,5 +189,16 @@
                 });
             });
         });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        }
     </script>
 @endpush
