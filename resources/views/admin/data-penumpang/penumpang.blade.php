@@ -49,7 +49,7 @@
                             <td>{{ $penumpang->pemesanan->kode_booking ?? '-' }}</td>
                             <td>{{ formatIndonesianDate($penumpang->pemesanan->jadwal->tanggal ?? '-') }} -
                                 {{ formatJam($penumpang->pemesanan->jadwal->jam_berangkat ?? '-') }}</td>
-                            <td>{{ $penumpang->pemesanan->jumlah_penumpang }}</td>
+                            <td>{{ $penumpang->pemesanan->jumlah_penumpang }} Orang</td>
                             <td>{{ $penumpang->nomor_kursi }}</td>
                             <td class="text-center">
                                 <a href="{{ route('edit-data-penumpang', $penumpang->penumpang_id) }}"

@@ -63,7 +63,7 @@
                                 </span>
                             </td>
 
-                            <td>{{ $pemesanan->jumlah_penumpang }}</td>
+                            <td>{{ $pemesanan->jumlah_penumpang }} Orang</td>
                             <td>{{ $pemesanan->jadwal->kota_asal }} - {{ $pemesanan->jadwal->kota_tujuan }}</td>
                             <td class="text-center">
                                 <a href="{{ route('cetak.nota', $pemesanan->pemesanan_id) }}" target="_blank"
