@@ -69,12 +69,11 @@ self.addEventListener("fetch", (event) => {
     // Jika permintaan HTML (misalnya /tiket)
     if (request.headers.get("accept")?.includes("text/html")) {
         event.respondWith(
-            fetch(request)
-                .then((response) => {
-                    return response;
+            caches.match(request)
+                .then((cachedResponse) => {
+                    return cachedResponse || fetch(request);
                 })
                 .catch(() => {
-                    // Fallback ke offline.html kalau gagal
                     return caches.match('/offline.html');
                 })
         );
