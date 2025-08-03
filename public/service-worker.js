@@ -1,9 +1,7 @@
-const CACHE_NAME = "pwa-cache-v2";
+const CACHE_NAME = "pwa-cache-v3";
 const FILES_TO_CACHE = [
     "/",
     "/cari-jadwal",
-    "/register",
-    "/login-pelanggan",
     "/css/caleran.min.css",
     "/css/style_pwa.css",
     "/css/color_palette.css",
@@ -66,12 +64,13 @@ self.addEventListener("fetch", (event) => {
     // Jika permintaan HTML (misalnya /tiket)
     if (request.headers.get("accept")?.includes("text/html")) {
         event.respondWith(
-            caches.match(request)
-                .then((cachedResponse) => {
-                    return cachedResponse || fetch(request);
+            fetch(request)
+                .then((response) => {
+                    return response;
                 })
-                .catch(() => {
-                    return caches.match('/offline.html');
+                .catch(async () => {
+                    const cachedResponse = await caches.match(request);
+                    return cachedResponse || caches.match('/offline.html');
                 })
         );
         return;
