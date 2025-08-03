@@ -19,6 +19,7 @@ const FILES_TO_CACHE = [
     "/js/base.js",
     "/storage/logo_kecil_rajendra.png",
     "/storage/logo_rajendra.png",
+    "/storage/unit_rajendra.jpg",
     "/icons/icon-512x512.png",
     "/icons/icon-192x192.png",
     "/manifest.json",
