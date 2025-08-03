@@ -96,7 +96,7 @@ class PemesananController extends Controller
     }
     public function pemesanan()
     {
-        $pemesanans = Pemesanan::with(['jadwal.mobil', 'penumpangs', 'tiket'])->latest()->paginate(5);
+        $pemesanans = Pemesanan::with(['jadwal.mobil', 'penumpangs', 'tiket'])->latest()->paginate(10);
         return view('admin.data-pemesanan.data-pemesanan', compact('pemesanans'));
     }
     public function storePemesanan(Request $request)

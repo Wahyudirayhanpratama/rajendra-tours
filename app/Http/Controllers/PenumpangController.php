@@ -161,7 +161,7 @@ class PenumpangController extends Controller
         $harga = $request->input('harga') ?? $jadwal->harga;
         $total_harga = $jadwal->harga * $jumlah_penumpang;
         $kapasitas = $jadwal->mobil->kapasitas;
-        
+
         $midtrans = new MidtransService();
         $snapToken = $midtrans->createSnapToken(
             'ORDER-' . uniqid(),
@@ -212,7 +212,7 @@ class PenumpangController extends Controller
     }
     public function index()
     {
-        $penumpangs = Penumpang::with(['pemesanan.jadwal.mobil'])->latest()->paginate(5);
+        $penumpangs = Penumpang::with(['pemesanan.jadwal.mobil'])->latest()->paginate(10);
         return view('admin.data-penumpang.penumpang', compact('penumpangs'));
     }
     //Create dari Admin

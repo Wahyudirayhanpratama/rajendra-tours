@@ -12,7 +12,7 @@ class PelangganController extends Controller
 {
     public function dataPelanggan()
     {
-        $pelanggan = User::where('role', 'pelanggan')->latest()->paginate(5);
+        $pelanggan = User::where('role', 'pelanggan')->latest()->paginate(10);
         return view('admin.data-akun.data-pelanggan', compact('pelanggan'));
     }
 
