@@ -43,7 +43,7 @@
                                     $statusText = ucfirst(str_replace('_', ' ', $status));
 
                                     switch ($status) {
-                                        case 'lunas':
+                                        case 'Lunas':
                                             $badgeClass = 'success';
                                             break;
                                         case 'belum_lunas':
