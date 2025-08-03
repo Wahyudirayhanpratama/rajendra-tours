@@ -21,7 +21,8 @@ const FILES_TO_CACHE = [
     "/storage/logo_rajendra.png",
     "/icons/icon-512x512.png",
     "/icons/icon-192x192.png",
-    "/manifest.json"
+    "/manifest.json",
+    "/offline.html",
 ];
 
 // Simpan file ke cache
@@ -65,7 +66,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     const request = event.request;
 
-    // Jika permintaan HTML → ambil dari jaringan, fallback ke cache jika offline
+    // Jika permintaan HTML (misalnya /tiket)
     if (request.headers.get("accept")?.includes("text/html")) {
         event.respondWith(
             fetch(request)
@@ -73,13 +74,14 @@ self.addEventListener("fetch", (event) => {
                     return response;
                 })
                 .catch(() => {
-                    return caches.match(request);
+                    // Fallback ke offline.html kalau gagal
+                    return caches.match('/offline.html');
                 })
         );
         return;
     }
 
-    // Untuk asset statis lainnya
+    // Untuk asset statis seperti CSS, JS, gambar
     event.respondWith(
         caches.match(request).then((cachedResponse) => {
             return cachedResponse || fetch(request);
