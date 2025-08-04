@@ -3,8 +3,10 @@
 @section('title', 'Data Pemesanan')
 
 @section('content')
-
-
+    <!-- Loader -->
+    <div id="loader">
+        <div class="spinner-border text-light" role="status"></div>
+    </div>
     <!-- App Header -->
     <div class="loginbg bg-po">
         <div class="left">
@@ -185,7 +187,7 @@
                             <a href="{{ route('jadwal.cari') }}" class="btn btn-secondary mt-2 w-100">Kembali ke Jadwal</a>
                         </form>
 
-                        <div class="text-center mt-2">
+                        <div class="text-center mt-2" style="font-size: small">
                             Belum punya akun? <form id="redirect-register-form" action="{{ route('register.redirect') }}"
                                 method="POST" style="display: none;">
                                 @csrf
