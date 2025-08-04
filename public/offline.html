@@ -9,7 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 50px;
+            padding: 5vw;
         }
 
         .container {
@@ -19,10 +19,14 @@
 
         h1 {
             color: #333;
+            font-size: 6vw;
         }
 
         p {
             color: #666;
+            font-size: 4vw;
+            line-height: 1.6;
+            margin: 10px 0;
         }
 
         img {
@@ -38,10 +42,24 @@
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 4vw;
+            margin-top: 20px;
         }
 
         button:hover {
             background-color: #92B6F8;
+        }
+
+        /* Media query untuk layar lebar */
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            p,
+            button {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
