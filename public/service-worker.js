@@ -14,6 +14,7 @@ const FILES_TO_CACHE = [
     "/storage/logo_kecil_rajendra.png",
     "/storage/logo_rajendra.png",
     "/storage/unit_rajendra.jpg",
+    "/storage/no_connection.jpg",
     "/icons/icon-512x512.png",
     "/icons/icon-192x192.png",
     "/manifest.json",
