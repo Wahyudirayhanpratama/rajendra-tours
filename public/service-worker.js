@@ -21,26 +21,24 @@ const FILES_TO_CACHE = [
     "/offline.html"
 ];
 
-// Simpan file ke cache
+// Saat install: cache semua file penting
 self.addEventListener("install", (event) => {
     console.log("Service Worker installed");
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return Promise.all(
-                FILES_TO_CACHE.map((file) => {
-                    return cache.add(file)
+                FILES_TO_CACHE.map((file) =>
+                    cache.add(file)
                         .then(() => console.log("✅ Cached:", file))
-                        .catch((error) => console.warn("❌ Failed to cache:", file, error));
-                })
+                        .catch((error) => console.warn("❌ Failed to cache:", file, error))
+                )
             );
-        }).catch((err) => {
-            console.error("🔥 Error opening cache:", err);
         })
     );
     self.skipWaiting();
 });
 
-// Hapus cache lama jika ada
+// Saat activate: hapus cache lama
 self.addEventListener("activate", (event) => {
     console.log("Service Worker activated");
     event.waitUntil(
@@ -48,7 +46,7 @@ self.addEventListener("activate", (event) => {
             Promise.all(
                 cacheNames.map((name) => {
                     if (name !== CACHE_NAME) {
-                        console.log("Deleting old cache:", name);
+                        console.log("🗑️ Deleting old cache:", name);
                         return caches.delete(name);
                     }
                 })
@@ -58,15 +56,19 @@ self.addEventListener("activate", (event) => {
     self.clients.claim();
 });
 
-// Gunakan cache jika ada, kalau tidak ambil dari server
+// Saat fetch: gunakan cache dulu, jika tidak ada ambil dari network lalu cache-kan
 self.addEventListener("fetch", (event) => {
     const request = event.request;
 
-    // Jika permintaan HTML (misalnya /tiket)
+    // Jika permintaan HTML (misalnya halaman)
     if (request.headers.get("accept")?.includes("text/html")) {
         event.respondWith(
             fetch(request)
                 .then((response) => {
+                    const responseClone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(request, responseClone);
+                    });
                     return response;
                 })
                 .catch(async () => {
@@ -77,11 +79,26 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    // Untuk asset statis seperti CSS, JS, gambar
+    // Untuk asset statis: ambil dari cache dulu, lalu network jika tidak ada
     event.respondWith(
         caches.match(request).then((cachedResponse) => {
-            return cachedResponse || fetch(request);
+            return cachedResponse || fetch(request).then((response) => {
+                if (!response || response.status !== 200 || response.type === 'opaque') {
+                    return response;
+                }
+                const responseClone = response.clone();
+                caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(request, responseClone);
+                }).catch(err => {
+                    console.warn("❌ Gagal menyimpan ke cache:", err);
+                });
+                return response;
+            }).catch(() => {
+                // Fallback untuk gambar jika offline
+                if (request.destination === 'image') {
+                    return caches.match('/storage/no_connection.jpg');
+                }
+            });
         })
     );
 });
-
