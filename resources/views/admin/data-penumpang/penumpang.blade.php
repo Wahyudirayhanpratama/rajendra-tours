@@ -10,7 +10,7 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h1 class="m-0 font-weight-bold">Data Pemesanan</h1>
+                    <h1 class="m-0 font-weight-bold">Data Penumpang</h1>
                     <a href="{{ route('tambah-data-penumpang') }}" class="btn btn-tambah text-white">Tambah Penumpang</a>
                 </div>
             </div>
