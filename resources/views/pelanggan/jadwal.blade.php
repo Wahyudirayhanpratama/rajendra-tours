@@ -155,7 +155,7 @@
                                         @if ($isSiang)
                                             <span
                                                 class="badge bg-warning text-dark px-3 py-2 rounded-pill d-flex align-items-center">
-                                                🌞 <span class="ms-2">{{ $jam }} WIB</span>
+                                                🌤️ <span class="ms-2">{{ $jam }} WIB</span>
                                             </span>
                                         @else
                                             <span
