@@ -28,7 +28,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div class="p-2 border rounded d-flex justify-content-between align-items-center"
-                                        style="height: 36px; width: 7cm;">
+                                        style="height: 36px; width: 6cm;">
                                         <span class="fw-bold fs-7 mb-0">No Tiket:
                                             <strong>{{ $pemesanan->tiket->no_tiket ?? '-' }}</strong></span>
                                     </div>
@@ -38,7 +38,7 @@
                                         $status = $pemesanan->status ?? 'unknown';
 
                                         switch ($status) {
-                                            case 'lunas':
+                                            case 'Lunas':
                                                 $badgeClass = 'bg-success text-white';
                                                 break;
                                             case 'belum_lunas':
