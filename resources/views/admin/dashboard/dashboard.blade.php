@@ -194,7 +194,7 @@
                                                     $statusPembayaran = $pemesanan->status ?? 'unknown';
 
                                                     switch ($statusPembayaran) {
-                                                        case 'lunas':
+                                                        case 'Lunas':
                                                             $badge = 'bg-success';
                                                             break;
                                                         case 'belum_lunas':
