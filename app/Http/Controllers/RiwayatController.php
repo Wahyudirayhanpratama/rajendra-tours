@@ -13,15 +13,19 @@ class RiwayatController extends Controller
     {
         $userId = Auth::guard('pelanggan')->user()->user_id;
 
-        // Tiket lama: jika waktu keberangkatan (tanggal + jam_berangkat) sudah lewat
         $riwayatTiket = Pemesanan::with(['jadwal', 'tiket'])
             ->where('user_id', $userId)
             ->whereIn('status', ['Lunas', 'Tiket dibatalkan'])
-            ->whereHas('jadwal', function ($query) {
-                $query->whereRaw("STR_TO_DATE(CONCAT(tanggal, ' ', jam_berangkat), '%Y-%m-%d %H:%i:%s') < ?", [now()]);
-            })
+            ->with(['jadwal'])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->filter(function ($pemesanan) {
+                if (!$pemesanan->jadwal) return false;
+
+                // Gabungkan tanggal dan jam_berangkat jadi satu timestamp
+                $datetime = $pemesanan->jadwal->tanggal . ' ' . $pemesanan->jadwal->jam_berangkat;
+                return strtotime($datetime) < now()->timestamp;
+            });
 
         return view('pelanggan.riwayat', compact('riwayatTiket'));
     }

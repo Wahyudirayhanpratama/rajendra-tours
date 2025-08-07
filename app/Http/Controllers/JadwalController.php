@@ -42,7 +42,7 @@ class JadwalController extends Controller
 
         // Jika masih ada data yang kosong, redirect ke halaman pencarian
         if (!$cityfrom || !$cityto || !$tanggal || !$jumlah_penumpang) {
-            return redirect()->route('form.pencarian')->with('error', 'Silakan isi form pencarian terlebih dahulu.');
+            return redirect()->route('cari-jadwal')->with('error', 'Silakan isi form pencarian terlebih dahulu.');
         }
 
         $singkatanKota = [
@@ -98,6 +98,7 @@ class JadwalController extends Controller
             'nextDate'
         ));
     }
+    // Input admin
     public function jadwalKeberangkatan(Request $request)
     {
         $jadwals = Jadwal::with('mobil')->latest()->paginate(10);

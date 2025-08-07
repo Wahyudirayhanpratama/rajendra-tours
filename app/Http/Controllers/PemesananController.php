@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class PemesananController extends Controller
 {
+    // Pelanggan
     public function store(Request $request)
     {
         // Validasi input
@@ -99,6 +100,7 @@ class PemesananController extends Controller
         $pemesanans = Pemesanan::with(['jadwal.mobil', 'penumpangs', 'tiket'])->latest()->paginate(10);
         return view('admin.data-pemesanan.data-pemesanan', compact('pemesanans'));
     }
+    // Admin
     public function storePemesanan(Request $request)
     {
         $request->validate([

@@ -370,7 +370,9 @@ class PenumpangController extends Controller
         $mobil = $jadwal->mobil;
 
         // H-3 jam rule
-        $batasWaktu = Carbon::parse($jadwal->tanggal . ' ' . $jadwal->jam_berangkat)->subHours(3);
+        $batasWaktu = Carbon::parse($jadwal->tanggal)
+            ->setTimeFromTimeString($jadwal->jam_berangkat)
+            ->subHours(3);
         if (now()->greaterThan($batasWaktu)) {
             return back()->withErrors(['error' => 'Perubahan hanya dapat dilakukan maksimal 3 jam sebelum keberangkatan.']);
         }

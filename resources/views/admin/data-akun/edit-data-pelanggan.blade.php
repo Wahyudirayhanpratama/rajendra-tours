@@ -28,6 +28,7 @@
             @endif
             <form action="{{ route('update-data-pelanggan', $pelanggan->user_id) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="mb-3">
                     <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama"
                         value="{{ $pelanggan->nama }}" required>
