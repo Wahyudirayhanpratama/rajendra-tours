@@ -15,7 +15,7 @@
                 $status = $pemesanan->status ?? 'unknown';
 
                 switch ($status) {
-                    case 'lunas':
+                    case 'Lunas':
                         $badgeClass = 'bg-success text-white';
                         break;
                     case 'belum_lunas':
