@@ -40,7 +40,7 @@
                             <td>Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</td>
                             <td class="text-center">
                                 <a href="{{ route('edit-jadwal-keberangkatan', $jadwal->jadwal_id) }}"
-                                    class="btn btn-sm btn-pp text-white"><i class="fas fa-edit"></i></a>
+                                    class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('hapus-jadwal-keberangkatan', $jadwal->jadwal_id) }}" method="POST"
                                     style="display:inline;" data-confirm="true">
                                     @csrf

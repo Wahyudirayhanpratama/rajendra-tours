@@ -28,26 +28,32 @@
             @endif
             <form action="{{ route('store-pelanggan') }}" method="POST">
                 @csrf
-                <div class="mb-3">
-                    <input type="text" name="nama" class="form-control" placeholder="Masukkan Nama" required>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <input type="text" name="nama" class="form-control" placeholder="Masukkan Nama" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="tel" name="no_hp" class="form-control" placeholder="Masukkan Nomor Telepon"
+                                required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <input type="text" name="alamat" class="form-control" placeholder="Masukkan Alamat"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="password" name="password" class="form-control" placeholder="Masukkan Password"
+                                required>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <input type="tel" name="no_hp" class="form-control" placeholder="Masukkan Nomor Telepon" required>
-                </div>
-
-                <div class="mb-3">
-                    <input type="text" name="alamat" class="form-control" placeholder="Masukkan Alamat" required>
-                </div>
-
-                <div class="mb-3">
-                    <input type="password" name="password" class="form-control" placeholder="Masukkan Password" required>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="button-container d-flex justify-content-between">
-                    <a href="{{ route('data-pelanggan') }}" class="btn btn-secondary">Kembali</a>
+                <div class="button-container">
+                    <a href="{{ route('data-pelanggan') }}" class="btn btn-secondary mr-1">Kembali</a>
                     <button type="submit" class="btn btn-pp text-white">Tambah</button>
                 </div>
             </form>

@@ -52,7 +52,7 @@
                                         <!-- Tombol Aksi -->
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('edit-data-mobil', $mobil->mobil_id) }}"
-                                                class="edit-btn btn-sm mr-2"><i class="fas fa-edit"></i></a>
+                                                class="btn btn-warning btn-sm mr-2"><i class="fas fa-edit"></i></a>
                                             <form action="{{ route('hapus-data-mobil', $mobil->mobil_id) }}" method="POST"
                                                 data-confirm="true">
                                                 @csrf

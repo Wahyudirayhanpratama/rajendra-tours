@@ -53,7 +53,7 @@
                             <td>{{ $penumpang->nomor_kursi }}</td>
                             <td class="text-center">
                                 <a href="{{ route('edit-data-penumpang', $penumpang->penumpang_id) }}"
-                                    class="btn btn-sm btn-pp text-white mb-1"><i class="fas fa-edit"></i></a>
+                                    class="btn btn-sm btn-warning mb-1"><i class="fas fa-edit"></i></a>
 
                                 <form action="{{ route('hapus-data-penumpang', $penumpang->penumpang_id) }}" method="POST"
                                     style="display:inline;" data-confirm="true">

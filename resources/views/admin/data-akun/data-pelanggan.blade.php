@@ -38,12 +38,12 @@
                                 <td>{{ $user->no_hp }}</td>
                                 <td>{{ $user->alamat }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('edit-data-pelanggan', $user->user_id) }}" class="edit-btn"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ route('edit-data-pelanggan', $user->user_id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
                                     <form action="{{ route('hapus-data-pelanggan', $user->user_id) }}" method="POST"
                                         style="display:inline;" data-confirm="true">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>

@@ -9,9 +9,14 @@
             <div class="container-fluid">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h1 class="m-0 font-weight-bold">Surat Jalan</h1>
-                    <button onclick="window.print()" class="btn btn-pp text-white d-print-none">
-                        <i class="fas fa-print mr-2"></i> Cetak
-                    </button>
+                    <div class="d-flex gap-2 d-print-none">
+                        <a href="{{ route('surat.jalan') }}" class="btn btn-secondary mr-2">
+                            Kembali
+                        </a>
+                        <button onclick="window.print()" class="btn btn-pp text-white">
+                            <i class="fas fa-print mr-2"></i> Cetak
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

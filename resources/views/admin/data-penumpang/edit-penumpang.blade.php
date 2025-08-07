@@ -95,7 +95,7 @@
                 <!-- Tombol -->
                 <div class="button-container">
                     <a href="{{ route('data.penumpang') }}" class="btn btn-secondary mr-1">Kembali</a>
-                    <button type="submit" class="btn btn-pp text-white">Update Penumpang</button>
+                    <button type="submit" class="btn btn-warning">Update Penumpang</button>
                 </div>
 
             </form>

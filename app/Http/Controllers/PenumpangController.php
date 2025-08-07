@@ -288,7 +288,7 @@ class PenumpangController extends Controller
             $jadwal = Jadwal::where('jadwal_id', $request->jadwal_id)->firstOrFail();
             $hargaPerPenumpang = $jadwal->harga;
             $totalHarga = $hargaPerPenumpang * intval($request->jumlah_penumpang);
-            $status = 'lunas';
+            $status = 'Lunas';
 
             $pemesanan = Pemesanan::create([
                 'pemesanan_id' => Str::uuid(),

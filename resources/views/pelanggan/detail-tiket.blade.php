@@ -38,23 +38,23 @@
         <div class="card mt-4 shadow-sm border-0">
             <div class="card-body px-4 py-3">
 
-                <div class="row g-3">
-                    <div class="col-12">
+                <div class="row g-1">
+                    <div class="col">
                         <small class="text-muted">No Tiket</small><br>
-                        <i class="bi bi-ticket-perforated me-2 fs-5 text-secondary"></i>
-                        <span class="fw-bold">{{ $pemesanan->tiket->no_tiket ?? '-' }}</span>
+                        <i class="bi bi-ticket-perforated me-2 fs-6 fs-sm-5 fs-md-4 fs-lg-3"></i>
+                        <span class="jam-berangkat fw-bold">{{ $pemesanan->tiket->no_tiket ?? '-' }}</span>
                     </div>
 
-                    <div class="col-12">
+                    <div class="col">
                         <small class="text-muted">Kode Booking</small><br>
-                        <i class="bi bi-clipboard-check me-2 fs-5"></i>
-                        <span class="fw-bold">{{ $pemesanan->kode_booking }}</span>
+                        <i class="bi bi-clipboard-check me-2 fs-6 fs-sm-5 fs-md-4 fs-lg-3"></i>
+                        <span class="jam-berangkat fw-bold">{{ $pemesanan->kode_booking }}</span>
                     </div>
 
                     <div class="col-12">
                         <small class="text-muted">Rute</small><br>
-                        <i class="bi bi-signpost me-2 fs-5"></i>
-                        <span class="fw-bold">
+                        <i class="bi bi-signpost me-2 fs-6 fs-sm-5 fs-md-4 fs-lg-3"></i>
+                        <span class="jam-berangkat fw-bold">
                             {{ $pemesanan->jadwal->kota_asal ?? '?' }} -
                             {{ $pemesanan->jadwal->kota_tujuan ?? '?' }}
                         </span>
@@ -62,8 +62,8 @@
 
                     <div class="col-12">
                         <small class="text-muted">Jadwal</small><br>
-                        <i class="bi bi-calendar-event me-2 fs-5"></i>
-                        <span class="fw-bold">
+                        <i class="bi bi-calendar-event me-2 fs-6 fs-sm-5 fs-md-4 fs-lg-3"></i>
+                        <span class="jam-berangkat fw-bold">
                             {{ formatIndonesianDate($pemesanan->jadwal->tanggal) }},
                             {{ formatJam($pemesanan->jadwal->jam_berangkat) }} WIB
                         </span>
@@ -71,17 +71,18 @@
 
                     <div class="col-12">
                         <small class="text-muted">Harga</small><br>
-                        <i class="bi bi-currency-dollar me-2 fs-5"></i>
-                        <span class="fw-bold">
+                        <i class="bi bi-currency-dollar me-2 fs-6 fs-sm-5 fs-md-4 fs-lg-3"></i>
+                        <span class="jam-berangkat fw-bold">
                             Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}
                         </span>
                     </div>
 
                     <div class="col-12">
                         <small class="text-muted">No Kursi</small><br>
-                        <i class="bi bi-person-bounding-box me-2 fs-5"></i>
-                        <span class="fw-bold">{{ $pemesanan->tiket->nomor_kursi ?? '-' }}</span>
+                        <i class="bi bi-person-bounding-box me-2 fs-6 fs-sm-5 fs-md-4 fs-lg-3"></i>
+                        <span class="jam-berangkat fw-bold">{{ $pemesanan->tiket->nomor_kursi ?? '-' }}</span>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -158,6 +159,14 @@
 
         .btn-fix {
             margin-top: 150px;
+        }
+
+        .jam-berangkat {
+            font-size: clamp(12px, 2.5vw, 16px);
+            /* clamp(min, preferred, max) */
+            white-space: normal;
+            /* biarkan wrap jika perlu */
+            display: inline-block;
         }
     </style>
 @endpush

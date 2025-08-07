@@ -29,34 +29,38 @@
             <form action="{{ route('update-data-mobil', $mobil->mobil_id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="mb-3">
-                    <label for="nama-mobil">Masukkan Merk Mobil</label>
-                    <input type="text" class="form-control" name="nama_mobil" placeholder="Contoh: Toyota Avanza"
-                        value="{{ $mobil->nama_mobil }}" required>
+                <div class="row">
+                    <!-- Kolom Kiri -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="nama-mobil">Masukkan Merk Mobil</label>
+                            <input type="text" class="form-control" name="nama_mobil" placeholder="Contoh: Toyota Avanza"
+                                value="{{ $mobil->nama_mobil }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nomor-polisi">Masukkan Nomor Polisi</label>
+                            <input type="text" class="form-control" name="nomor_polisi" placeholder="Contoh: B 1234 ABC"
+                                value="{{ $mobil->nomor_polisi }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="jumlah-seat">Jumlah Seat</label>
+                            <input type="number" class="form-control" name="kapasitas" placeholder="Contoh: 7"
+                                value="{{ $mobil->kapasitas }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="gambar">Upload Gambar Mobil</label>
+                            <input type="file" class="form-control" name="gambar" accept="image/*">
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="nomor-polisi">Masukkan Nomor Polisi</label>
-                    <input type="text" class="form-control" name="nomor_polisi" placeholder="Contoh: B 1234 ABC"
-                        value="{{ $mobil->nomor_polisi }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="jumlah-seat">Jumlah Seat</label>
-                    <input type="number" class="form-control" name="kapasitas" placeholder="Contoh: 7"
-                        value="{{ $mobil->kapasitas }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="gambar">Upload Gambar Mobil</label>
-                    <input type="file" class="form-control" name="gambar" accept="image/*">
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="button-container d-flex justify-content-between">
-                    <a href="{{ route('data-mobil') }}" class="btn btn-secondary">Kembali</a>
-                    <button type="submit" class="btn btn-primary bg-po">Simpan</button>
+                <div class="button-container">
+                    <a href="{{ route('data-mobil') }}" class="btn btn-secondary mr-1">Kembali</a>
+                    <button type="submit" class="btn btn-warning">Simpan</button>
                 </div>
             </form>
         </div>

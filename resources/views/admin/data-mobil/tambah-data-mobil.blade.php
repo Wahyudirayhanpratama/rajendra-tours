@@ -28,28 +28,33 @@
             @endif
             <form action="{{ route('store-data-mobil') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="nama_mobil" placeholder="Masukkan Merk Mobil" required>
+                <div class="row">
+                    <!-- Kolom Kiri -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="nama_mobil" placeholder="Masukkan Merk Mobil"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="nomor_polisi"
+                                placeholder="Masukkan Nomor Polisi" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <input type="number" class="form-control" name="kapasitas" placeholder="Jumlah Seat" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="file" class="form-control" name="gambar" placeholder="Upload Gambar"
+                                accept="image/*" required>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="nomor_polisi" placeholder="Masukkan Nomor Polisi"
-                        required>
-                </div>
-
-                <div class="mb-3">
-                    <input type="number" class="form-control" name="kapasitas" placeholder="Jumlah Seat" required>
-                </div>
-
-                <div class="mb-3">
-                    <input type="file" class="form-control" name="gambar" placeholder="Upload Gambar" accept="image/*" required>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="button-container d-flex justify-content-between">
-                    <a href="{{ route('data-mobil') }}" class="btn btn-secondary">Kembali</a>
-                    <button type="submit" class="btn btn-primary bg-po">Tambah</button>
+                <div class="button-container">
+                    <a href="{{ route('data-mobil') }}" class="btn btn-secondary mr-1">Kembali</a>
+                    <button type="submit" class="btn btn-pp text-white">Tambah</button>
                 </div>
             </form>
         </div>

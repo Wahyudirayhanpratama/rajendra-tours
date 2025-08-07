@@ -29,31 +29,35 @@
             <form action="{{ route('update-data-pelanggan', $pelanggan->user_id) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama"
-                        value="{{ $pelanggan->nama }}" required>
-                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama"
+                                value="{{ $pelanggan->nama }}" required>
+                        </div>
 
-                <div class="mb-3">
-                    <input type="tel" class="form-control" name="no_hp" placeholder="Masukkan Nomor Telepon"
-                        value="{{ $pelanggan->no_hp }}" required>
-                </div>
+                        <div class="mb-3">
+                            <input type="tel" class="form-control" name="no_hp" placeholder="Masukkan Nomor Telepon"
+                                value="{{ $pelanggan->no_hp }}" required>
+                        </div>
+                    </div>
 
-                <div class="mb-3">
-                    <input type="text" class="form-control" name="alamat" placeholder="Masukkan Alamat"
-                        value="{{ $pelanggan->alamat }}" required>
-                </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="alamat" placeholder="Masukkan Alamat"
+                                value="{{ $pelanggan->alamat }}" required>
+                        </div>
 
-                <div class="mb-3">
-                    <input type="password" class="form-control" name="password"
-                        placeholder="Masukkan Password Baru (opsional)">
+                        <div class="mb-3">
+                            <input type="password" class="form-control" name="password"
+                                placeholder="Masukkan Password Baru (opsional)">
+                        </div>
+                    </div>
                 </div>
-
-                <div class="divider"></div>
 
                 <div class="button-container">
                     <a href="{{ route('data-pelanggan') }}" class="btn btn-secondary mr-1">Kembali</a>
-                    <button type="submit" class="btn btn-pp text-white">Update Akun</button>
+                    <button type="submit" class="btn btn-warning">Update Akun</button>
                 </div>
             </form>
         </div>

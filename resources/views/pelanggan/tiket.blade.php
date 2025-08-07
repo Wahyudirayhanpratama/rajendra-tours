@@ -27,9 +27,8 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="p-2 border rounded d-flex justify-content-between align-items-center"
-                                        style="height: 36px; width: 6cm;">
-                                        <span class="fw-bold fs-7 mb-0">No Tiket:
+                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2">
+                                        <span class="fw-bold fs-7 mb-0">
                                             <strong>{{ $pemesanan->tiket->no_tiket ?? '-' }}</strong></span>
                                     </div>
                                 </div>
@@ -53,8 +52,8 @@
                                         }
                                         $labelStatus = match ($status) {
                                             'lunas' => 'Lunas',
-                                            'belum_lunas' => 'Menunggu Pembayaran',
-                                            'Tiket dibatalkan' => 'Tiket Dibatalkan',
+                                            'belum_lunas' => 'Menunggu',
+                                            'Tiket dibatalkan' => 'Batal',
                                             default => ucfirst(str_replace('_', ' ', $status)),
                                         };
                                     @endphp

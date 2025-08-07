@@ -107,7 +107,7 @@
                 <!-- Tombol Aksi -->
                 <div class="button-container">
                     <a href="{{ route('jadwal-keberangkatan') }}" class="btn btn-secondary mr-1">Kembali</a>
-                    <button type="submit" class="btn btn-pp text-white">Update Jadwal</button>
+                    <button type="submit" class="btn btn-warning">Update Jadwal</button>
                 </div>
             </form>
         </div>
