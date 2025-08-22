@@ -1,61 +1,116 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Jendra Tours
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Jendra Tours is a web-based application designed for managing tour and travel bookings, likely for a shuttle or bus service. It provides a comprehensive platform for administrators to manage operations, owners to monitor business performance, and customers to book tickets seamlessly.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The application is divided into three main roles, each with its own set of features:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Admin
+- **Dashboard:** An overview of the application's activity.
+- **Customer Management:** Full CRUD (Create, Read, Update, Delete) functionality for customer data.
+- **Vehicle Management:** Manage the fleet of vehicles (`mobil`).
+- **Schedule Management:** Create and manage travel schedules (`jadwal`).
+- **Booking Management:** View and manage all customer bookings (`pemesanan`).
+- **Passenger Management:** Manage passenger information for each booking.
+- **Printables:** Generate and print receipts (`nota`) and travel permits (`surat jalan`).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Pemilik (Owner)
+- **Dashboard:** A dedicated dashboard to view key business metrics.
+- **Transaction Reports:** Access and view detailed reports of all transactions (`laporan transaksi`).
 
-## Learning Laravel
+### Pelanggan (Customer)
+- **Authentication:** Secure registration and login functionality.
+- **Profile Management:** View and update personal profile information.
+- **Search & Book:** Search for available schedules and book tickets.
+- **Booking History:** View a history of all past and upcoming trips (`riwayat`).
+- **Payment:** A seamless payment process integrated with Midtrans.
+- **E-Ticket:** View and manage booked tickets.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tech Stack
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Backend:** Laravel 12, PHP 8.2
+- **Frontend:** Blade, Vite.js
+- **Database:** MySQL (or other Laravel-supported database)
+- **Payment Gateway:** [Midtrans](https://midtrans.com/)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation
 
-## Laravel Sponsors
+To get the project up and running on your local machine, follow these steps:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repository-url>
+    cd <project-directory>
+    ```
 
-### Premium Partners
+2.  **Install PHP dependencies:**
+    ```bash
+    composer install
+    ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+3.  **Install JavaScript dependencies:**
+    ```bash
+    npm install
+    ```
 
-## Contributing
+4.  **Create your environment file:**
+    ```bash
+    cp .env.example .env
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5.  **Generate an application key:**
+    ```bash
+    php artisan key:generate
+    ```
 
-## Code of Conduct
+6.  **Configure your `.env` file:**
+    Open the `.env` file and set up your database credentials (`DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`). You will also need to add your Midtrans API keys:
+    ```
+    MIDTRANS_MERCHANT_ID=your_merchant_id
+    MIDTRANS_CLIENT_KEY=your_client_key
+    MIDTRANS_SERVER_KEY=your_server_key
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7.  **Run the database migrations:**
+    ```bash
+    php artisan migrate
+    ```
 
-## Security Vulnerabilities
+8.  **Seed the database with initial users:**
+    This will create the default admin and owner accounts.
+    ```bash
+    php artisan db:seed --class=UsersTableSeeder
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+9.  **Start the development servers:**
+    Open two terminal windows and run the following commands:
+    ```bash
+    # Terminal 1: Start the Laravel server
+    php artisan serve
 
-## License
+    # Terminal 2: Start the Vite development server
+    npm run dev
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Usage
+
+Once the application is running, you can log in with the default credentials created by the seeder.
+
+-   **Admin Login:**
+    -   **Login Page:** `/login`
+    -   **Username (No. HP):** `081234567890`
+    -   **Password:** `admin123`
+
+-   **Owner Login:**
+    -   **Login Page:** `/login`
+    -   **Username (No. HP):** `081234567891`
+    -   **Password:** `pemilik123`
+
+-   **Customer Access:**
+    -   Customers can register for a new account at `/register`.
+    -   The main landing page is at the root URL (`/`).
+
+## About the Developer
+
+This project was developed by a passionate developer. You can view their profile [here](/developer).
